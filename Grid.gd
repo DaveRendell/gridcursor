@@ -1,8 +1,8 @@
 extends Node2D
 
 export var grid_size: int = 32
-export var grid_width: int = 8
-export var grid_height: int = 7
+export var grid_width: int = 20
+export var grid_height: int = 20
 
 var width = grid_width * grid_size
 var height = grid_height * grid_size
@@ -20,41 +20,21 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	$Cursor.position.x = cursor_x * grid_size
-	$Cursor.position.y = cursor_y * grid_size
+	$Cursor.position = position_from_coordinates(cursor_x, cursor_y)
 	if using_mouse:
 		set_position_to_mouse_cursor()
 
+# Returns the relative position of an object at the given grid coordinates
+# Should be overwritten to match the coordinate system of this grid
+func position_from_coordinates(x: int, y: int) -> Vector2:
+	return Vector2(x * grid_size, y * grid_size)
 
-func set_position_to_mouse_cursor():
-	var mouse_relative_position = get_global_mouse_position() - global_position
-	cursor_x = mouse_relative_position.x / grid_size
-	cursor_y = mouse_relative_position.y / grid_size
+# Takes a relative position and returns the 2D grid coordinates in an array
+# Should be overwritten to match the coordinate system of this grid
+func coordinates_from_position(p: Vector2) -> Array:
+	return [p.x / grid_size, p.y / grid_size]
 
-
-func _input(event):
-	if event.is_action_pressed("ui_up") and cursor_y > 0:
-		cursor_y -= 1
-		using_mouse = false
-	if event.is_action_pressed("ui_down") and cursor_y < grid_height - 1:
-		cursor_y += 1
-		using_mouse = false
-	if event.is_action_pressed("ui_left") and cursor_x > 0:
-		cursor_x -= 1
-		using_mouse = false
-	if event.is_action_pressed("ui_right") and cursor_x < grid_width - 1:
-		cursor_x += 1
-		using_mouse = false
-	
-	if (event.is_action_pressed("ui_accept"))\
-	|| (event is InputEventMouseButton and event.is_pressed()):
-		click_position(cursor_x, cursor_y)
-
-
-func click_position(x, y):
-	print("Clicked grid position %d %d" % [x, y])
-
-
+# Draw the grid for this coordinate system
 func draw_grid():
 	# Set background dimensions
 	$Background.rect_size = Vector2(width, height)
@@ -77,6 +57,34 @@ func draw_grid():
 		line.add_point(Vector2(0, offset))
 		line.add_point(Vector2(width, offset))
 		add_child(line)
+
+func set_position_to_mouse_cursor():
+	var mouse_relative_position = get_global_mouse_position() - global_position
+	var coords = coordinates_from_position(mouse_relative_position)
+	cursor_x = coords[0]
+	cursor_y = coords[1]
+
+func _input(event):
+	if event.is_action_pressed("ui_up") and cursor_y > 0:
+		cursor_y -= 1
+		using_mouse = false
+	if event.is_action_pressed("ui_down") and cursor_y < grid_height - 1:
+		cursor_y += 1
+		using_mouse = false
+	if event.is_action_pressed("ui_left") and cursor_x > 0:
+		cursor_x -= 1
+		using_mouse = false
+	if event.is_action_pressed("ui_right") and cursor_x < grid_width - 1:
+		cursor_x += 1
+		using_mouse = false
+	
+	if (event.is_action_pressed("ui_accept"))\
+	|| (event is InputEventMouseButton and event.is_pressed()):
+		click_position(cursor_x, cursor_y)
+
+
+func click_position(x, y):
+	print("Clicked grid position %d %d" % [x, y])
 
 
 # Signals
