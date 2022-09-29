@@ -1,9 +1,8 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Grid.gd" type="Script" id=1]
 [ext_resource path="res://img/ui/grid/cursor/0.png" type="Texture" id=2]
 [ext_resource path="res://img/ui/grid/cursor/1.png" type="Texture" id=3]
-[ext_resource path="res://Cursor.gd" type="Script" id=4]
 
 [sub_resource type="SpriteFrames" id=2]
 animations = [ {
@@ -20,15 +19,11 @@ script = ExtResource( 1 )
 margin_right = 32.0
 margin_bottom = 32.0
 
-[node name="Cursor" type="Node2D" parent="."]
-script = ExtResource( 4 )
-
-[node name="AnimatedSprite" type="AnimatedSprite" parent="Cursor"]
-position = Vector2( 14, 14 )
+[node name="Cursor" type="AnimatedSprite" parent="."]
 scale = Vector2( 2, 2 )
 frames = SubResource( 2 )
-frame = 1
 playing = true
+offset = Vector2( 7, 7 )
 
-[connection signal="mouse_entered" from="Background" to="Cursor" method="_on_Background_mouse_entered"]
-[connection signal="mouse_exited" from="Background" to="Cursor" method="_on_Background_mouse_exited"]
+[connection signal="mouse_entered" from="Background" to="." method="_on_Background_mouse_entered"]
+[connection signal="mouse_exited" from="Background" to="." method="_on_Background_mouse_exited"]
