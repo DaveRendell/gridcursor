@@ -21,22 +21,20 @@ func _ready():
 func _process(delta):
 	position.x = x * grid_size
 	position.y = y * grid_size
-	read_input()
 	if using_mouse:
 		set_position_to_mouse_cursor()
 
-
-func read_input():
-	if Input.is_action_just_pressed("ui_up") and y > 0:
+func _input(event):
+	if event.is_action_pressed("ui_up") and y > 0:
 		y -= 1
 		using_mouse = false
-	if Input.is_action_just_pressed("ui_down") and y < grid_height - 1:
+	if event.is_action_pressed("ui_down") and y < grid_height - 1:
 		y += 1
 		using_mouse = false
-	if Input.is_action_just_pressed("ui_left") and x > 0:
+	if event.is_action_pressed("ui_left") and x > 0:
 		x -= 1
 		using_mouse = false
-	if Input.is_action_just_pressed("ui_right") and x < grid_width - 1:
+	if event.is_action_pressed("ui_right") and x < grid_width - 1:
 		x += 1
 		using_mouse = false
 
@@ -48,10 +46,8 @@ func set_position_to_mouse_cursor():
 
 
 func _on_Background_mouse_entered():
-	print("mouse entered")
 	using_mouse = true
 
 
 func _on_Background_mouse_exited():
-	print("mouse exited")
 	using_mouse = false

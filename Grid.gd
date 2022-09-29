@@ -21,6 +21,15 @@ func _ready():
 #func _process(delta):
 #	pass
 
+func _input(event):
+	if (event.is_action_pressed("ui_accept"))\
+	|| (event is InputEventMouseButton and event.is_pressed()):
+		click_position($Cursor.x, $Cursor.y)
+
+
+func click_position(x, y):
+	print("Clicked grid position %d %d" % [x, y])
+
 
 func draw_grid():
 	# Set background dimensions

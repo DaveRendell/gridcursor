@@ -27,6 +27,7 @@ script = ExtResource( 4 )
 position = Vector2( 14, 14 )
 scale = Vector2( 2, 2 )
 frames = SubResource( 2 )
+frame = 1
 playing = true
 
 [connection signal="mouse_entered" from="Background" to="Cursor" method="_on_Background_mouse_entered"]
