@@ -1,5 +1,6 @@
 extends "res://Grid.gd"
 
+signal option_selected
 
 var options = [
 	"Option 1",
@@ -14,6 +15,10 @@ func _ready():
 	grid_width = 1
 	grid_height = options.size()
 
+func click_position(x, y):
+	var option = options[y]
+	print("menu clicking")
+	emit_signal("option_selected", option)
 
 func position_from_coordinates(x: int, y: int) -> Vector2:
 	return Vector2(0, y * grid_size)

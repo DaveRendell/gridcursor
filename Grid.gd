@@ -5,6 +5,7 @@ export var grid_width: int = 20
 export var grid_height: int = 20
 
 # Cursor properties
+export var active = true
 var cursor_x: int = 0
 var cursor_y: int = 0
 var mouse_in_grid = false
@@ -42,33 +43,34 @@ func set_position_to_mouse_cursor():
 	cursor_y = coords[1]
 
 func _input(event):
-	if event.is_action_pressed("ui_up") and cursor_y > 0:
-		cursor_y -= 1
-		$Cursor/ScrollStartTimer.start()
-	if event.is_action_pressed("ui_down") and cursor_y < grid_height - 1:
-		cursor_y += 1
-		$Cursor/ScrollStartTimer.start()
-	if event.is_action_pressed("ui_left") and cursor_x > 0:
-		cursor_x -= 1
-		$Cursor/ScrollStartTimer.start()
-	if event.is_action_pressed("ui_right") and cursor_x < grid_width - 1:
-		cursor_x += 1
-		$Cursor/ScrollStartTimer.start()
-	
-	if event.is_action_released("ui_up") \
-	or event.is_action_released("ui_down")\
-	or event.is_action_released("ui_left")\
-	or event.is_action_released("ui_right"):
-		$Cursor/ScrollStartTimer.stop()
-		$Cursor/ScrollTickTimer.stop()
-		scrolling = false
-	
-	if event is InputEventMouseMotion and mouse_in_grid:
-		set_position_to_mouse_cursor()
-	
-	if (event.is_action_pressed("ui_accept"))\
-	|| (event is InputEventMouseButton and event.is_pressed()):
-		click_position(cursor_x, cursor_y)
+	if active:
+		if event.is_action_pressed("ui_up") and cursor_y > 0:
+			cursor_y -= 1
+			$Cursor/ScrollStartTimer.start()
+		if event.is_action_pressed("ui_down") and cursor_y < grid_height - 1:
+			cursor_y += 1
+			$Cursor/ScrollStartTimer.start()
+		if event.is_action_pressed("ui_left") and cursor_x > 0:
+			cursor_x -= 1
+			$Cursor/ScrollStartTimer.start()
+		if event.is_action_pressed("ui_right") and cursor_x < grid_width - 1:
+			cursor_x += 1
+			$Cursor/ScrollStartTimer.start()
+		
+		if event.is_action_released("ui_up") \
+		or event.is_action_released("ui_down")\
+		or event.is_action_released("ui_left")\
+		or event.is_action_released("ui_right"):
+			$Cursor/ScrollStartTimer.stop()
+			$Cursor/ScrollTickTimer.stop()
+			scrolling = false
+		
+		if event is InputEventMouseMotion and mouse_in_grid:
+			set_position_to_mouse_cursor()
+		
+		if (event.is_action_pressed("ui_accept"))\
+		|| (event is InputEventMouseButton and event.is_pressed()):
+			click_position(cursor_x, cursor_y)
 
 
 func scroll_cursor():
