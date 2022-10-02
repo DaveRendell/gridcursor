@@ -1,5 +1,8 @@
 extends "res://Grid.gd"
 
+var width = grid_width * grid_size
+var height = grid_height * grid_size
+
 # Magic hexagon number
 var q = float(grid_size) / (2 * sqrt(3))
 var hex_size = float(grid_size) / sqrt(3)

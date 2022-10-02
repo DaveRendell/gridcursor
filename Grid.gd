@@ -4,9 +4,6 @@ export var grid_size: int = 32
 export var grid_width: int = 20
 export var grid_height: int = 20
 
-var width = grid_width * grid_size
-var height = grid_height * grid_size
-
 # Cursor properties
 var cursor_x: int = 0
 var cursor_y: int = 0
@@ -18,7 +15,6 @@ var scrolling: bool = false
 func _ready():
 	draw_grid()
 
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	$Cursor.position = position_from_coordinates(cursor_x, cursor_y)
@@ -26,36 +22,18 @@ func _process(delta):
 # Returns the relative position of an object at the given grid coordinates
 # Should be overwritten to match the coordinate system of this grid
 func position_from_coordinates(x: int, y: int) -> Vector2:
-	return Vector2(x * grid_size, y * grid_size)
+	push_error("Implement position_from_coordinates in inheriting scene")
+	return Vector2.ZERO
 
 # Takes a relative position and returns the 2D grid coordinates in an array
 # Should be overwritten to match the coordinate system of this grid
 func coordinates_from_position(p: Vector2) -> Array:
-	return [p.x / grid_size, p.y / grid_size]
+	push_error("Implement coordinates_from_position in inheriting scene")
+	return []
 
 # Draw the grid for this coordinate system
 func draw_grid():
-	# Set background dimensions
-	$Background.rect_size = Vector2(width, height)
-	
-	# Draw vertical lines
-	for i in (grid_width - 1):
-		var offset = grid_size * (i + 1)
-		var line = Line2D.new()
-		line.width = 1
-		line.default_color = Color.darkslategray
-		line.add_point(Vector2(offset, 0))
-		line.add_point(Vector2(offset, height))
-		add_child(line)
-	# Draw horizontal lines
-	for i in (grid_height - 1):
-		var offset = grid_size * (i + 1)
-		var line = Line2D.new()
-		line.width = 1
-		line.default_color = Color.darkslategray
-		line.add_point(Vector2(0, offset))
-		line.add_point(Vector2(width, offset))
-		add_child(line)
+	push_error("Implement draw_grid in inheriting scene")
 
 func set_position_to_mouse_cursor():
 	var mouse_relative_position = get_global_mouse_position() - global_position
