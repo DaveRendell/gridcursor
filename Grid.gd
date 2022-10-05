@@ -15,6 +15,7 @@ var scrolling: bool = false
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	draw_grid()
+	draw_nodes()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -85,7 +86,24 @@ func scroll_cursor():
 
 func click_position(x, y):
 	print("Clicked grid position %d %d" % [x, y])
+	for node in $GridNodes.get_children():
+		if node.has_method("select"):
+			if node.x == x and node.y == y:
+				node.select(self)
 
+# QQ
+func add_grid_node(node):
+	$GridNodes.add_child(node)
+
+func get_nodes():
+	$GridNodes.get_children()
+
+func draw_nodes():
+	print($GridNodes.get_child_count())
+	for node in $GridNodes.get_children():
+		var grid_node = (node as GridNode)
+		node.position = position_from_coordinates(grid_node.x, grid_node.y)
+	
 
 # Signals
 func _on_Background_mouse_entered():
