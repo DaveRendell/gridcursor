@@ -31,3 +31,10 @@ func draw_grid():
 		line.add_point(Vector2(0, offset))
 		line.add_point(Vector2(width, offset))
 		add_child(line)
+
+func add_highlight(x: int, y: int, color: Color):
+	var r = ColorRect.new()
+	r.rect_position = position_from_coordinates(x, y)
+	r.rect_size = Vector2(grid_size, grid_size)
+	r.color = color
+	$Highlights.add_child(r)

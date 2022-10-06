@@ -13,6 +13,9 @@ var cursor_y: int = 0
 var mouse_in_grid = false
 var scrolling: bool = false
 
+var send_clicks_as_signal = false
+signal click
+
 var transparent: bool = false
 
 func make_transparent():
@@ -49,6 +52,9 @@ func set_position_to_mouse_cursor():
 	var coords = coordinates_from_position(mouse_relative_position)
 	cursor_x = coords[0]
 	cursor_y = coords[1]
+
+func add_highlight(x: int, y: int, color: Color):
+	push_error("Implement add_highlight in inheriting scene")
 
 func _input(event):
 	if active:
@@ -93,10 +99,19 @@ func scroll_cursor():
 
 func click_position(x, y):
 	print("Clicked grid position %d %d" % [x, y])
-	for node in $GridNodes.get_children():
-		if node.has_method("select"):
-			if node.x == x and node.y == y:
-				node.select(self)
+	if send_clicks_as_signal:
+		print("Sending grid click as signal")
+		emit_signal("click", self)
+	else:
+		print("Looking for selectable grid node")
+		for node in $GridNodes.get_children():
+			if node.has_method("select"):
+				if node.x == x and node.y == y:
+					node.select(self)
+
+func clear_highlights():
+	for highlight in $Highlights.get_children():
+		highlight.queue_free()
 
 # QQ
 func add_grid_node(node):

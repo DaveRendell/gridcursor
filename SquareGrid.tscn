@@ -8,3 +8,5 @@
 script = ExtResource( 2 )
 
 [node name="MovingBlob" parent="GridNodes" index="3" instance=ExtResource( 3 )]
+x = 1
+y = 1
