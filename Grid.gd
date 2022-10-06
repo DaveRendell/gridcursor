@@ -1,5 +1,7 @@
 extends Node2D
 
+class_name Grid
+
 export var grid_size: int = 32
 export var grid_width: int = 20
 export var grid_height: int = 20
@@ -11,6 +13,11 @@ var cursor_y: int = 0
 var mouse_in_grid = false
 var scrolling: bool = false
 
+var transparent: bool = false
+
+func make_transparent():
+	transparent = true
+	$Background.visible = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
