@@ -38,3 +38,11 @@ func add_highlight(x: int, y: int, color: Color):
 	r.rect_size = Vector2(grid_size, grid_size)
 	r.color = color
 	$Highlights.add_child(r)
+
+func get_adjacent_cells(x: int, y: int):
+	return [
+		[x, y - 1],
+		[x, y + 1],
+		[x + 1, y],
+		[x - 1, y]
+	]

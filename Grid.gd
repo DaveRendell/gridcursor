@@ -56,6 +56,9 @@ func set_position_to_mouse_cursor():
 func add_highlight(x: int, y: int, color: Color):
 	push_error("Implement add_highlight in inheriting scene")
 
+func get_adjacent_cells(x: int, y: int):
+	push_error("Implement get_adjacent_cells in inheriting scene")
+
 func _input(event):
 	if active:
 		if event.is_action_pressed("ui_up") and cursor_y > 0:

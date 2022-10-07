@@ -42,12 +42,29 @@ func draw_grid():
 			hex.position = position_from_coordinates(i, j) + 0.5 * grid_size * Vector2.RIGHT
 			add_child(hex)
 
+func get_adjacent_cells(x: int, y: int):
+	var cube_coords = offset_to_cube(x, y)
+	return [
+		cube_to_offset(cube_coords[0], cube_coords[1] - 1, cube_coords[2] + 1),
+		cube_to_offset(cube_coords[0], cube_coords[1] + 1, cube_coords[2] - 1),
+		cube_to_offset(cube_coords[0] - 1, cube_coords[1], cube_coords[2] + 1),
+		cube_to_offset(cube_coords[0] + 1, cube_coords[1], cube_coords[2] - 1),
+		cube_to_offset(cube_coords[0] - 1, cube_coords[1] + 1, cube_coords[2]),
+		cube_to_offset(cube_coords[0] + 1, cube_coords[1] - 1, cube_coords[2])
+	]
+
 # https://www.redblobgames.com/grids/hexagons/
 func cube_to_offset(q, r, s):
 	var x = q + (r - (r&1)) / 2
 	var y = r
 	return [x, y]
 
+func offset_to_cube(x, y):
+	var q = x - (y - (y&1)) / 2
+	var r = y
+	var s = - q - r
+	return [q, r, s]
+	
 func pixel_to_offset_hex(x, y):
 	var cube_coords = pixel_to_pointy_hex(x, y)
 	return cube_to_offset(cube_coords[0], cube_coords[1], cube_coords[2])
