@@ -37,12 +37,18 @@ func add_highlight(x: int, y: int, color: Color):
 	r.rect_position = position_from_coordinates(x, y)
 	r.rect_size = Vector2(grid_size, grid_size)
 	r.color = color
+	r.show_behind_parent = true
+	r.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	$Highlights.add_child(r)
 
 func get_adjacent_cells(x: int, y: int):
-	return [
-		[x, y - 1],
-		[x, y + 1],
-		[x + 1, y],
-		[x - 1, y]
-	]
+	var output = []
+	if (y - 1) >= 0:
+		output.append([x, y - 1])
+	if (y + 1) < grid_height:
+		output.append([x, y + 1])
+	if (x - 1) >= 0:
+		output.append([x - 1, y])
+	if (x + 1) < grid_width:
+		output.append([x + 1, y])
+	return output

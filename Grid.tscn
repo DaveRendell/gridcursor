@@ -1,10 +1,8 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Grid.gd" type="Script" id=1]
 [ext_resource path="res://img/ui/grid/cursor/0.png" type="Texture" id=2]
 [ext_resource path="res://img/ui/grid/cursor/1.png" type="Texture" id=3]
-[ext_resource path="res://InanimateBlob.tscn" type="PackedScene" id=4]
-[ext_resource path="res://LogBlob.tscn" type="PackedScene" id=5]
 
 [sub_resource type="SpriteFrames" id=2]
 animations = [ {
@@ -37,19 +35,8 @@ wait_time = 0.1
 
 [node name="GridNodes" type="Node" parent="."]
 
-[node name="InanimateBlob" parent="GridNodes" instance=ExtResource( 4 )]
-x = 2
-y = 3
-
-[node name="InanimateBlob2" parent="GridNodes" instance=ExtResource( 4 )]
-x = 4
-y = 6
-
-[node name="LogBlob" parent="GridNodes" instance=ExtResource( 5 )]
-x = 2
-y = 2
-
-[node name="Highlights" type="Node" parent="."]
+[node name="Highlights" type="Node2D" parent="."]
+show_behind_parent = true
 
 [connection signal="mouse_entered" from="Background" to="." method="_on_Background_mouse_entered"]
 [connection signal="mouse_exited" from="Background" to="." method="_on_Background_mouse_exited"]

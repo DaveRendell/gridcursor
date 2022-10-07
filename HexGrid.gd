@@ -44,7 +44,7 @@ func draw_grid():
 
 func get_adjacent_cells(x: int, y: int):
 	var cube_coords = offset_to_cube(x, y)
-	return [
+	var unbounded_neighbours = [
 		cube_to_offset(cube_coords[0], cube_coords[1] - 1, cube_coords[2] + 1),
 		cube_to_offset(cube_coords[0], cube_coords[1] + 1, cube_coords[2] - 1),
 		cube_to_offset(cube_coords[0] - 1, cube_coords[1], cube_coords[2] + 1),
@@ -52,6 +52,21 @@ func get_adjacent_cells(x: int, y: int):
 		cube_to_offset(cube_coords[0] - 1, cube_coords[1] + 1, cube_coords[2]),
 		cube_to_offset(cube_coords[0] + 1, cube_coords[1] - 1, cube_coords[2])
 	]
+	var output = []
+	for neighbour in unbounded_neighbours:
+		if neighbour[0] >= 0 and neighbour[0] < grid_width\
+		and neighbour[1] >= 0 and neighbour[1] < grid_height:
+			output.append(neighbour)
+	return output
+
+func add_highlight(x: int, y: int, color: Color):
+	var r = ColorRect.new()
+	r.rect_position = position_from_coordinates(x, y)
+	r.rect_size = Vector2(grid_size, grid_size)
+	r.color = color
+	r.show_behind_parent = true
+	r.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	$Highlights.add_child(r)
 
 # https://www.redblobgames.com/grids/hexagons/
 func cube_to_offset(q, r, s):

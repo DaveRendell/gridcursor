@@ -59,6 +59,17 @@ func add_highlight(x: int, y: int, color: Color):
 func get_adjacent_cells(x: int, y: int):
 	push_error("Implement get_adjacent_cells in inheriting scene")
 
+func node_array():
+	var output = []
+	output.resize(grid_width)
+	for i in grid_height:
+		var col = []
+		col.resize(grid_height)
+		output[i] = col
+	for node in $GridNodes.get_children():
+		output[node.x][node.y] = node
+	return output
+	
 func _input(event):
 	if active:
 		if event.is_action_pressed("ui_up") and cursor_y > 0:

@@ -1,6 +1,13 @@
 extends "res://GridNode.gd"
 
 export var movement = 6
+export var team = 0
+
+func _ready():
+	if team == 0:
+		$AnimatedSprite.animation = "purple"
+	if team == 1:
+		$AnimatedSprite.animation = "yellow"
 
 
 func select(grid):
@@ -13,8 +20,13 @@ func select(grid):
 
 func handle_grid_click(grid):
 	var options = movement_options(grid)
+	var node_array = grid.node_array()
 	
-	if options.has([grid.cursor_x, grid.cursor_y]):
+	var is_option = options.has([grid.cursor_x, grid.cursor_y])
+	var node = node_array[grid.cursor_x][grid.cursor_y]
+	var space_occupied = node != null
+	
+	if is_option and not space_occupied:
 		x = grid.cursor_x
 		y = grid.cursor_y
 		
@@ -33,6 +45,7 @@ func calculate_movement(grid):
 		for j in grid.grid_height:
 			col[j] = -1
 		remaining_movement[i] = col
+	var node_array = grid.node_array()
 	
 	remaining_movement[x][y] = movement
 	var updates = [[x, y]]
@@ -50,8 +63,11 @@ func calculate_movement(grid):
 				var a_y = a[1]
 				# TODO update with terrain based movement cost
 				var a_remain = u_remain - 1
+				var has_movement = a_remain > remaining_movement[a_x][a_y]
+				var a_node = node_array[a_x][a_y]
+				var enemy_node = (a_node != null) and (a_node.team != team)
 				
-				if a_remain > remaining_movement[a_x][a_y]:
+				if has_movement and not enemy_node:
 					remaining_movement[a_x][a_y] = a_remain
 					new_updates.append(a)
 		updates = new_updates
