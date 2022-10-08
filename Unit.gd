@@ -1,6 +1,7 @@
 extends "res://GridNode.gd"
 
 export var movement = 6
+export var movement_type = "foot"
 export var team = 0
 
 func _ready():
@@ -62,7 +63,9 @@ func calculate_movement(grid):
 				var a_x = a[0]
 				var a_y = a[1]
 				# TODO update with terrain based movement cost
-				var a_remain = u_remain - 1
+				var a_terrain = grid.terrain_grid[a_x][a_y]
+				var a_cost = grid.terrain_types[a_terrain]["movement"][movement_type]
+				var a_remain = u_remain - a_cost
 				var has_movement = a_remain > remaining_movement[a_x][a_y]
 				var a_node = node_array[a_x][a_y]
 				var enemy_node = (a_node != null) and (a_node.team != team)

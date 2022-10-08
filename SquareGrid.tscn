@@ -10,23 +10,20 @@ script = ExtResource( 2 )
 [node name="Background" parent="." index="0"]
 show_behind_parent = true
 
-[node name="Cursor" parent="." index="1"]
-frame = 1
-
 [node name="Unit" parent="GridNodes" index="0" instance=ExtResource( 4 )]
-x = 8
+x = 6
 y = 8
 
 [node name="Unit2" parent="GridNodes" index="1" instance=ExtResource( 4 )]
-x = 8
+x = 6
 y = 9
 team = 1
 
 [node name="Unit3" parent="GridNodes" index="2" instance=ExtResource( 4 )]
-x = 9
+x = 7
 y = 9
 team = 1
 
 [node name="Unit4" parent="GridNodes" index="3" instance=ExtResource( 4 )]
-x = 8
+x = 6
 y = 7

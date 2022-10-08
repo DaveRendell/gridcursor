@@ -9,6 +9,8 @@ export var grid_height: int = 20
 var terrain_grid: Array
 var highlights: Array = []
 
+var terrain_types = []
+
 # Cursor properties
 export var active = true
 var cursor_x: int = 0
@@ -27,13 +29,15 @@ func make_transparent():
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	var file = File.new()
+	file.open("res://terrain.json", File.READ)
+	terrain_types = parse_json(file.get_as_text())
 
 	terrain_grid = empty_grid(0)
 	terrain_grid[5][5] = 2
 	terrain_grid[5][6] = 2
 	terrain_grid[6][6] = 2
 	
-	draw_colored_polygon(cell_corners(5, 5), Color.purple)
 	draw_grid()
 	draw_nodes()
 

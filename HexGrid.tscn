@@ -12,6 +12,7 @@ show_behind_parent = true
 color = Color( 1, 1, 1, 0.513726 )
 
 [node name="Unit" parent="GridNodes" index="0" instance=ExtResource( 3 )]
+movement_type = "foot"
 
 [node name="Highlights" parent="." index="3"]
 show_behind_parent = false

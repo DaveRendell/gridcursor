@@ -21,6 +21,7 @@ animations = [ {
 [node name="Unit" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
 movement = 6
+movement_type = "foot"
 team = 0
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="." index="0"]
