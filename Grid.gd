@@ -92,7 +92,7 @@ func _draw():
 		var x = highlight[0]
 		var y = highlight[1]
 		var colour = highlight[2]
-		colour.a = 0.3
+		colour.a = 0.4
 		draw_colored_polygon(cell_corners(x, y), colour, PoolVector2Array(), null, null, true)
 	if path.size() > 0:
 		for i in range(1, path.size()):

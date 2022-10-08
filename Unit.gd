@@ -47,10 +47,11 @@ func handle_cursor_move(grid):
 			grid.path = grid.path.slice(0, already_on_path)
 			grid.update()
 			return
-		# TODO: if not adjacent, reset to auto
 		var path_end = grid.path[-1]
 		var adjacent_cells = grid.get_adjacent_cells(path_end[0], path_end[1])
-		if adjacent_cells.has([c_x, c_y]):
+		var c_node = grid.node_array()[c_x][c_y]
+		var enemy_in_cell = (c_node != null) and (c_node.team != team)
+		if adjacent_cells.has([c_x, c_y]) and !enemy_in_cell:
 			var manual_path = grid.path.duplicate()
 			manual_path.append([c_x, c_y])
 			if movement_cost_of_path(grid, manual_path) <= movement:
@@ -89,14 +90,11 @@ func calculate_movement(grid):
 				var a_x = a[0]
 				var a_y = a[1]
 				var a_cost = movement_cost_of_cell(grid, a_x, a_y)
-				var a_remain = u_remain - a_cost
-				var has_movement = a_remain > remaining_movement[a_x][a_y]
-				var a_node = node_array[a_x][a_y]
-				var enemy_node = (a_node != null) and (a_node.team != team)
-				
-				if has_movement and not enemy_node:
-					remaining_movement[a_x][a_y] = a_remain
-					new_updates.append(a)
+				if a_cost >= 0:
+					var a_remain = u_remain - a_cost					
+					if a_remain > remaining_movement[a_x][a_y]:
+						remaining_movement[a_x][a_y] = a_remain
+						new_updates.append(a)
 		updates = new_updates
 	
 	return remaining_movement
@@ -112,6 +110,9 @@ func movement_options(grid):
 
 func movement_cost_of_cell(grid, i, j):
 	var terrain = grid.terrain_grid[i][j]
+	var node = grid.node_array()[i][j]
+	if (node != null) and (node.team != team):
+		return -1
 	return grid.terrain_types[terrain]["movement"][movement_type]
 
 func get_path_to_coords(grid, i, j):
@@ -129,13 +130,15 @@ func get_path_to_coords(grid, i, j):
 		for a in adjacent_cells:
 			var a_x = a[0]
 			var a_y = a[1]
-			var a_remain = remaining_movement[a_x][a_y]
-			if a_remain == u_remain + u_cost:
-				out.append([a_x, a_y])
-				u_x = a_x
-				u_y = a_y
-				u_remain = a_remain
-				break
+			var a_node = grid.node_array()[a_x][a_y]
+			if (a_node == null) or (a_node.team == team):
+				var a_remain = remaining_movement[a_x][a_y]
+				if a_remain == u_remain + u_cost:
+					out.append([a_x, a_y])
+					u_x = a_x
+					u_y = a_y
+					u_remain = a_remain
+					break
 	out.invert()
 	return out
 
