@@ -28,15 +28,25 @@ func handle_grid_click(grid):
 	var space_occupied = node != null
 	
 	if is_option and not space_occupied:
-		x = grid.cursor_x
-		y = grid.cursor_y
-		
-		grid.draw_nodes()
-		grid.clear_highlights()
-		grid.send_clicks_as_signal = false
+		var tween = get_tree().create_tween()
+		for i in range(1, grid.path.size()):
+			var pos = grid.position_from_coordinates(grid.path[i][0], grid.path[i][1])
+			tween.tween_property(self, "position", pos, 0.1)
+		tween.connect("finished", self, "update_position", [grid, grid.cursor_x, grid.cursor_y])
 		grid.path = []
+		grid.update()
 		grid.disconnect("click", self, "handle_grid_click")
 		grid.disconnect("cursor_move", self, "handle_cursor_move")
+
+func update_position(grid, c_x, c_y):
+	x = c_x
+	y = c_y
+	
+	grid.draw_nodes()
+	grid.clear_highlights()
+	grid.send_clicks_as_signal = false
+	grid.path = []
+	
 
 func handle_cursor_move(grid):
 	var c_x = grid.cursor_x
