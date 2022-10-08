@@ -10,7 +10,6 @@ func _ready():
 	if team == 1:
 		$AnimatedSprite.animation = "yellow"
 
-
 func select(grid):
 	var options = movement_options(grid)
 	grid.send_clicks_as_signal = true
@@ -18,6 +17,7 @@ func select(grid):
 		grid.add_highlight(option[0], option[1], Color.aquamarine)
 	
 	grid.connect("click", self, "handle_grid_click")
+	grid.connect("cursor_move", self, "handle_cursor_move")
 
 func handle_grid_click(grid):
 	var options = movement_options(grid)
@@ -34,7 +34,33 @@ func handle_grid_click(grid):
 		grid.draw_nodes()
 		grid.clear_highlights()
 		grid.send_clicks_as_signal = false
+		grid.path = []
 		grid.disconnect("click", self, "handle_grid_click")
+		grid.disconnect("cursor_move", self, "handle_cursor_move")
+
+func handle_cursor_move(grid):
+	var c_x = grid.cursor_x
+	var c_y = grid.cursor_y
+	if grid.path.size() > 0:
+		var already_on_path = grid.path.find([c_x, c_y])
+		if already_on_path >= 0:
+			grid.path = grid.path.slice(0, already_on_path)
+			grid.update()
+			return
+		# TODO: if not adjacent, reset to auto
+		var path_end = grid.path[-1]
+		var adjacent_cells = grid.get_adjacent_cells(path_end[0], path_end[1])
+		if adjacent_cells.has([c_x, c_y]):
+			var manual_path = grid.path.duplicate()
+			manual_path.append([c_x, c_y])
+			if movement_cost_of_path(grid, manual_path) <= movement:
+				grid.path = manual_path
+				grid.update()
+				return
+	var auto_path = get_path_to_coords(grid, grid.cursor_x, grid.cursor_y)
+	if auto_path.size() > 0:
+		grid.path = auto_path
+		grid.update()
 
 func calculate_movement(grid):
 	# Generate grid containing movement free at each tile, initialise with all -1
@@ -62,9 +88,7 @@ func calculate_movement(grid):
 			for a in adjacent_cells:
 				var a_x = a[0]
 				var a_y = a[1]
-				# TODO update with terrain based movement cost
-				var a_terrain = grid.terrain_grid[a_x][a_y]
-				var a_cost = grid.terrain_types[a_terrain]["movement"][movement_type]
+				var a_cost = movement_cost_of_cell(grid, a_x, a_y)
 				var a_remain = u_remain - a_cost
 				var has_movement = a_remain > remaining_movement[a_x][a_y]
 				var a_node = node_array[a_x][a_y]
@@ -85,3 +109,39 @@ func movement_options(grid):
 			if remaining_movement[i][j] > -1:
 				options.append([i, j])
 	return options
+
+func movement_cost_of_cell(grid, i, j):
+	var terrain = grid.terrain_grid[i][j]
+	return grid.terrain_types[terrain]["movement"][movement_type]
+
+func get_path_to_coords(grid, i, j):
+	var remaining_movement = calculate_movement(grid)
+	if remaining_movement[i][j] < 0:
+		return []
+	
+	var out = [[i, j]]
+	var u_x = i
+	var u_y = j
+	var u_remain = remaining_movement[i][j]
+	while (u_x != x) or (u_y != y):
+		var adjacent_cells = grid.get_adjacent_cells(u_x, u_y)
+		var u_cost = movement_cost_of_cell(grid, u_x, u_y)
+		for a in adjacent_cells:
+			var a_x = a[0]
+			var a_y = a[1]
+			var a_remain = remaining_movement[a_x][a_y]
+			if a_remain == u_remain + u_cost:
+				out.append([a_x, a_y])
+				u_x = a_x
+				u_y = a_y
+				u_remain = a_remain
+				break
+	out.invert()
+	return out
+
+func movement_cost_of_path(grid, p: Array):
+	var cost = 0
+	for i in range(1, p.size()):
+		cost += movement_cost_of_cell(grid, p[i][0], p[i][1])
+	return cost
+	

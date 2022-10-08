@@ -8,6 +8,7 @@ export var grid_height: int = 20
 
 var terrain_grid: Array
 var highlights: Array = []
+var path = []
 
 var terrain_types = []
 
@@ -20,6 +21,7 @@ var scrolling: bool = false
 
 var send_clicks_as_signal = false
 signal click
+signal cursor_move
 
 var transparent: bool = false
 
@@ -62,6 +64,10 @@ func position_from_coordinates(x: int, y: int) -> Vector2:
 	push_error("Implement position_from_coordinates in inheriting scene")
 	return Vector2.ZERO
 
+func cell_centre_position(x: int, y: int) -> Vector2:
+	push_error("Implement cell_centre_position in inheriting scene")
+	return Vector2.ZERO
+
 # Takes a relative position and returns the 2D grid coordinates in an array
 # Should be overwritten to match the coordinate system of this grid
 func coordinates_from_position(p: Vector2) -> Array:
@@ -88,12 +94,21 @@ func _draw():
 		var colour = highlight[2]
 		colour.a = 0.3
 		draw_colored_polygon(cell_corners(x, y), colour, PoolVector2Array(), null, null, true)
+	if path.size() > 0:
+		for i in range(1, path.size()):
+			var from = cell_centre_position(path[i - 1][0], path[i - 1][1])
+			var to = cell_centre_position(path[i][0], path[i][1])
+
+			draw_line(from, to, Color.coral, grid_size * 0.5, true)
 
 func set_position_to_mouse_cursor():
 	var mouse_relative_position = get_global_mouse_position() - global_position
 	var coords = coordinates_from_position(mouse_relative_position)
-	cursor_x = coords[0]
-	cursor_y = coords[1]
+	if (cursor_x != coords[0]) or (cursor_y != coords[1]):
+		cursor_x = max(0, min(coords[0], grid_width - 1))
+		cursor_y = max(0, min(coords[1], grid_height - 1))
+		if send_clicks_as_signal:
+			emit_signal("cursor_move", self)
 
 func add_highlight(x: int, y: int, colour: Color):
 	highlights.append([x, y, colour])
@@ -115,20 +130,26 @@ func node_array():
 	for node in $GridNodes.get_children():
 		output[node.x][node.y] = node
 	return output
-	
+
+func move_cursor(d_x: int, d_y: int):
+	cursor_x += d_x
+	cursor_y += d_y
+	if send_clicks_as_signal:
+		emit_signal("cursor_move", self)
+
 func _input(event):
 	if active:
 		if event.is_action_pressed("ui_up") and cursor_y > 0:
-			cursor_y -= 1
+			move_cursor(0, -1)
 			$Cursor/ScrollStartTimer.start()
 		if event.is_action_pressed("ui_down") and cursor_y < grid_height - 1:
-			cursor_y += 1
+			move_cursor(0, 1)
 			$Cursor/ScrollStartTimer.start()
 		if event.is_action_pressed("ui_left") and cursor_x > 0:
-			cursor_x -= 1
+			move_cursor(-1, 0)
 			$Cursor/ScrollStartTimer.start()
 		if event.is_action_pressed("ui_right") and cursor_x < grid_width - 1:
-			cursor_x += 1
+			move_cursor(1, 0)
 			$Cursor/ScrollStartTimer.start()
 		
 		if event.is_action_released("ui_up") \
@@ -149,21 +170,19 @@ func _input(event):
 
 func scroll_cursor():
 	if Input.is_action_pressed("ui_up") and cursor_y > 0:
-		cursor_y -= 1
+		move_cursor(0, -1)
 	if Input.is_action_pressed("ui_down") and cursor_y < grid_height - 1:
-		cursor_y += 1
+		move_cursor(0, 1)
 	if Input.is_action_pressed("ui_left") and cursor_x > 0:
-		cursor_x -= 1
+		move_cursor(-1, 0)
 	if Input.is_action_pressed("ui_right") and cursor_x < grid_width - 1:
-		cursor_x += 1
+		move_cursor(1, 0)
 
 func click_position(x, y):
 	print("Clicked grid position %d %d" % [x, y])
 	if send_clicks_as_signal:
-		print("Sending grid click as signal")
 		emit_signal("click", self)
 	else:
-		print("Looking for selectable grid node")
 		for node in $GridNodes.get_children():
 			if node.has_method("select"):
 				if node.x == x and node.y == y:
@@ -181,7 +200,6 @@ func get_nodes():
 	$GridNodes.get_children()
 
 func draw_nodes():
-	print($GridNodes.get_child_count())
 	for node in $GridNodes.get_children():
 		var grid_node = (node as GridNode)
 		node.position = position_from_coordinates(grid_node.x, grid_node.y)

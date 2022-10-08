@@ -15,11 +15,12 @@ func position_from_coordinates(x: int, y: int) -> Vector2:
 	return out
 	
 	
-# QQ: Still not quite right
 func coordinates_from_position(p: Vector2) -> Array:
 	var coords = pixel_to_offset_hex(p.x - 0.5 * grid_size, p.y- 0.5 * grid_size)
 	return coords
 
+func cell_centre_position(x: int, y: int) -> Vector2:
+	return position_from_coordinates(x, y) + Vector2(0.5 * grid_size, hex_size)
 
 func draw_grid():
 	# Set background dimensions

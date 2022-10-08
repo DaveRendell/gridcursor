@@ -11,8 +11,7 @@ script = ExtResource( 1 )
 show_behind_parent = true
 color = Color( 1, 1, 1, 0.513726 )
 
-[node name="Unit" parent="GridNodes" index="0" instance=ExtResource( 3 )]
-movement_type = "foot"
+[node name="Cursor" parent="." index="1"]
+frame = 1
 
-[node name="Highlights" parent="." index="3"]
-show_behind_parent = false
+[node name="Unit" parent="GridNodes" index="0" instance=ExtResource( 3 )]
