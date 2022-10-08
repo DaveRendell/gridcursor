@@ -6,6 +6,9 @@ export var grid_size: int = 32
 export var grid_width: int = 20
 export var grid_height: int = 20
 
+var terrain_grid: Array
+var highlights: Array = []
+
 # Cursor properties
 export var active = true
 var cursor_x: int = 0
@@ -24,8 +27,26 @@ func make_transparent():
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+
+	terrain_grid = empty_grid(0)
+	terrain_grid[5][5] = 2
+	terrain_grid[5][6] = 2
+	terrain_grid[6][6] = 2
+	
+	draw_colored_polygon(cell_corners(5, 5), Color.purple)
 	draw_grid()
 	draw_nodes()
+
+func empty_grid(value = null):
+	var grid = []
+	grid.resize(grid_width)
+	for i in grid_width:
+		var col = []
+		col.resize(grid_height)
+		for j in grid_height:
+			col[j] = value
+		grid[i] = col
+	return grid
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -47,17 +68,38 @@ func coordinates_from_position(p: Vector2) -> Array:
 func draw_grid():
 	push_error("Implement draw_grid in inheriting scene")
 
+func _draw():
+	for i in grid_width:
+		for j in grid_height:
+			var terrain = terrain_grid[i][j]
+			var colour: Color = Color.black
+			if terrain == 0:
+				colour = Color.lightgreen
+			if terrain == 2:
+				colour = Color.darkgreen
+			draw_colored_polygon(cell_corners(i, j), colour, PoolVector2Array(), null, null, true)
+	for highlight in highlights:
+		var x = highlight[0]
+		var y = highlight[1]
+		var colour = highlight[2]
+		colour.a = 0.3
+		draw_colored_polygon(cell_corners(x, y), colour, PoolVector2Array(), null, null, true)
+
 func set_position_to_mouse_cursor():
 	var mouse_relative_position = get_global_mouse_position() - global_position
 	var coords = coordinates_from_position(mouse_relative_position)
 	cursor_x = coords[0]
 	cursor_y = coords[1]
 
-func add_highlight(x: int, y: int, color: Color):
-	push_error("Implement add_highlight in inheriting scene")
+func add_highlight(x: int, y: int, colour: Color):
+	highlights.append([x, y, colour])
+	update()
 
 func get_adjacent_cells(x: int, y: int):
 	push_error("Implement get_adjacent_cells in inheriting scene")
+
+func cell_corners(x: int, y: int):
+	push_error("Implement cell_corners in inheriting scene")
 
 func node_array():
 	var output = []
@@ -124,8 +166,8 @@ func click_position(x, y):
 					node.select(self)
 
 func clear_highlights():
-	for highlight in $Highlights.get_children():
-		highlight.queue_free()
+	highlights = []
+	update()
 
 # QQ
 func add_grid_node(node):
@@ -140,7 +182,6 @@ func draw_nodes():
 		var grid_node = (node as GridNode)
 		node.position = position_from_coordinates(grid_node.x, grid_node.y)
 	
-
 # Signals
 func _on_Background_mouse_entered():
 	mouse_in_grid = true

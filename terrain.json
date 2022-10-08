@@ -1,0 +1,32 @@
+[
+  {
+    "name": "plains",
+    "movement": {
+      "foot": 1,
+      "wheel": 2,
+      "fly": 1
+    }
+  },
+  {
+    "name": "road",
+    "movement": {
+      "foot": 1,
+      "wheel": 1,
+      "fly": 1
+    }
+  },
+  {
+    "name": "forest",
+    "movement": {
+      "foot": 2,
+      "wheel": 3,
+      "fly": 1
+    }
+  },
+  {
+    "name": "sea",
+    "movement": {
+      "fly": 1
+    }
+  }
+]

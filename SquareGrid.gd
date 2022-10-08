@@ -32,15 +32,6 @@ func draw_grid():
 		line.add_point(Vector2(width, offset))
 		add_child(line)
 
-func add_highlight(x: int, y: int, color: Color):
-	var r = ColorRect.new()
-	r.rect_position = position_from_coordinates(x, y)
-	r.rect_size = Vector2(grid_size, grid_size)
-	r.color = color
-	r.show_behind_parent = true
-	r.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	$Highlights.add_child(r)
-
 func get_adjacent_cells(x: int, y: int):
 	var output = []
 	if (y - 1) >= 0:
@@ -52,3 +43,12 @@ func get_adjacent_cells(x: int, y: int):
 	if (x + 1) < grid_width:
 		output.append([x + 1, y])
 	return output
+
+func cell_corners(x: int, y: int):
+	var start = position_from_coordinates(x, y)
+	return PoolVector2Array([
+		start,
+		start + Vector2(grid_size, 0),
+		start + Vector2(grid_size, grid_size),
+		start + Vector2(0, grid_size)
+	])

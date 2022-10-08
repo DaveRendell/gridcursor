@@ -59,14 +59,16 @@ func get_adjacent_cells(x: int, y: int):
 			output.append(neighbour)
 	return output
 
-func add_highlight(x: int, y: int, color: Color):
-	var r = ColorRect.new()
-	r.rect_position = position_from_coordinates(x, y)
-	r.rect_size = Vector2(grid_size, grid_size)
-	r.color = color
-	r.show_behind_parent = true
-	r.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	$Highlights.add_child(r)
+func cell_corners(x: int, y: int):
+	var start = position_from_coordinates(x, y) + Vector2(0.5 * grid_size, 0)
+	return PoolVector2Array([
+		start,
+		start + Vector2(0.5 * grid_size, 0.5 * hex_size),
+		start + Vector2(0.5 * grid_size, 1.5 * hex_size),
+		start + Vector2(0, 2.0 * hex_size),
+		start + Vector2(-0.5 * grid_size, 1.5 * hex_size),
+		start + Vector2(-0.5 * grid_size, 0.5 * hex_size)
+	])
 
 # https://www.redblobgames.com/grids/hexagons/
 func cube_to_offset(q, r, s):

@@ -9,6 +9,9 @@ script = ExtResource( 1 )
 
 [node name="Background" parent="." index="0"]
 show_behind_parent = true
+color = Color( 1, 1, 1, 0.513726 )
 
-[node name="Unit" parent="GridNodes" index="3" instance=ExtResource( 3 )]
-team = 0
+[node name="Unit" parent="GridNodes" index="0" instance=ExtResource( 3 )]
+
+[node name="Highlights" parent="." index="3"]
+show_behind_parent = false

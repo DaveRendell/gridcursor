@@ -18,6 +18,7 @@ script = ExtResource( 1 )
 [node name="Background" type="ColorRect" parent="."]
 margin_right = 32.0
 margin_bottom = 32.0
+color = Color( 1, 1, 1, 0 )
 
 [node name="Cursor" type="AnimatedSprite" parent="."]
 scale = Vector2( 2, 2 )
@@ -34,9 +35,6 @@ one_shot = true
 wait_time = 0.1
 
 [node name="GridNodes" type="Node" parent="."]
-
-[node name="Highlights" type="Node2D" parent="."]
-show_behind_parent = true
 
 [connection signal="mouse_entered" from="Background" to="." method="_on_Background_mouse_entered"]
 [connection signal="mouse_exited" from="Background" to="." method="_on_Background_mouse_exited"]
