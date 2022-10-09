@@ -1,4 +1,4 @@
-extends "res://Grid.gd"
+extends "res://Map.gd"
 
 var width = grid_width * grid_size
 var height = grid_height * grid_size
