@@ -1,4 +1,5 @@
 extends "res://Grid.gd"
+class_name Map
 
 var terrain_grid: Array
 var highlights: Array = []
@@ -16,6 +17,8 @@ func _ready() -> void:
 	terrain_grid[6][6] = 2
 	terrain_grid[7][7] = 3
 	terrain_grid[7][8] = 3
+	var a = Coordinate.new(5, 6)
+	print(a)
 
 func _draw():
 	for i in grid_width:

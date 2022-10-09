@@ -15,9 +15,9 @@ func position_from_coordinates(x: int, y: int) -> Vector2:
 	return out
 	
 	
-func coordinates_from_position(p: Vector2) -> Array:
+func coordinates_from_position(p: Vector2) -> Coordinate:
 	var coords = pixel_to_offset_hex(p.x - 0.5 * grid_size, p.y- 0.5 * grid_size)
-	return coords
+	return Coordinate.new(coords[0], coords[1])
 
 func cell_centre_position(x: int, y: int) -> Vector2:
 	return position_from_coordinates(x, y) + Vector2(0.5 * grid_size, hex_size)

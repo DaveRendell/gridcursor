@@ -9,8 +9,8 @@ func position_from_coordinates(x: int, y: int) -> Vector2:
 func cell_centre_position(x: int, y: int) -> Vector2:
 	return position_from_coordinates(x, y) + Vector2(0.5 * grid_size, 0.5 * grid_size)
 
-func coordinates_from_position(p: Vector2) -> Array:
-	return [p.x / grid_size, p.y / grid_size]
+func coordinates_from_position(p: Vector2) -> Coordinate:
+	return Coordinate.new(p.x / grid_size, p.y / grid_size)
 
 func draw_grid():
 	# Set background dimensions

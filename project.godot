@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Reference",
+"class": "Coordinate",
+"language": "GDScript",
+"path": "res://coordinate.gd"
+}, {
 "base": "Node2D",
 "class": "Grid",
 "language": "GDScript",
@@ -18,10 +23,23 @@ _global_script_classes=[ {
 "class": "GridNode",
 "language": "GDScript",
 "path": "res://GridNode.gd"
+}, {
+"base": "Node2D",
+"class": "Map",
+"language": "GDScript",
+"path": "res://Map.gd"
+}, {
+"base": "Node2D",
+"class": "Unit",
+"language": "GDScript",
+"path": "res://Unit.gd"
 } ]
 _global_script_class_icons={
+"Coordinate": "",
 "Grid": "",
-"GridNode": ""
+"GridNode": "",
+"Map": "",
+"Unit": ""
 }
 
 [application]

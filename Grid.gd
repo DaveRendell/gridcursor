@@ -8,8 +8,7 @@ export var grid_height: int = 20
 
 # Cursor properties
 export var active = true
-var cursor_x: int = 0
-var cursor_y: int = 0
+var cursor: Coordinate = Coordinate.new(0, 0)
 var mouse_in_grid = false
 var scrolling: bool = false
 
@@ -31,7 +30,7 @@ func empty_grid(value = null):
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	$Cursor.position = position_from_coordinates(cursor_x, cursor_y)
+	$Cursor.position = position_from_coordinates(cursor.x, cursor.y)
 	
 # Returns the relative position of an object at the given grid coordinates
 # Should be overwritten to match the coordinate system of this grid
@@ -45,37 +44,35 @@ func cell_centre_position(x: int, y: int) -> Vector2:
 
 # Takes a relative position and returns the 2D grid coordinates in an array
 # Should be overwritten to match the coordinate system of this grid
-func coordinates_from_position(p: Vector2) -> Array:
+func coordinates_from_position(p: Vector2) -> Coordinate:
 	push_error("Implement coordinates_from_position in inheriting scene")
-	return []
+	return Coordinate.new(0, 0)
 
 func set_position_to_mouse_cursor():
 	var mouse_relative_position = get_global_mouse_position() - global_position
-	var coords = coordinates_from_position(mouse_relative_position)
-	if (cursor_x != coords[0]) or (cursor_y != coords[1]):
-		cursor_x = max(0, min(coords[0], grid_width - 1))
-		cursor_y = max(0, min(coords[1], grid_height - 1))
+	var coordinate = coordinates_from_position(mouse_relative_position)
+	if not cursor.equals(coordinate):
+		cursor = coordinate.trim(grid_width, grid_height)
 		if send_clicks_as_signal:
 			emit_signal("cursor_move", self)
 
-func move_cursor(d_x: int, d_y: int):
-	cursor_x += d_x
-	cursor_y += d_y
+func move_cursor(dx: int, dy: int):
+	cursor = cursor.add_x(dx).add_y(dy)
 	if send_clicks_as_signal:
 		emit_signal("cursor_move", self)
 
 func _input(event):
 	if active:
-		if event.is_action_pressed("ui_up") and cursor_y > 0:
+		if event.is_action_pressed("ui_up") and cursor.y > 0:
 			move_cursor(0, -1)
 			$Cursor/ScrollStartTimer.start()
-		if event.is_action_pressed("ui_down") and cursor_y < grid_height - 1:
+		if event.is_action_pressed("ui_down") and cursor.y < grid_height - 1:
 			move_cursor(0, 1)
 			$Cursor/ScrollStartTimer.start()
-		if event.is_action_pressed("ui_left") and cursor_x > 0:
+		if event.is_action_pressed("ui_left") and cursor.x > 0:
 			move_cursor(-1, 0)
 			$Cursor/ScrollStartTimer.start()
-		if event.is_action_pressed("ui_right") and cursor_x < grid_width - 1:
+		if event.is_action_pressed("ui_right") and cursor.x < grid_width - 1:
 			move_cursor(1, 0)
 			$Cursor/ScrollStartTimer.start()
 		
@@ -92,17 +89,17 @@ func _input(event):
 		
 		if (event.is_action_pressed("ui_accept"))\
 		|| (event is InputEventMouseButton and event.is_pressed()):
-			click_position(cursor_x, cursor_y)
+			click_position(cursor.x, cursor.y)
 
 
 func scroll_cursor():
-	if Input.is_action_pressed("ui_up") and cursor_y > 0:
+	if Input.is_action_pressed("ui_up") and cursor.y > 0:
 		move_cursor(0, -1)
-	if Input.is_action_pressed("ui_down") and cursor_y < grid_height - 1:
+	if Input.is_action_pressed("ui_down") and cursor.y < grid_height - 1:
 		move_cursor(0, 1)
-	if Input.is_action_pressed("ui_left") and cursor_x > 0:
+	if Input.is_action_pressed("ui_left") and cursor.x > 0:
 		move_cursor(-1, 0)
-	if Input.is_action_pressed("ui_right") and cursor_x < grid_width - 1:
+	if Input.is_action_pressed("ui_right") and cursor.x < grid_width - 1:
 		move_cursor(1, 0)
 
 func click_position(x, y):

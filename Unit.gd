@@ -1,4 +1,5 @@
 extends "res://GridNode.gd"
+class_name Unit
 
 export var movement = 6
 export var movement_type = "foot"
@@ -23,8 +24,8 @@ func handle_grid_click(grid):
 	var options = movement_options(grid)
 	var node_array = grid.node_array()
 	
-	var is_option = options.has([grid.cursor_x, grid.cursor_y])
-	var node = node_array[grid.cursor_x][grid.cursor_y]
+	var is_option = options.has([grid.cursor.x, grid.cursor.y])
+	var node = node_array[grid.cursor.x][grid.cursor.y]
 	var space_occupied = node != null
 	
 	if is_option and not space_occupied:
@@ -32,7 +33,7 @@ func handle_grid_click(grid):
 		for i in range(1, grid.path.size()):
 			var pos = grid.position_from_coordinates(grid.path[i][0], grid.path[i][1])
 			tween.tween_property(self, "position", pos, 0.1)
-		tween.connect("finished", self, "update_position", [grid, grid.cursor_x, grid.cursor_y])
+		tween.connect("finished", self, "update_position", [grid, grid.cursor.x, grid.cursor.y])
 		grid.path = []
 		grid.update()
 		grid.disconnect("click", self, "handle_grid_click")
@@ -49,8 +50,9 @@ func update_position(grid, c_x, c_y):
 	
 
 func handle_cursor_move(grid):
-	var c_x = grid.cursor_x
-	var c_y = grid.cursor_y
+	var c_x = grid.cursor.x
+	var c_y = grid.cursor.y
+	var c = grid.cursor
 	var options = movement_options(grid)
 	
 	if !options.has([c_x, c_y]):
@@ -75,7 +77,7 @@ func handle_cursor_move(grid):
 				grid.path = manual_path
 				grid.update()
 				return
-	var auto_path = get_path_to_coords(grid, grid.cursor_x, grid.cursor_y)
+	var auto_path = get_path_to_coords(grid, grid.cursor.x, grid.cursor.y)
 	if auto_path.size() > 0:
 		grid.path = auto_path
 		grid.update()
@@ -116,26 +118,26 @@ func calculate_movement(grid):
 	
 	return remaining_movement
 
-func movement_options(grid):
-	var remaining_movement = calculate_movement(grid)
+func movement_options(map: Map) -> Array:
+	var remaining_movement = calculate_movement(map)
 	var options = []
-	for i in grid.grid_width: 
-		for j in grid.grid_height:
+	for i in map.grid_width: 
+		for j in map.grid_height:
 			if remaining_movement[i][j] > -1:
 				options.append([i, j])
 	return options
 
-func movement_cost_of_cell(grid, i, j):
-	var terrain = grid.terrain_grid[i][j]
-	var node = grid.node_array()[i][j]
+func movement_cost_of_cell(map: Map, i: int, j: int) -> int:
+	var terrain: int = map.terrain_grid[i][j]
+	var node: Unit = map.node_array()[i][j]
 	if (node != null) and (node.team != team):
 		return -1
-	if grid.terrain_types[terrain]["movement"].has(movement_type):
-		return grid.terrain_types[terrain]["movement"][movement_type]
+	if map.terrain_types[terrain]["movement"].has(movement_type):
+		return map.terrain_types[terrain]["movement"][movement_type]
 	return -1
 
-func get_path_to_coords(grid, i, j):
-	var remaining_movement = calculate_movement(grid)
+func get_path_to_coords(map: Map, i: int, j: int) -> Array:
+	var remaining_movement = calculate_movement(map)
 	if remaining_movement[i][j] < 0:
 		return []
 	
@@ -144,12 +146,12 @@ func get_path_to_coords(grid, i, j):
 	var u_y = j
 	var u_remain = remaining_movement[i][j]
 	while (u_x != x) or (u_y != y):
-		var adjacent_cells = grid.get_adjacent_cells(u_x, u_y)
-		var u_cost = movement_cost_of_cell(grid, u_x, u_y)
+		var adjacent_cells = map.get_adjacent_cells(u_x, u_y)
+		var u_cost = movement_cost_of_cell(map, u_x, u_y)
 		for a in adjacent_cells:
 			var a_x = a[0]
 			var a_y = a[1]
-			var a_node = grid.node_array()[a_x][a_y]
+			var a_node = map.node_array()[a_x][a_y]
 			if (a_node == null) or (a_node.team == team):
 				var a_remain = remaining_movement[a_x][a_y]
 				if a_remain == u_remain + u_cost:
@@ -161,9 +163,9 @@ func get_path_to_coords(grid, i, j):
 	out.invert()
 	return out
 
-func movement_cost_of_path(grid, p: Array):
+func movement_cost_of_path(map: Map, p: Array):
 	var cost = 0
 	for i in range(1, p.size()):
-		cost += movement_cost_of_cell(grid, p[i][0], p[i][1])
+		cost += movement_cost_of_cell(map, p[i][0], p[i][1])
 	return cost
 	
