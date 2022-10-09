@@ -39,6 +39,8 @@ func _ready():
 	terrain_grid[5][5] = 2
 	terrain_grid[5][6] = 2
 	terrain_grid[6][6] = 2
+	terrain_grid[7][7] = 3
+	terrain_grid[7][8] = 3
 	
 	draw_grid()
 	draw_nodes()
@@ -85,8 +87,12 @@ func _draw():
 			var colour: Color = Color.black
 			if terrain == 0:
 				colour = Color.lightgreen
+			if terrain == 1:
+				colour = Color.lightgray
 			if terrain == 2:
 				colour = Color.darkgreen
+			if terrain == 3:
+				colour = Color.aqua
 			draw_colored_polygon(cell_corners(i, j), colour, PoolVector2Array(), null, null, true)
 	for highlight in highlights:
 		var x = highlight[0]

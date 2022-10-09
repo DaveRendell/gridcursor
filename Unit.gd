@@ -51,6 +51,13 @@ func update_position(grid, c_x, c_y):
 func handle_cursor_move(grid):
 	var c_x = grid.cursor_x
 	var c_y = grid.cursor_y
+	var options = movement_options(grid)
+	
+	if !options.has([c_x, c_y]):
+		grid.path = []
+		grid.update()
+		return
+		
 	if grid.path.size() > 0:
 		var already_on_path = grid.path.find([c_x, c_y])
 		if already_on_path >= 0:
@@ -123,7 +130,9 @@ func movement_cost_of_cell(grid, i, j):
 	var node = grid.node_array()[i][j]
 	if (node != null) and (node.team != team):
 		return -1
-	return grid.terrain_types[terrain]["movement"][movement_type]
+	if grid.terrain_types[terrain]["movement"].has(movement_type):
+		return grid.terrain_types[terrain]["movement"][movement_type]
+	return -1
 
 func get_path_to_coords(grid, i, j):
 	var remaining_movement = calculate_movement(grid)
