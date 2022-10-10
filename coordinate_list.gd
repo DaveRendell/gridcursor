@@ -33,4 +33,7 @@ func remove(position: int) -> CoordinateList:
 	var new_array = array.duplicate()
 	new_array.remove(position)
 	return get_script().new(new_array)
+
+func last() -> Coordinate:
+	return at(array.size() - 1)
 		
