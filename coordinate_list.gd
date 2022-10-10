@@ -20,6 +20,9 @@ func append(coordinate: Coordinate) -> CoordinateList:
 	new_array.append([coordinate.x, coordinate.y])
 	return get_script().new(new_array)
 
+func size() -> int:
+	return array.size()
+
 func has(coordinate: Coordinate) -> bool:
 	return array.has([coordinate.x, coordinate.y])
 
