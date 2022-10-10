@@ -43,6 +43,11 @@ func last() -> Coordinate:
 func find(coordinate: Coordinate) -> int:
 	return array.find([coordinate.x, coordinate.y])
 
+func reverse() -> CoordinateList:
+	var new_array = array.duplicate()
+	new_array.invert()
+	return get_script().new(new_array)
+
 func toArray() -> Array:
 	var output = []
 	for item in array:
