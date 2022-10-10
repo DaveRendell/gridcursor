@@ -18,3 +18,6 @@ func _init(width: int = 0, height: int = 0, grid_nodes: Array = [], default = nu
 
 func at(coordinate: Coordinate):
 	return data[coordinate.x][coordinate.y]
+
+func set(coordinate: Coordinate, value) -> void:
+	data[coordinate.x][coordinate.y] = value
