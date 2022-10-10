@@ -39,4 +39,13 @@ func remove(position: int) -> CoordinateList:
 
 func last() -> Coordinate:
 	return at(array.size() - 1)
+
+func find(coordinate: Coordinate) -> int:
+	return array.find([coordinate.x, coordinate.y])
+
+func toArray() -> Array:
+	var output = []
+	for item in array:
+		output.append(Coordinate.new(item[0], item[1]))
+	return output
 		
