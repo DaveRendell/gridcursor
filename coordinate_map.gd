@@ -20,3 +20,10 @@ func at(coordinate: Coordinate):
 
 func set_value(coordinate: Coordinate, value) -> void:
 	data[coordinate.x][coordinate.y] = value
+
+func coordinates() -> Array:
+	var out = []
+	for i in data.size():
+		for j in data[0].size():
+			out.append(Coordinate.new(i, j))
+	return out
