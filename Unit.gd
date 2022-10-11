@@ -5,6 +5,8 @@ export var movement = 6
 export var movement_type = "foot"
 export var team = 0
 
+var movement_remaining: CoordinateMap = null
+
 func _ready():
 	if team == 0:
 		$AnimatedSprite.animation = "purple"
@@ -47,6 +49,7 @@ func update_position(grid, coordinate: Coordinate):
 	grid.clear_highlights()
 	grid.send_clicks_as_signal = false
 	grid.path = CoordinateList.new()
+	movement_remaining = null
 	
 
 func handle_cursor_move(map: Map):
@@ -79,6 +82,10 @@ func handle_cursor_move(map: Map):
 		map.update()
 
 func calculate_movement(map: Map) -> CoordinateMap:
+	# Lazy load
+	if movement_remaining:
+		return movement_remaining
+	
 	# Generate grid containing movement free at each tile, initialise with all -1
 	var remaining_movement = CoordinateMap.new(map.grid_width, map.grid_height, [], -1)
 	var node_array = map.node_array()
@@ -106,11 +113,9 @@ func calculate_movement(map: Map) -> CoordinateMap:
 func movement_options(map: Map) -> CoordinateList:
 	var remaining_movement = calculate_movement(map)
 	var options = []
-	for i in map.grid_width: 
-		for j in map.grid_height:
-			var coordinate = Coordinate.new(i, j)
-			if remaining_movement.at(coordinate)> -1:
-				options.append(coordinate)
+	for coordinate in remaining_movement.coordinates():
+		if remaining_movement.at(coordinate)> -1:
+			options.append(coordinate)
 	return CoordinateList.new(options)
 
 func movement_cost_of_cell(map: Map, coordinate: Coordinate) -> int:
@@ -150,4 +155,3 @@ func movement_cost_of_path(map: Map, p: CoordinateList):
 	for i in range(1, p.size()):
 		cost += movement_cost_of_cell(map, p.at(i))
 	return cost
-	

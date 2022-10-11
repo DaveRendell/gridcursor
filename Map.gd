@@ -1,8 +1,9 @@
 extends "res://Grid.gd"
 class_name Map
+# A grid that represents a map, with player interactable objects on it.
 
 var terrain_grid: CoordinateMap = CoordinateMap.new(grid_width, grid_height, [], 0)
-var highlights: Array = []
+var highlights: CoordinateMap = CoordinateMap.new(grid_width, grid_height, [], null)
 var path = CoordinateList.new()
 
 var terrain_types = []
@@ -18,25 +19,23 @@ func _ready() -> void:
 	terrain_grid.set_value(Coordinate.new(7, 8), 3)
 
 func _draw():
-	for i in grid_width:
-		for j in grid_height:
-			var coordinate = Coordinate.new(i, j)
-			var terrain = terrain_grid.at(coordinate)
-			var colour: Color = Color.black
-			if terrain == 0:
-				colour = Color.lightgreen
-			if terrain == 1:
-				colour = Color.lightgray
-			if terrain == 2:
-				colour = Color.darkgreen
-			if terrain == 3:
-				colour = Color.aqua
-			draw_colored_polygon(cell_corners(coordinate), colour, PoolVector2Array(), null, null, true)
-	for highlight in highlights:
-		var coordinate = highlight[0]
-		var colour = highlight[1]
-		colour.a = 0.4
+	for coordinate in terrain_grid.coordinates():
+		var terrain = terrain_grid.at(coordinate)
+		var colour: Color = Color.black
+		if terrain == 0:
+			colour = Color.lightgreen
+		if terrain == 1:
+			colour = Color.lightgray
+		if terrain == 2:
+			colour = Color.darkgreen
+		if terrain == 3:
+			colour = Color.aqua
 		draw_colored_polygon(cell_corners(coordinate), colour, PoolVector2Array(), null, null, true)
+	for coordinate in highlights.coordinates():
+		var colour = highlights.at(coordinate)
+		if colour:
+			colour.a = 0.4
+			draw_colored_polygon(cell_corners(coordinate), colour, PoolVector2Array(), null, null, true)
 	if path.size() > 0:
 		for i in range(1, path.size()):
 			var from = cell_centre_position(path.at(i - 1))
@@ -48,7 +47,7 @@ func _draw():
 	draw_nodes()
 
 func add_highlight(coordinate: Coordinate, colour: Color):
-	highlights.append([coordinate, colour])
+	highlights.set_value(coordinate, colour)
 	update()
 
 func get_adjacent_cells(coordinate: Coordinate) -> CoordinateList:
@@ -62,7 +61,7 @@ func node_array():
 	return CoordinateMap.new(grid_width, grid_height, $GridNodes.get_children(), null)
 
 func clear_highlights():
-	highlights = []
+	highlights = CoordinateMap.new(grid_width, grid_height, [], null)
 	update()
 
 func draw_nodes():

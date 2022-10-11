@@ -1,6 +1,10 @@
 extends Node2D
 
 class_name Grid
+# Scene representing a scene containing a grid of user interactable objects, e.g.
+# a menu, a battle map, a hex grid...
+# This scene is abstract, and must have various methods implemented by 
+# inheriting scenes
 
 export var grid_size: int = 32
 export var grid_width: int = 20
@@ -16,10 +20,6 @@ var send_clicks_as_signal = false
 signal click
 signal cursor_move
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	$Cursor.position = position_from_coordinates(cursor)
 	
 # Returns the relative position of an object at the given grid coordinates
 # Should be overwritten to match the coordinate system of this grid
@@ -44,11 +44,13 @@ func set_position_to_mouse_cursor() -> void:
 		cursor = coordinate.trim(grid_width, grid_height)
 		if send_clicks_as_signal:
 			emit_signal("cursor_move", self)
+		$Cursor.position = position_from_coordinates(cursor)
 
 func move_cursor(dx: int, dy: int):
 	cursor = cursor.add_x(dx).add_y(dy)
 	if send_clicks_as_signal:
 		emit_signal("cursor_move", self)
+	$Cursor.position = position_from_coordinates(cursor)
 
 func _input(event):
 	if active:

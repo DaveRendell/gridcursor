@@ -1,6 +1,7 @@
 extends Node2D
 
 class_name GridNode
+# Represents an object on a `Grid`
 
 # Position on grid
 export var x: int

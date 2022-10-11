@@ -1,4 +1,6 @@
 class_name CoordinateMap
+# Custom collection for storing a layer of objects on a grid, e.g. terrain types
+# or units on a map
 
 var data: Array = []
 
