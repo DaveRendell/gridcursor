@@ -17,28 +17,17 @@ signal click
 signal cursor_move
 
 
-func empty_grid(value = null):
-	var grid = []
-	grid.resize(grid_width)
-	for i in grid_width:
-		var col = []
-		col.resize(grid_height)
-		for j in grid_height:
-			col[j] = value
-		grid[i] = col
-	return grid
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	$Cursor.position = position_from_coordinates(cursor.x, cursor.y)
+	$Cursor.position = position_from_coordinates(cursor)
 	
 # Returns the relative position of an object at the given grid coordinates
 # Should be overwritten to match the coordinate system of this grid
-func position_from_coordinates(x: int, y: int) -> Vector2:
+func position_from_coordinates(coordinate: Coordinate) -> Vector2:
 	push_error("Implement position_from_coordinates in inheriting scene")
 	return Vector2.ZERO
 
-func cell_centre_position(x: int, y: int) -> Vector2:
+func cell_centre_position(coordinate: Coordinate) -> Vector2:
 	push_error("Implement cell_centre_position in inheriting scene")
 	return Vector2.ZERO
 
@@ -48,7 +37,7 @@ func coordinates_from_position(p: Vector2) -> Coordinate:
 	push_error("Implement coordinates_from_position in inheriting scene")
 	return Coordinate.new(0, 0)
 
-func set_position_to_mouse_cursor():
+func set_position_to_mouse_cursor() -> void:
 	var mouse_relative_position = get_global_mouse_position() - global_position
 	var coordinate = coordinates_from_position(mouse_relative_position)
 	if not cursor.equals(coordinate):
@@ -89,7 +78,7 @@ func _input(event):
 		
 		if (event.is_action_pressed("ui_accept"))\
 		|| (event is InputEventMouseButton and event.is_pressed()):
-			click_position(cursor.x, cursor.y)
+			click_position(cursor)
 
 
 func scroll_cursor():
@@ -102,14 +91,15 @@ func scroll_cursor():
 	if Input.is_action_pressed("ui_right") and cursor.x < grid_width - 1:
 		move_cursor(1, 0)
 
-func click_position(x, y):
-	print("Clicked grid position %d %d" % [x, y])
+func click_position(coordinate: Coordinate):
+	print("Clicked grid position %s" % [coordinate])
 	if send_clicks_as_signal:
 		emit_signal("click", self)
 	else:
-		for node in $GridNodes.get_children():
-			if node.has_method("select"):
-				if node.x == x and node.y == y:
+		for child in $GridNodes.get_children():
+			var node = child as GridNode
+			if node and node.has_method("select"):
+				if node.coordinate().equals(coordinate):
 					node.select(self)
 
 	

@@ -33,13 +33,25 @@ _global_script_classes=[ {
 "class": "GridNode",
 "language": "GDScript",
 "path": "res://GridNode.gd"
+}, {
+"base": "Node2D",
+"class": "Map",
+"language": "GDScript",
+"path": "res://Map.gd"
+}, {
+"base": "Node2D",
+"class": "Unit",
+"language": "GDScript",
+"path": "res://Unit.gd"
 } ]
 _global_script_class_icons={
 "Coordinate": "",
 "CoordinateList": "",
 "CoordinateMap": "",
 "Grid": "",
-"GridNode": ""
+"GridNode": "",
+"Map": "",
+"Unit": ""
 }
 
 [application]

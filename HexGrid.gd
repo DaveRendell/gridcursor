@@ -8,9 +8,9 @@ var q = float(grid_size) / (2 * sqrt(3))
 var hex_size = float(grid_size) / sqrt(3)
 var u_axis = grid_size * Vector2(1, 0)
 
-func position_from_coordinates(x: int, y: int) -> Vector2:
-	var out = Vector2(x * grid_size, y * 1.5 * hex_size)
-	if y % 2:
+func position_from_coordinates(coordinate: Coordinate) -> Vector2:
+	var out = Vector2(coordinate.x * grid_size, coordinate.y * 1.5 * hex_size)
+	if coordinate.y % 2:
 		out.x += 0.5 * grid_size
 	return out
 	
@@ -19,8 +19,8 @@ func coordinates_from_position(p: Vector2) -> Coordinate:
 	var coords = pixel_to_offset_hex(p.x - 0.5 * grid_size, p.y- 0.5 * grid_size)
 	return Coordinate.new(coords[0], coords[1])
 
-func cell_centre_position(x: int, y: int) -> Vector2:
-	return position_from_coordinates(x, y) + Vector2(0.5 * grid_size, hex_size)
+func cell_centre_position(coordinate: Coordinate) -> Vector2:
+	return position_from_coordinates(coordinate) + Vector2(0.5 * grid_size, hex_size)
 
 func draw_grid():
 	# Set background dimensions
@@ -40,11 +40,11 @@ func draw_grid():
 			hex.add_point(Vector2(-0.5 * grid_size, 1.5 * hex_size))
 			hex.add_point(Vector2(-0.5 * grid_size, 0.5 * hex_size))
 			hex.add_point(Vector2(0, 0))
-			hex.position = position_from_coordinates(i, j) + 0.5 * grid_size * Vector2.RIGHT
+			hex.position = position_from_coordinates(Coordinate.new(i, j)) + 0.5 * grid_size * Vector2.RIGHT
 			add_child(hex)
 
-func get_adjacent_cells(x: int, y: int):
-	var cube_coords = offset_to_cube(x, y)
+func get_adjacent_cells(coordinate: Coordinate):
+	var cube_coords = offset_to_cube(coordinate.x, coordinate.y)
 	var unbounded_neighbours = [
 		cube_to_offset(cube_coords[0], cube_coords[1] - 1, cube_coords[2] + 1),
 		cube_to_offset(cube_coords[0], cube_coords[1] + 1, cube_coords[2] - 1),
@@ -57,11 +57,11 @@ func get_adjacent_cells(x: int, y: int):
 	for neighbour in unbounded_neighbours:
 		if neighbour[0] >= 0 and neighbour[0] < grid_width\
 		and neighbour[1] >= 0 and neighbour[1] < grid_height:
-			output.append(neighbour)
+			output.append(Coordinate.new(neighbour[0], neighbour[1]))
 	return output
 
-func cell_corners(x: int, y: int):
-	var start = position_from_coordinates(x, y) + Vector2(0.5 * grid_size, 0)
+func cell_corners(coordinate: Coordinate):
+	var start = position_from_coordinates(coordinate) + Vector2(0.5 * grid_size, 0)
 	return PoolVector2Array([
 		start,
 		start + Vector2(0.5 * grid_size, 0.5 * hex_size),

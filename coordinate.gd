@@ -2,8 +2,8 @@ class_name Coordinate
 # Class for holding a coordinate in a `Grid`. Contains x (horizontal) and 
 # y (vertical) co-ordinates.
 
-var x: int
-var y: int
+export var x: int
+export var y: int
 
 func _init(x: int, y: int):
 	self.x = x

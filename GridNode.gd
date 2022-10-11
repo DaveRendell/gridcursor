@@ -5,3 +5,6 @@ class_name GridNode
 # Position on grid
 export var x: int
 export var y: int
+
+func coordinate() -> Coordinate:
+	return Coordinate.new(x, y)

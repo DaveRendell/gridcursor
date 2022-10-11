@@ -1,9 +1,8 @@
 class_name CoordinateMap
 
-
 var data: Array = []
 
-func _init(width: int = 0, height: int = 0, grid_nodes: Array = [], default = null):
+func _init(width: int = 0, height: int = 0, grid_nodes: Array = [], default = 0):
 	data.resize(width)
 	for i in width:
 		var col = []
@@ -19,5 +18,5 @@ func _init(width: int = 0, height: int = 0, grid_nodes: Array = [], default = nu
 func at(coordinate: Coordinate):
 	return data[coordinate.x][coordinate.y]
 
-func set(coordinate: Coordinate, value) -> void:
+func set_value(coordinate: Coordinate, value) -> void:
 	data[coordinate.x][coordinate.y] = value

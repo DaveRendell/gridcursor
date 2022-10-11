@@ -3,11 +3,11 @@ extends "res://Map.gd"
 var width = grid_width * grid_size
 var height = grid_height * grid_size
 
-func position_from_coordinates(x: int, y: int) -> Vector2:
-	return Vector2(x * grid_size, y * grid_size)
+func position_from_coordinates(coordinate: Coordinate) -> Vector2:
+	return Vector2(coordinate.x * grid_size, coordinate.y * grid_size)
 
-func cell_centre_position(x: int, y: int) -> Vector2:
-	return position_from_coordinates(x, y) + Vector2(0.5 * grid_size, 0.5 * grid_size)
+func cell_centre_position(coordinate: Coordinate) -> Vector2:
+	return position_from_coordinates(coordinate) + Vector2(0.5 * grid_size, 0.5 * grid_size)
 
 func coordinates_from_position(p: Vector2) -> Coordinate:
 	return Coordinate.new(p.x / grid_size, p.y / grid_size)
@@ -35,20 +35,20 @@ func draw_grid():
 		line.add_point(Vector2(width, offset))
 		add_child(line)
 
-func get_adjacent_cells(x: int, y: int):
+func get_adjacent_cells(coordinate: Coordinate) -> CoordinateList:
 	var output = []
-	if (y - 1) >= 0:
-		output.append([x, y - 1])
-	if (y + 1) < grid_height:
-		output.append([x, y + 1])
-	if (x - 1) >= 0:
-		output.append([x - 1, y])
-	if (x + 1) < grid_width:
-		output.append([x + 1, y])
-	return output
+	if (coordinate.y - 1) >= 0:
+		output.append(coordinate.add_y(-1))
+	if (coordinate.y + 1) < grid_height:
+		output.append(coordinate.add_y(1))
+	if (coordinate.x - 1) >= 0:
+		output.append(coordinate.add_x(-1))
+	if (coordinate.x + 1) < grid_width:
+		output.append(coordinate.add_x(1))
+	return CoordinateList.new(output)
 
-func cell_corners(x: int, y: int):
-	var start = position_from_coordinates(x, y)
+func cell_corners(coordinate: Coordinate):
+	var start = position_from_coordinates(coordinate)
 	return PoolVector2Array([
 		start,
 		start + Vector2(grid_size, 0),
