@@ -1,4 +1,4 @@
-extends "res://GridNode.gd"
+extends "res://src/grid/GridNode.gd"
 class_name Unit
 
 export var movement = 6

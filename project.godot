@@ -12,37 +12,37 @@ _global_script_classes=[ {
 "base": "Reference",
 "class": "Coordinate",
 "language": "GDScript",
-"path": "res://coordinate.gd"
+"path": "res://src/coordinate/coordinate.gd"
 }, {
 "base": "Reference",
 "class": "CoordinateList",
 "language": "GDScript",
-"path": "res://coordinate_list.gd"
+"path": "res://src/coordinate/coordinate_list.gd"
 }, {
 "base": "Reference",
 "class": "CoordinateMap",
 "language": "GDScript",
-"path": "res://coordinate_map.gd"
+"path": "res://src/coordinate/coordinate_map.gd"
 }, {
 "base": "Node2D",
 "class": "Grid",
 "language": "GDScript",
-"path": "res://Grid.gd"
+"path": "res://src/grid/Grid.gd"
 }, {
 "base": "Node2D",
 "class": "GridNode",
 "language": "GDScript",
-"path": "res://GridNode.gd"
+"path": "res://src/grid/GridNode.gd"
 }, {
 "base": "Node2D",
 "class": "Map",
 "language": "GDScript",
-"path": "res://Map.gd"
+"path": "res://src/map/Map.gd"
 }, {
 "base": "Node2D",
 "class": "Unit",
 "language": "GDScript",
-"path": "res://Unit.gd"
+"path": "res://src/map/Unit.gd"
 } ]
 _global_script_class_icons={
 "Coordinate": "",
@@ -57,7 +57,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Cursor"
-run/main_scene="res://SquareGrid.tscn"
+run/main_scene="res://src/map/SquareGrid.tscn"
 config/icon="res://icon.png"
 
 [display]

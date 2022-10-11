@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://Grid.tscn" type="PackedScene" id=1]
-[ext_resource path="res://SquareGrid.gd" type="Script" id=2]
-[ext_resource path="res://Unit.tscn" type="PackedScene" id=4]
+[ext_resource path="res://src/grid/Grid.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/map/SquareGrid.gd" type="Script" id=2]
+[ext_resource path="res://src/map/Unit.tscn" type="PackedScene" id=4]
 
 [node name="SquareGrid" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
@@ -11,7 +11,7 @@ script = ExtResource( 2 )
 show_behind_parent = true
 
 [node name="Cursor" parent="." index="1"]
-frame = 1
+frame = 0
 
 [node name="Unit" parent="GridNodes" index="0" instance=ExtResource( 4 )]
 x = 6

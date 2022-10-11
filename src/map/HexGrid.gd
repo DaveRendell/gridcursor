@@ -1,4 +1,4 @@
-extends "res://Map.gd"
+extends "res://src/map/Map.gd"
 
 var width = grid_width * grid_size
 var height = grid_height * grid_size
@@ -43,7 +43,7 @@ func draw_grid():
 			hex.position = position_from_coordinates(Coordinate.new(i, j)) + 0.5 * grid_size * Vector2.RIGHT
 			add_child(hex)
 
-func get_adjacent_cells(coordinate: Coordinate):
+func get_adjacent_cells(coordinate: Coordinate) -> CoordinateList:
 	var cube_coords = offset_to_cube(coordinate.x, coordinate.y)
 	var unbounded_neighbours = [
 		cube_to_offset(cube_coords[0], cube_coords[1] - 1, cube_coords[2] + 1),
@@ -58,7 +58,7 @@ func get_adjacent_cells(coordinate: Coordinate):
 		if neighbour[0] >= 0 and neighbour[0] < grid_width\
 		and neighbour[1] >= 0 and neighbour[1] < grid_height:
 			output.append(Coordinate.new(neighbour[0], neighbour[1]))
-	return output
+	return CoordinateList.new(output)
 
 func cell_corners(coordinate: Coordinate):
 	var start = position_from_coordinates(coordinate) + Vector2(0.5 * grid_size, 0)

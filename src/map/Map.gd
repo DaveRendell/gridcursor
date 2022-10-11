@@ -1,4 +1,4 @@
-extends "res://Grid.gd"
+extends "res://src/grid/Grid.gd"
 class_name Map
 # A grid that represents a map, with player interactable objects on it.
 
@@ -10,7 +10,7 @@ var terrain_types = []
 
 func _ready() -> void:
 	var file = File.new()
-	file.open("res://terrain.json", File.READ)
+	file.open("res://data/terrain.json", File.READ)
 	terrain_types = parse_json(file.get_as_text())
 	terrain_grid.set_value(Coordinate.new(5, 5), 2)
 	terrain_grid.set_value(Coordinate.new(5, 6), 2)

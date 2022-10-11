@@ -1,4 +1,4 @@
-extends "res://Grid.gd"
+extends "res://src/grid/Grid.gd"
 
 signal option_selected
 
@@ -14,18 +14,24 @@ var height = grid_size * options.size()
 func _ready():
 	grid_width = 1
 	grid_height = options.size()
+	draw_grid()
 
-func click_position(x, y):
-	var option = options[y]
+func _init(options: Array):
+	self.options = options
+	height = grid_size * options.size()
+	update()
+
+func click_position(coordinate: Coordinate):
+	var option = options[coordinate.y]
 	print("menu clicking")
 	emit_signal("option_selected", option)
 
-func position_from_coordinates(x: int, y: int) -> Vector2:
-	return Vector2(0, y * grid_size)
+func position_from_coordinates(coordinate: Coordinate) -> Vector2:
+	return Vector2(0, coordinate.y * grid_size)
 
-func coordinates_from_position(p: Vector2) -> Array:
-	return [0, p.y / grid_size]
-	
+func coordinates_from_position(p: Vector2) -> Coordinate:
+	return Coordinate.new(0, p.y / grid_size)
+
 func draw_grid():
 	$Background.rect_size = Vector2(width, height)
 	for i in options.size():

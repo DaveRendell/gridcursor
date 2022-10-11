@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://Grid.gd" type="Script" id=1]
+[ext_resource path="res://src/grid/Grid.gd" type="Script" id=1]
 [ext_resource path="res://img/ui/grid/cursor/0.png" type="Texture" id=2]
 [ext_resource path="res://img/ui/grid/cursor/1.png" type="Texture" id=3]
 
@@ -24,6 +24,7 @@ color = Color( 1, 1, 1, 0 )
 scale = Vector2( 2, 2 )
 z_index = 5
 frames = SubResource( 2 )
+frame = 1
 playing = true
 offset = Vector2( 7, 7 )
 
