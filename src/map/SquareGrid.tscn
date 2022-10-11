@@ -6,6 +6,7 @@
 
 [node name="SquareGrid" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
+active = true
 
 [node name="Background" parent="." index="0"]
 show_behind_parent = true

@@ -7,6 +7,8 @@ export var team = 0
 
 var movement_remaining: CoordinateMap = null
 
+var new_menu = preload("res://src/menu/Menu.tscn")
+
 func _ready():
 	if team == 0:
 		$AnimatedSprite.animation = "purple"
@@ -22,34 +24,62 @@ func select(grid):
 	grid.connect("click", self, "handle_grid_click")
 	grid.connect("cursor_move", self, "handle_cursor_move")
 
-func handle_grid_click(grid):
-	var options = movement_options(grid)
-	var node_array = grid.node_array()
+func handle_grid_click(map: Map):
+	var coordinate = map.cursor
+	var options = movement_options(map)
+	var node_array = map.node_array()
 	
-	var is_option = options.has(grid.cursor)
-	var node = node_array.at(grid.cursor)
+	var is_option = options.has(coordinate)
+	var node = node_array.at(coordinate)
 	var space_occupied = node != null
 	
 	if is_option and not space_occupied:
-		var tween = get_tree().create_tween()
-		for i in range(1, grid.path.size()):
-			var pos = grid.position_from_coordinates(grid.path.at(i))
-			tween.tween_property(self, "position", pos, 0.1)
-		tween.connect("finished", self, "update_position", [grid, grid.cursor])
-		grid.path = CoordinateList.new([])
-		grid.update()
-		grid.disconnect("click", self, "handle_grid_click")
-		grid.disconnect("cursor_move", self, "handle_cursor_move")
+		var tween = animate_movement_along_path(map)
+		var path = map.path
+		map.path = CoordinateList.new([])
+		map.update()
+		map.set_active(false)
+		
+		yield(tween, "finished")
+		
+		var menu = new_menu.instance()
+		menu.set_options(["Wait", "Cancel"])
+		menu.position = Vector2(map.grid_size, 0)
+		add_child(menu)
+		var option = yield(menu, "option_selected")
+		
+		if option == "Wait":
+			menu.queue_free()
+			update_position(map, coordinate)
+		if option == "Cancel":
+			menu.queue_free()
+			map.path = path
+			map.update()
+			position = map.position_from_coordinates(coordinate())
+			yield(get_tree(), "idle_frame")
+			map.set_active(true)
+			
 
-func update_position(grid, coordinate: Coordinate):
+func animate_movement_along_path(map: Map) -> SceneTreeTween:
+	var tween = get_tree().create_tween()
+	for i in range(1, map.path.size()):
+		var pos = map.position_from_coordinates(map.path.at(i))
+		tween.tween_property(self, "position", pos, 0.1)
+	return tween
+
+func update_position(map: Map, coordinate: Coordinate):
 	x = coordinate.x
 	y = coordinate.y
 	
-	grid.draw_nodes()
-	grid.clear_highlights()
-	grid.send_clicks_as_signal = false
-	grid.path = CoordinateList.new()
+	map.draw_nodes()
+	map.clear_highlights()
+	map.send_clicks_as_signal = false
+	map.disconnect("click", self, "handle_grid_click")
+	map.disconnect("cursor_move", self, "handle_cursor_move")
+	map.path = CoordinateList.new()
 	movement_remaining = null
+	yield(get_tree(), "idle_frame")
+	map.set_active(true)
 	
 
 func handle_cursor_move(map: Map):

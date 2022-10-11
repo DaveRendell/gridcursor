@@ -11,7 +11,7 @@ export var grid_width: int = 20
 export var grid_height: int = 20
 
 # Cursor properties
-export var active = true
+var active = true
 var cursor: Coordinate = Coordinate.new(0, 0)
 var mouse_in_grid = false
 var scrolling: bool = false
@@ -94,17 +94,21 @@ func scroll_cursor():
 		move_cursor(1, 0)
 
 func click_position(coordinate: Coordinate):
-	print("Clicked grid position %s" % [coordinate])
-	if send_clicks_as_signal:
-		emit_signal("click", self)
-	else:
-		for child in $GridNodes.get_children():
-			var node = child as GridNode
-			if node and node.has_method("select"):
-				if node.coordinate().equals(coordinate):
-					node.select(self)
+	if active:
+		print("Clicked grid position %s" % [coordinate])
+		if send_clicks_as_signal:
+			emit_signal("click", self)
+		else:
+			for child in $GridNodes.get_children():
+				var node = child as GridNode
+				if node and node.has_method("select"):
+					if node.coordinate().equals(coordinate):
+						node.select(self)
 
-	
+func set_active(value: bool) -> void:
+	active = value
+	$Cursor.visible = value
+
 # Signals
 func _on_Background_mouse_entered():
 	mouse_in_grid = true
