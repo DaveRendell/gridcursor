@@ -14,7 +14,15 @@ func position_from_coordinates(coordinate: Coordinate) -> Vector2:
 		out.x += 0.5 * grid_size
 	return out
 	
-	
+func distance(coordinate_1: Coordinate, coordinate_2: Coordinate) -> int:
+	var hex_1 = offset_to_cube(coordinate_1.x, coordinate_1.y)
+	var hex_2 = offset_to_cube(coordinate_2.x, coordinate_2.y)
+	return int(
+		abs(hex_1[0] - hex_2[0])
+		+ abs(hex_1[1] - hex_2[1])
+		+ abs(hex_1[2] - hex_2[2])
+	)
+
 func coordinates_from_position(p: Vector2) -> Coordinate:
 	var coords = pixel_to_offset_hex(p.x - 0.5 * grid_size, p.y- 0.5 * grid_size)
 	return Coordinate.new(coords[0], coords[1])

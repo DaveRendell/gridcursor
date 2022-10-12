@@ -3,6 +3,8 @@ class_name Unit
 
 export var movement = 6
 export var movement_type = "foot"
+var attacks = [Attack.new(1, 1, true)]
+
 export var team = 0
 
 var movement_remaining: CoordinateMap = null
@@ -42,11 +44,18 @@ func handle_grid_click(map: Map):
 		
 		yield(tween, "finished")
 		
+		var attack_options = get_attack_options(map, coordinate, attacks[0])
+		
+		var menu_options = ["Wait", "Cancel"]
+		if attack_options.size() > 0:
+			menu_options.push_front("Attack")
+		
 		var menu = new_menu.instance()
-		menu.set_options(["Wait", "Cancel"])
+		menu.set_options(menu_options)
 		menu.position = Vector2(map.grid_size, 0)
 		add_child(menu)
 		var option = yield(menu, "option_selected")
+		
 		
 		if option == "Wait":
 			menu.queue_free()
@@ -58,7 +67,23 @@ func handle_grid_click(map: Map):
 			position = map.position_from_coordinates(coordinate())
 			yield(get_tree(), "idle_frame")
 			map.set_active(true)
+		if option == "Attack":
+			# TODO
+			# Raise new menu of attack options
+			# Or think of way of choosing on grid? new map mode where you cycle between options?
+			pass
 			
+
+func get_attack_options(map: Map, coordinate: Coordinate, attack: Attack) -> CoordinateList:
+	var out = CoordinateList.new()
+	var node_array = map.node_array()
+	for target_coordinate in node_array.coordinates():
+		var node = node_array.at(target_coordinate)
+		if node and node.team != team:
+			var distance = map.distance(coordinate, target_coordinate)
+			if distance >= attack.min_range and distance <= attack.max_range:
+				out = out.append(target_coordinate)
+	return out
 
 func animate_movement_along_path(map: Map) -> SceneTreeTween:
 	var tween = get_tree().create_tween()

@@ -46,6 +46,10 @@ func _draw():
 	draw_grid()
 	draw_nodes()
 
+func distance(coordinate_1: Coordinate, coordinate_2: Coordinate) -> int:
+	push_error("Implement distance in inheriting class")
+	return 0
+
 func add_highlight(coordinate: Coordinate, colour: Color):
 	highlights.set_value(coordinate, colour)
 	update()
@@ -57,7 +61,7 @@ func get_adjacent_cells(coordinate: Coordinate) -> CoordinateList:
 func cell_corners(coordinate: Coordinate):
 	push_error("Implement cell_corners in inheriting scene")
 
-func node_array():
+func node_array() -> CoordinateMap:
 	return CoordinateMap.new(grid_width, grid_height, $GridNodes.get_children(), null)
 
 func clear_highlights():

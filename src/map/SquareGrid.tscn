@@ -6,13 +6,12 @@
 
 [node name="SquareGrid" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
-active = true
 
 [node name="Background" parent="." index="0"]
 show_behind_parent = true
 
 [node name="Cursor" parent="." index="1"]
-frame = 0
+frame = 1
 
 [node name="Unit" parent="GridNodes" index="0" instance=ExtResource( 4 )]
 x = 6

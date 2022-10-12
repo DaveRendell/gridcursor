@@ -12,6 +12,9 @@ func cell_centre_position(coordinate: Coordinate) -> Vector2:
 func coordinates_from_position(p: Vector2) -> Coordinate:
 	return Coordinate.new(p.x / grid_size, p.y / grid_size)
 
+func distance(coordinate_1: Coordinate, coordinate_2: Coordinate) -> int:
+	return int(abs(coordinate_1.x - coordinate_2.x) + abs(coordinate_1.y - coordinate_2.y))
+
 func draw_grid():
 	# Set background dimensions
 	$Background.rect_size = Vector2(width, height)
