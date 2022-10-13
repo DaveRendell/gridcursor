@@ -27,10 +27,11 @@ func has(coordinate: Coordinate) -> bool:
 	return array.has([coordinate.x, coordinate.y])
 
 func slice(start: int, end: int) -> CoordinateList:
-	var new_list = get_script().new()
-	for i in range(0, end - start):
-		new_list = new_list.append(array[start + i])
-	return new_list
+	var coords = []
+	for i in range(start, end + 1):
+		var coordinate = at(i)
+		coords.append(coordinate)
+	return get_script().new(coords)
 
 func remove(position: int) -> CoordinateList:
 	var new_array = array.duplicate()
@@ -53,4 +54,10 @@ func to_array() -> Array:
 	for item in array:
 		output.append(Coordinate.new(item[0], item[1]))
 	return output
-		
+
+func _to_string():
+	var output = "["
+	for coord in to_array():
+		output += coord._to_string()
+	output += "]"
+	return output

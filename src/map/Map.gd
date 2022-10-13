@@ -8,6 +8,12 @@ var path = CoordinateList.new()
 
 var terrain_types = []
 
+var teams = 2
+var current_turn = 0
+
+var new_menu = preload("res://src/menu/Menu.tscn")
+
+
 func _ready() -> void:
 	var file = File.new()
 	file.open("res://data/terrain.json", File.READ)
@@ -54,6 +60,11 @@ func add_highlight(coordinate: Coordinate, colour: Color):
 	highlights.set_value(coordinate, colour)
 	update()
 
+func add_highlights(coordinates: CoordinateList, colour: Color):
+	for coordinate in coordinates.to_array():
+		highlights.set_value(coordinate, colour)
+	update()	
+
 func get_adjacent_cells(coordinate: Coordinate) -> CoordinateList:
 	push_error("Implement get_adjacent_cells in inheriting scene")
 	return CoordinateList.new([])
@@ -68,6 +79,33 @@ func clear_highlights():
 	highlights = CoordinateMap.new(grid_width, grid_height, [], null)
 	update()
 
+func click_position(coordinate: Coordinate):
+	if active:
+		print("Clicked grid position %s" % [coordinate])
+		if send_clicks_as_signal:
+			if !clickable_cells or clickable_cells.has(coordinate):
+				emit_signal("click", self)
+		else:
+			for child in $GridNodes.get_children():
+				var node = child as GridNode
+				if node and node.has_method("select"):
+					if node.coordinate().equals(coordinate):
+						return node.select(self)
+			# If no unit selected
+			var menu = new_menu.instance()
+			menu.set_options(["End turn", "Cancel"])
+			menu.position = position_from_coordinates(cursor) + Vector2(grid_size, 0)
+			menu.z_index = 10
+			add_child(menu)
+			set_active(false)
+			var option = yield(menu, "option_selected")
+			
+			menu.queue_free()
+			if option == "End turn":
+				next_turn()
+			yield(get_tree(), "idle_frame")
+			set_active(true)
+
 func draw_nodes():
 	for node in $GridNodes.get_children():
 		var grid_node = (node as GridNode)
@@ -76,3 +114,9 @@ func draw_nodes():
 # Draw the grid for this coordinate system
 func draw_grid():
 	push_error("Implement draw_grid in inheriting scene")
+
+func next_turn():
+	current_turn = (current_turn + 1) % teams
+	for child in $GridNodes.get_children():
+		if child.has_method("state_to_unselected"):
+			child.state_to_unselected(self)

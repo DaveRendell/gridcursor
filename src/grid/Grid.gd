@@ -82,6 +82,9 @@ func _input(event):
 		if (event.is_action_pressed("ui_accept"))\
 		|| (event is InputEventMouseButton and event.is_pressed()):
 			click_position(cursor)
+		
+		if event.is_action_pressed("ui_cancel"):
+			emit_signal("click", "cancel")
 
 
 func scroll_cursor():
@@ -95,17 +98,7 @@ func scroll_cursor():
 		move_cursor(1, 0)
 
 func click_position(coordinate: Coordinate):
-	if active:
-		print("Clicked grid position %s" % [coordinate])
-		if send_clicks_as_signal:
-			if !clickable_cells or clickable_cells.has(coordinate):
-				emit_signal("click", self)
-		else:
-			for child in $GridNodes.get_children():
-				var node = child as GridNode
-				if node and node.has_method("select"):
-					if node.coordinate().equals(coordinate):
-						node.select(self)
+	push_error("Implement click_position in inheriting scene")
 
 func set_active(value: bool) -> void:
 	active = value

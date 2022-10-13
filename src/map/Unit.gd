@@ -7,6 +7,35 @@ var attacks = [Attack.new(1, 1, true)]
 
 export var team = 0
 
+enum UnitState {
+	UNSELECTED,
+	SELECTED,
+	ACTION_SELECT,
+	ATTACK_SELECT,
+	DONE,
+}
+var unit_state: int = 0
+
+# States
+# 0: Non selected
+	# On select -> selected
+# 1: Selected
+	# Highlight movable areas
+	# Update path on cursor move
+	# click movement option -> (animated) action_select
+	# click attack option -> (animated) action_select with preselected attack, no wait option?
+	# click other option -> #0
+# 2: Action select
+	# Menu with options
+	# Wait -> finished
+	# Cancel -> #1
+	# Attack -> #3 attack_select
+# 3: Attack select
+	# Highlight attackable units from moved position
+	# Click non attack option -> #2
+	# Click attack option -> (attack, then) #4
+#4 Done
+
 var movement_remaining: CoordinateMap = null
 
 var new_menu = preload("res://src/menu/Menu.tscn")
@@ -17,88 +46,108 @@ func _ready():
 	if team == 1:
 		$AnimatedSprite.animation = "yellow"
 
-func select(grid):
-	var options = movement_options(grid)
-	grid.send_clicks_as_signal = true
-	for option in options.to_array():
-		grid.add_highlight(option, Color.aquamarine)
-	
-	grid.connect("click", self, "handle_grid_click")
-	grid.connect("cursor_move", self, "handle_cursor_move")
+func select(map: Map):
+	if unit_state == UnitState.UNSELECTED and map.current_turn == team:
+		state_to_selected(map, CoordinateList.new())
 
-func handle_grid_click(map: Map):
-	var coordinate = map.cursor
-	var original_position = coordinate()
-	var options = movement_options(map)
-	var node_array = map.node_array()
+func state_to_unselected(map: Map):
+	unit_state = UnitState.UNSELECTED
+	modulate = Color(1, 1, 1, 1)
+	map.clear_highlights()
+	map.path = CoordinateList.new()
+
+func state_to_selected(map: Map, initial_path: CoordinateList):
+	unit_state = UnitState.SELECTED
+	var movement_options = movement_options(map)
 	
-	var is_option = options.has(coordinate)
-	var node = node_array.at(coordinate)
-	var space_occupied = node != null
+	# Set map to display possibly movement options and show movement path
+	map.clear_highlights()
+	map.add_highlights(movement_options, Color.aqua)
+	map.path = initial_path
+	map.connect("cursor_move", self, "handle_cursor_move")
 	
-	if is_option and not space_occupied:
-		var tween = animate_movement_along_path(map)
+	var movement_selected = wait_for_cell_option_select(map, movement_options)
+	var result = yield(map, "click")
+	movement_selected.resume()
+	
+	
+	if typeof(result) == TYPE_STRING and result == "cancel":
+		# Unselect unit
+		map.disconnect("cursor_move", self, "handle_cursor_move")
+		state_to_unselected(map)
+	else:
+		# Animate movement along movement path, then move to action select
 		var path = map.path
-		map.path = CoordinateList.new([])
-		map.update()
-		map.set_active(false)
-		
+		var tween = animate_movement_along_path(map)
 		yield(tween, "finished")
-		
-		var attack_options = get_attack_options(map, coordinate, attacks[0])
-		
-		var menu_options = ["Wait", "Cancel"]
-		if attack_options.size() > 0:
-			menu_options.push_front("Attack")
-		
-		var menu = new_menu.instance()
-		menu.set_options(menu_options)
-		menu.position = Vector2(map.grid_size, 0)
-		add_child(menu)
-		var option = yield(menu, "option_selected")
-		
-		
-		if option == "Wait":
-			menu.queue_free()
-			update_position(map, coordinate)
-		if option == "Cancel":
-			menu.queue_free()
-			map.path = path
-			map.update()
-			position = map.position_from_coordinates(coordinate())
-			yield(get_tree(), "idle_frame")
-			map.set_active(true)
-		if option == "Attack":
-			menu.queue_free()
-			map.set_active(true)
-			update_position(map, coordinate)
-			var map_option_select = wait_for_cell_option_select(map, attack_options, Color.lightpink)
-			
-			yield(map, "click")
-			var target_coordinate = map.cursor
-			map_option_select.resume()
-			
-			var attacked_node = map.node_array().at(target_coordinate)
-			attacked_node.queue_free()
+		state_to_action_select(map, path)
+
+func state_to_action_select(map: Map, path: CoordinateList):
+	unit_state = UnitState.ACTION_SELECT
+	var new_location = map.cursor
+	var attack_options = get_attack_options(map, new_location) # TODO: Get options from all attacks
+	
+	var menu_options = ["Wait", "Cancel"]
+	if attack_options.size() > 0:
+		menu_options.push_front("Attack")
+	
+	var menu = new_menu.instance()
+	menu.set_options(menu_options)
+	menu.position = Vector2(map.grid_size, 0)
+	menu.z_index = 10
+	add_child(menu)
+	var option = yield(menu, "option_selected")
+	menu.queue_free()
+	
+	if option == "Cancel":
+		yield(get_tree(), "idle_frame")
+		state_to_selected(map, path)
+	if option == "Wait":
+		update_position(map, new_location)
+		state_to_done(map)
+	if option == "Attack":
+		state_to_attack_select(map, path, new_location)
+
+func state_to_attack_select(map: Map, path: CoordinateList, new_location: Coordinate):
+	unit_state = UnitState.ATTACK_SELECT
+	var attack_options = get_attack_options(map, new_location)
+	var initial_position = coordinate()
+	update_position(map, new_location)
+	map.clear_highlights()
+	map.add_highlights(attack_options, Color.lightpink)
+	
+	var attack_selected = wait_for_cell_option_select(map, attack_options)
+	var result = yield(map, "click")
+	attack_selected.resume()
+	
+	if typeof(result) == TYPE_STRING and result == "cancel":
+		update_position(map, initial_position)
+		state_to_action_select(map, path)
+	else:
+		var attacked_node = map.node_array().at(map.cursor)
+		attacked_node.queue_free() # TODO: damage rather than instadeath
+		state_to_done(map)
+
+func state_to_done(map: Map):
+	unit_state == UnitState.DONE
+	modulate = Color(0.5, 0.5, 0.5, 1.0)
+	map.clear_highlights()
 
 func wait_for_cell_option_select(
 	map: Map,
-	options: CoordinateList,
-	highlight_colour: Color
+	options: CoordinateList
 ) -> void:
+	map.set_active(true)
 	map.send_clicks_as_signal = true
 	map.clickable_cells = options
-	for option in options.to_array():
-		map.add_highlight(option, highlight_colour)
-	
+
 	yield()
 	
 	map.send_clicks_as_signal = false
-	map.clickable_cells = null
-	map.clear_highlights()
-	
+	map.clickable_cells = null	
 
-func get_attack_options(map: Map, coordinate: Coordinate, attack: Attack) -> CoordinateList:
+func get_attack_options(map: Map, coordinate: Coordinate) -> CoordinateList:
+	var attack = attacks[0] # TODO use all attacks
 	var out = CoordinateList.new()
 	var node_array = map.node_array()
 	for target_coordinate in node_array.coordinates():
@@ -111,9 +160,14 @@ func get_attack_options(map: Map, coordinate: Coordinate, attack: Attack) -> Coo
 
 func animate_movement_along_path(map: Map) -> SceneTreeTween:
 	var tween = get_tree().create_tween()
+	if map.path.size() == 0:
+		tween.tween_interval(0)
 	for i in range(1, map.path.size()):
 		var pos = map.position_from_coordinates(map.path.at(i))
 		tween.tween_property(self, "position", pos, 0.1)
+	map.path = CoordinateList.new()
+	map.set_active(false)
+	map.update()
 	return tween
 
 func update_position(map: Map, coordinate: Coordinate):
@@ -123,7 +177,6 @@ func update_position(map: Map, coordinate: Coordinate):
 	map.draw_nodes()
 	map.clear_highlights()
 	map.send_clicks_as_signal = false
-	map.disconnect("click", self, "handle_grid_click")
 	map.disconnect("cursor_move", self, "handle_cursor_move")
 	map.path = CoordinateList.new()
 	movement_remaining = null
@@ -193,7 +246,7 @@ func movement_options(map: Map) -> CoordinateList:
 	var remaining_movement = calculate_movement(map)
 	var options = []
 	for coordinate in remaining_movement.coordinates():
-		if remaining_movement.at(coordinate)> -1:
+		if remaining_movement.at(coordinate) > -1:
 			options.append(coordinate)
 	return CoordinateList.new(options)
 
