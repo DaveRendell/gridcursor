@@ -17,6 +17,7 @@ var mouse_in_grid = false
 var scrolling: bool = false
 
 var send_clicks_as_signal = false
+var clickable_cells: CoordinateList = null
 signal click
 signal cursor_move
 
@@ -97,7 +98,8 @@ func click_position(coordinate: Coordinate):
 	if active:
 		print("Clicked grid position %s" % [coordinate])
 		if send_clicks_as_signal:
-			emit_signal("click", self)
+			if !clickable_cells or clickable_cells.has(coordinate):
+				emit_signal("click", self)
 		else:
 			for child in $GridNodes.get_children():
 				var node = child as GridNode

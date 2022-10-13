@@ -28,6 +28,7 @@ func select(grid):
 
 func handle_grid_click(map: Map):
 	var coordinate = map.cursor
+	var original_position = coordinate()
 	var options = movement_options(map)
 	var node_array = map.node_array()
 	
@@ -68,11 +69,34 @@ func handle_grid_click(map: Map):
 			yield(get_tree(), "idle_frame")
 			map.set_active(true)
 		if option == "Attack":
-			# TODO
-			# Raise new menu of attack options
-			# Or think of way of choosing on grid? new map mode where you cycle between options?
-			pass
+			menu.queue_free()
+			map.set_active(true)
+			update_position(map, coordinate)
+			var map_option_select = wait_for_cell_option_select(map, attack_options, Color.lightpink)
 			
+			yield(map, "click")
+			var target_coordinate = map.cursor
+			map_option_select.resume()
+			
+			var attacked_node = map.node_array().at(target_coordinate)
+			attacked_node.queue_free()
+
+func wait_for_cell_option_select(
+	map: Map,
+	options: CoordinateList,
+	highlight_colour: Color
+) -> void:
+	map.send_clicks_as_signal = true
+	map.clickable_cells = options
+	for option in options.to_array():
+		map.add_highlight(option, highlight_colour)
+	
+	yield()
+	
+	map.send_clicks_as_signal = false
+	map.clickable_cells = null
+	map.clear_highlights()
+	
 
 func get_attack_options(map: Map, coordinate: Coordinate, attack: Attack) -> CoordinateList:
 	var out = CoordinateList.new()
