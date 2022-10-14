@@ -17,26 +17,6 @@ enum UnitState {
 }
 var unit_state: int = 0
 
-# States
-# 0: Non selected
-	# On select -> selected
-# 1: Selected
-	# Highlight movable areas
-	# Update path on cursor move
-	# click movement option -> (animated) action_select
-	# click attack option -> (animated) action_select with preselected attack, no wait option?
-	# click other option -> #0
-# 2: Action select
-	# Menu with options
-	# Wait -> finished
-	# Cancel -> #1
-	# Attack -> #3 attack_select
-# 3: Attack select
-	# Highlight attackable units from moved position
-	# Click non attack option -> #2
-	# Click attack option -> (attack, then) #4
-#4 Done
-
 var movement_remaining: CoordinateMap = null
 var movement_options: CoordinateList = null
 var empty_movement_options: CoordinateList = null
@@ -90,6 +70,7 @@ func state_to_selected(map: Map, initial_path: CoordinateList):
 		if movement_options.has(clicked_cell):
 			# Animate movement along movement path, then move to action select
 			var path = map.path
+			map.disconnect("cursor_move", self, "handle_cursor_move")
 			var tween = animate_movement_along_path(map)
 			yield(tween, "finished")
 			state_to_action_select(map, path)
@@ -102,6 +83,7 @@ func state_to_selected(map: Map, initial_path: CoordinateList):
 			else:
 				path = get_path_to_coords(map, get_node_can_attack_from(map, clicked_cell))
 			map.path = path
+			map.disconnect("cursor_move", self, "handle_cursor_move")
 			var tween = animate_movement_along_path(map)
 			yield(tween, "finished")
 			state_to_attack_confirm(map, path)
@@ -110,7 +92,7 @@ func state_to_selected(map: Map, initial_path: CoordinateList):
 func state_to_action_select(map: Map, path: CoordinateList):
 	print("Unit state: Action select")
 	unit_state = UnitState.ACTION_SELECT
-	var new_location = map.cursor
+	var new_location = path.last()
 	var attack_options = get_attack_options(map, new_location) # TODO: Get options from all attacks
 	
 	var menu_options = ["Wait", "Cancel"]
@@ -126,6 +108,7 @@ func state_to_action_select(map: Map, path: CoordinateList):
 	menu.queue_free()
 	
 	if option == "Cancel":
+		position = map.position_from_coordinates(path.at(0))
 		yield(get_tree(), "idle_frame")
 		state_to_selected(map, path)
 	if option == "Wait":
@@ -138,7 +121,6 @@ func state_to_attack_select(map: Map, path: CoordinateList, new_location: Coordi
 	print("Unit state: Attack select")
 	unit_state = UnitState.ATTACK_SELECT
 	var attack_options = get_attack_options(map, new_location)
-	position = map.position_from_coordinates(new_location)
 	map.clear_highlights()
 	map.add_highlights(attack_options, Color.lightpink)
 	
@@ -147,7 +129,6 @@ func state_to_attack_select(map: Map, path: CoordinateList, new_location: Coordi
 	attack_selected.resume()
 	
 	if typeof(result) == TYPE_STRING and result == "cancel":
-		position = map.position_from_coordinates(path.at(0))
 		state_to_action_select(map, path)
 	else:
 		state_to_attack_confirm(map, path)
@@ -157,11 +138,13 @@ func state_to_attack_confirm(map: Map, path: CoordinateList):
 	unit_state = UnitState.ATTACK_CONFIRM
 	var attacked_node = map.node_array().at(map.cursor)
 	
-	var menu_options = ["Attack", "Cancel"]
+	var menu_options = ["999% Damage", "Cancel"]
 	
 	var menu = new_menu.instance()
 	menu.set_options(menu_options)
-	menu.position = Vector2(map.grid_size, 0)
+	menu.position = map.position_from_coordinates(map.cursor)\
+		+ Vector2(map.grid_size, 0)\
+		- map.position_from_coordinates(coordinate())
 	menu.z_index = 10
 	add_child(menu)
 	map.set_active(false)
@@ -169,7 +152,7 @@ func state_to_attack_confirm(map: Map, path: CoordinateList):
 	menu.queue_free()
 	map.set_active(true)
 	
-	if option == "Attack":
+	if option == "999% Damage":
 		attacked_node.queue_free() # TODO: damage rather than instadeath
 		update_position(map, path.last())
 		state_to_done(map)

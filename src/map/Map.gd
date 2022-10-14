@@ -23,6 +23,8 @@ func _ready() -> void:
 	terrain_grid.set_value(Coordinate.new(6, 6), 2)
 	terrain_grid.set_value(Coordinate.new(7, 7), 3)
 	terrain_grid.set_value(Coordinate.new(7, 8), 3)
+	
+	draw_nodes()
 
 func _draw():
 	for coordinate in terrain_grid.coordinates():
@@ -50,7 +52,6 @@ func _draw():
 			draw_line(from, to, Color.coral, grid_size * 0.5, true)
 	
 	draw_grid()
-	draw_nodes()
 
 func distance(coordinate_1: Coordinate, coordinate_2: Coordinate) -> int:
 	push_error("Implement distance in inheriting class")
