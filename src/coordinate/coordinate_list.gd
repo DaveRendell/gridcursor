@@ -49,6 +49,11 @@ func reverse() -> CoordinateList:
 	new_array.invert()
 	return get_script().new(new_array)
 
+func concat(other: CoordinateList) -> CoordinateList:
+	var out = to_array()
+	out.append_array(other.to_array())
+	return get_script().new(out)
+
 func to_array() -> Array:
 	var output = []
 	for item in array:
@@ -56,8 +61,8 @@ func to_array() -> Array:
 	return output
 
 func _to_string():
-	var output = "["
+	var output = "CoordList(["
 	for coord in to_array():
 		output += coord._to_string()
-	output += "]"
+	output += "])"
 	return output

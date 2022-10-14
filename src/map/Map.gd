@@ -40,7 +40,7 @@ func _draw():
 	for coordinate in highlights.coordinates():
 		var colour = highlights.at(coordinate)
 		if colour:
-			colour.a = 0.4
+			colour.a = 0.6
 			draw_colored_polygon(cell_corners(coordinate), colour, PoolVector2Array(), null, null, true)
 	if path.size() > 0:
 		for i in range(1, path.size()):
@@ -84,7 +84,10 @@ func click_position(coordinate: Coordinate):
 		print("Clicked grid position %s" % [coordinate])
 		if send_clicks_as_signal:
 			if !clickable_cells or clickable_cells.has(coordinate):
+				print("Cursor on clickable cell, emitting click signal")
 				emit_signal("click", self)
+			else:
+				print("Cursor on non clickable cell, ignoring...")
 		else:
 			for child in $GridNodes.get_children():
 				var node = child as GridNode
