@@ -1,0 +1,18 @@
+[gd_scene format=2]
+
+[node name="PopupDialog" type="PopupPanel"]
+margin_right = 352.0
+margin_bottom = 40.0
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+margin_left = 2.0
+margin_top = 1.0
+margin_right = 354.0
+margin_bottom = 41.0
+
+[node name="Label" type="Label" parent="CenterContainer"]
+margin_left = 163.0
+margin_top = 13.0
+margin_right = 188.0
+margin_bottom = 27.0
+text = "text"

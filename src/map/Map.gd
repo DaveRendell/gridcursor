@@ -12,7 +12,7 @@ var teams = 2
 var current_turn = 0
 
 var new_menu = preload("res://src/menu/Menu.tscn")
-
+var new_toast = preload("res://src/PopupDialog.tscn")
 
 func _ready() -> void:
 	var file = File.new()
@@ -124,3 +124,18 @@ func next_turn():
 	for child in $GridNodes.get_children():
 		if child.has_method("state_to_unselected"):
 			child.state_to_unselected(self)
+			var message: String
+			if current_turn == 1:
+				message = "Yellow team's turn"
+			else:
+				message = "Purple team's turn"
+			display_toast(message)
+
+func display_toast(text: String) -> void:
+	var toast = new_toast.instance()
+	toast.get_node("CenterContainer/Label").text = text
+	add_child(toast)
+	toast.popup_centered()
+	var timer = get_tree().create_timer(1)
+	timer.connect("timeout", toast, "queue_free")
+	
