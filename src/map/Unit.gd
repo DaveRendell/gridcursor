@@ -3,7 +3,10 @@ class_name Unit
 
 export var movement = 6
 export var movement_type = "foot"
-var attacks = [Attack.new(1, 1)]
+var attacks = [
+	Attack.new("Greatsword", 1, 1),
+	Attack.new("Shortbow", 2, 6),
+]
 
 export var team = 0
 
@@ -20,6 +23,7 @@ var unit_state: int = 0
 var movement_remaining: CoordinateMap = null
 var movement_options: CoordinateList = null
 var empty_movement_options: CoordinateList = null
+var attack_options: Array = []
 var all_attack_options: CoordinateList = null
 
 var new_menu = preload("res://src/menu/Menu.tscn")
@@ -35,6 +39,7 @@ func select(map: Map):
 		movement_remaining = calculate_movement_remaining(map)
 		movement_options = calculate_movement_options()
 		empty_movement_options = calculate_empty_movement_options(map)
+		attack_options = calculate_attack_options(map)
 		all_attack_options = calculate_all_attack_options(map)
 		state_to_selected(map, CoordinateList.new([coordinate()]))
 
@@ -182,18 +187,19 @@ func wait_for_cell_option_select(
 	map.clickable_cells = null	
 
 func get_attack_options(map: Map, coordinate: Coordinate) -> CoordinateList:
-	var attack = attacks[0] # TODO use all attacks
 	var out = CoordinateList.new()
 	var node_array = map.node_array()
 	for target_coordinate in node_array.coordinates():
 		var node = node_array.at(target_coordinate)
 		if node and node.team != team:
 			var distance = map.distance(coordinate, target_coordinate)
-			if distance >= attack.min_range and distance <= attack.max_range:
-				out = out.append(target_coordinate)
+			var in_range = false
+			for attack in attacks:
+				if distance >= attack.min_range and distance <= attack.max_range:
+					out = out.append(target_coordinate)
 	return out
 
-func calculate_all_attack_options(map: Map) -> CoordinateList:
+func calculate_options_for_attack(map: Map, attack: Attack) -> CoordinateList:
 	var out = CoordinateList.new()
 	for movement_option in movement_options.to_array():
 		var attack_options = get_attack_options(map, movement_option)
@@ -202,6 +208,23 @@ func calculate_all_attack_options(map: Map) -> CoordinateList:
 				out = out.append(attack_option)
 
 	all_attack_options = out
+	return out
+
+func calculate_attack_options(map: Map) -> Array:
+	var out = []
+	for i in attacks.size():
+		var attack = attacks[i]
+		var options = calculate_options_for_attack(map, attack)
+		out.append(options)
+	return out
+
+func calculate_all_attack_options(map: Map) -> CoordinateList:
+	var out = CoordinateList.new()
+	for i in attacks.size():
+		var attack_option = attack_options[i]
+		print(attack_option)
+		out = out.concat(attack_option)
+		print(out)
 	return out
 
 func get_node_can_attack_from(map: Map, target_coords: Coordinate) -> Coordinate:
