@@ -5,7 +5,7 @@ export var movement = 6
 export var movement_type = "foot"
 var attacks = [
 	Attack.new("Greatsword", 1, 1),
-	Attack.new("Shortbow", 2, 6),
+	#Attack.new("Shortbow", 2, 6),
 ]
 
 export var team = 0
@@ -20,11 +20,12 @@ enum UnitState {
 }
 var unit_state: int = 0
 
-var movement_remaining: CoordinateMap = null
+var remaining_movement_at_cell: CoordinateMap = null
+var default_attack_sources: CoordinateMap = null
+var all_attack_sources: CoordinateMap = null
 var movement_options: CoordinateList = null
 var empty_movement_options: CoordinateList = null
-var attack_options: Array = []
-var all_attack_options: CoordinateList = null
+var attack_options: CoordinateList = null
 
 var new_menu = preload("res://src/menu/Menu.tscn")
 
@@ -36,11 +37,7 @@ func _ready():
 
 func select(map: Map):
 	if unit_state == UnitState.UNSELECTED and map.current_turn == team:
-		movement_remaining = calculate_movement_remaining(map)
-		movement_options = calculate_movement_options()
-		empty_movement_options = calculate_empty_movement_options(map)
-		attack_options = calculate_attack_options(map)
-		all_attack_options = calculate_all_attack_options(map)
+		calculate_options(map)
 		state_to_selected(map, CoordinateList.new([coordinate()]))
 
 func state_to_unselected(map: Map):
@@ -52,13 +49,13 @@ func state_to_unselected(map: Map):
 func state_to_selected(map: Map, initial_path: CoordinateList):
 	print("Unit state: Selected")
 	unit_state = UnitState.SELECTED
-	
-	var all_options = empty_movement_options.concat(all_attack_options)
+
+	var all_options = empty_movement_options.concat(attack_options)
 	
 	# Set map to display possible movement options and show movement path
 	map.clear_highlights()
 	map.add_highlights(movement_options, Color.lightblue)
-	map.add_highlights(all_attack_options, Color.lightpink)
+	map.add_highlights(attack_options, Color.lightpink)
 	map.path = initial_path
 	map.connect("cursor_move", self, "handle_cursor_move")
 	
@@ -79,14 +76,14 @@ func state_to_selected(map: Map, initial_path: CoordinateList):
 			var tween = animate_movement_along_path(map)
 			yield(tween, "finished")
 			state_to_action_select(map, path)
-		if all_attack_options.has(clicked_cell):
+		if attack_options.has(clicked_cell):
 			var path: CoordinateList
 			if map.path.size() == 0:
 				map.path = map.path.append(coordinate())
-			if get_attack_options(map, map.path.last()).has(clicked_cell):
+			if all_attack_sources.at(clicked_cell).has(map.path.last()):
 				path = map.path
 			else:
-				path = get_path_to_coords(map, get_node_can_attack_from(map, clicked_cell))
+				path = get_path_to_coords(map, default_attack_sources.at(clicked_cell))
 			map.path = path
 			map.disconnect("cursor_move", self, "handle_cursor_move")
 			var tween = animate_movement_along_path(map)
@@ -98,10 +95,11 @@ func state_to_action_select(map: Map, path: CoordinateList):
 	print("Unit state: Action select")
 	unit_state = UnitState.ACTION_SELECT
 	var new_location = path.last()
-	var attack_options = get_attack_options(map, new_location) # TODO: Get options from all attacks
+	
+	var attack_options = valid_attacks(map, new_location)
 	
 	var menu_options = ["Wait", "Cancel"]
-	if attack_options.size() > 0:
+	if attack_options.non_empty_coordinates().size() > 0:
 		menu_options.push_front("Attack")
 	
 	var menu = new_menu.instance()
@@ -125,7 +123,7 @@ func state_to_action_select(map: Map, path: CoordinateList):
 func state_to_attack_select(map: Map, path: CoordinateList, new_location: Coordinate):
 	print("Unit state: Attack select")
 	unit_state = UnitState.ATTACK_SELECT
-	var attack_options = get_attack_options(map, new_location)
+	var attack_options = CoordinateList.new(valid_attacks(map, new_location).non_empty_coordinates())
 	map.clear_highlights()
 	map.add_highlights(attack_options, Color.lightpink)
 	
@@ -186,62 +184,6 @@ func wait_for_cell_option_select(
 	map.send_clicks_as_signal = false
 	map.clickable_cells = null	
 
-func get_attack_options(map: Map, coordinate: Coordinate) -> CoordinateList:
-	var out = CoordinateList.new()
-	var node_array = map.node_array()
-	for target_coordinate in node_array.coordinates():
-		var node = node_array.at(target_coordinate)
-		if node and node.team != team:
-			var distance = map.distance(coordinate, target_coordinate)
-			var in_range = false
-			for attack in attacks:
-				if distance >= attack.min_range and distance <= attack.max_range:
-					out = out.append(target_coordinate)
-	return out
-
-func calculate_options_for_attack(map: Map, attack: Attack) -> CoordinateList:
-	var out = CoordinateList.new()
-	for movement_option in movement_options.to_array():
-		var attack_options = get_attack_options(map, movement_option)
-		for attack_option in attack_options.to_array():
-			if !out.has(attack_option):
-				out = out.append(attack_option)
-
-	all_attack_options = out
-	return out
-
-func calculate_attack_options(map: Map) -> Array:
-	var out = []
-	for i in attacks.size():
-		var attack = attacks[i]
-		var options = calculate_options_for_attack(map, attack)
-		out.append(options)
-	return out
-
-func calculate_all_attack_options(map: Map) -> CoordinateList:
-	var out = CoordinateList.new()
-	for i in attacks.size():
-		var attack_option = attack_options[i]
-		print(attack_option)
-		out = out.concat(attack_option)
-		print(out)
-	return out
-
-func get_node_can_attack_from(map: Map, target_coords: Coordinate) -> Coordinate:
-	var option = null
-	var best_remain = -1
-	
-	for movement_option in empty_movement_options.to_array():
-		var node = map.node_array().at(movement_option)
-		if !node or node.coordinate().equals(coordinate()):
-			if get_attack_options(map, movement_option).has(target_coords):
-				var remain = movement_remaining.at(movement_option)
-				if remain > best_remain:
-					best_remain = remain
-					option = movement_option
-	return option
-	
-
 func animate_movement_along_path(map: Map) -> SceneTreeTween:
 	var tween = get_tree().create_tween()
 	if map.path.size() <= 1:
@@ -263,19 +205,26 @@ func update_position(map: Map, coordinate: Coordinate):
 	map.send_clicks_as_signal = false
 	map.disconnect("cursor_move", self, "handle_cursor_move")
 	map.path = CoordinateList.new()
-	movement_remaining = null
-	all_attack_options = null
+	
+	remaining_movement_at_cell = null
+	default_attack_sources = null
+	all_attack_sources = null
+	movement_options = null
 	empty_movement_options = null
+	attack_options = null
+	
 	yield(get_tree(), "idle_frame")
 	map.set_active(true)
 	
 
 func handle_cursor_move(map: Map):
-	if all_attack_options.has(map.cursor):
-		if map.path.size() > 0 and empty_movement_options.has(map.path.last()) and get_attack_options(map, map.path.last()).has(map.cursor):
+	if attack_options.has(map.cursor):
+		if map.path.size() > 0\
+		and empty_movement_options.has(map.path.last())\
+		and all_attack_sources.at(map.cursor).has(map.path.last()):
 			return
 		else:
-			var cell_to_end_path_at = get_node_can_attack_from(map, map.cursor)
+			var cell_to_end_path_at = default_attack_sources.at(map.cursor).source
 			var auto_path = get_path_to_coords(map, cell_to_end_path_at)
 			if auto_path.size() > 0:
 				map.path = auto_path
@@ -308,45 +257,74 @@ func handle_cursor_move(map: Map):
 		map.path = auto_path
 		map.update()
 
-func calculate_movement_remaining(map: Map) -> CoordinateMap:	
-	# Generate grid containing movement free at each tile, initialise with all -1
-	var remaining_movement = CoordinateMap.new(map.grid_width, map.grid_height, [], -1)
-	var node_array = map.node_array()
+# CoordinateMap to array of sorted attack inds from position u
+func valid_attacks(map: Map, position: Coordinate) -> CoordinateMap:
+	var out = CoordinateMap.new(map.grid_width, map.grid_height)
+	for unit_coordinate in map.node_array().non_empty_coordinates():
+		var unit: Unit = map.node_array().at(unit_coordinate)
+		if unit.team != team:
+			var attacks_in_range = []
+			for i in attacks.size():
+				var attack = attacks[i]
+				if attack.can_attack_distance(map.distance(position, unit_coordinate)):
+					attacks_in_range.append(i)
+			if attacks_in_range.size() > 0:
+				out.set_value(unit_coordinate, attacks_in_range)
+	return out
+
+class AttackSource:
+	var attack_id: int
+	var source: Coordinate
+	func _init(attack_id: int, source: Coordinate):
+		self.attack_id = attack_id
+		self.source = source
+
+func calculate_options(map: Map) -> void:
+	remaining_movement_at_cell = CoordinateMap.new(map.grid_width, map.grid_width, [], -1) # -> int
+	default_attack_sources = CoordinateMap.new(map.grid_width, map.grid_height) # -> AttackSource
+	all_attack_sources = CoordinateMap.new(map.grid_width, map.grid_height, [], CoordinateList.new()) # -> CoordinateList
+	movement_options = CoordinateList.new()
+	empty_movement_options = CoordinateList.new([coordinate()])
+	attack_options = CoordinateList.new()
 	
-	remaining_movement.set_value(coordinate(), movement)
+	remaining_movement_at_cell.set_value(coordinate(), movement)
 	var updates = CoordinateList.new([coordinate()])
 	
 	while updates.size() > 0:
-		var new_updates = CoordinateList.new([])
+		var new_updates = []
 		for u in updates.to_array():
-			var u_remain = remaining_movement.at(u)
-			var adjacent_cells = map.get_adjacent_cells(u)
+			var u_remain = remaining_movement_at_cell.at(u)
 			
+			# Add to movement options if valid
+			if u_remain >= 0:
+				movement_options = movement_options.append(u)
+				if !map.node_array().at(u):
+					empty_movement_options = empty_movement_options.append(u)
+			
+			# Check attacks from u
+			var attack_targets = valid_attacks(map, u)
+			for attack_target in attack_targets.non_empty_coordinates():
+				attack_options = attack_options.append(attack_target)
+				all_attack_sources.set_value(attack_target, all_attack_sources.at(attack_target).append(u))
+				var best_attack = attack_targets.at(attack_target)[0]
+				var existing_attacks_at_target: AttackSource = default_attack_sources.at(attack_target)
+				
+				if !map.node_array().at(u)\
+				and (!existing_attacks_at_target\
+					or (existing_attacks_at_target.attack_id > best_attack)\
+					or u_remain > remaining_movement_at_cell.at(existing_attacks_at_target.source)):
+					default_attack_sources.set_value(attack_target, AttackSource.new(best_attack, u))
+			
+			# Calculate adjacent movment options
+			var adjacent_cells = map.get_adjacent_cells(u)
 			for a in adjacent_cells.to_array():
 				var a_cost = movement_cost_of_cell(map, a)
 				if a_cost >= 0:
-					var a_remain = u_remain - a_cost					
-					if a_remain > remaining_movement.at(a):
-						remaining_movement.set_value(a, a_remain)
-						new_updates = new_updates.append(a)
-		updates = new_updates
-	
-	return remaining_movement
-
-func calculate_movement_options() -> CoordinateList:
-	var options = []
-	for coordinate in movement_remaining.coordinates():
-		if movement_remaining.at(coordinate) > -1:
-			options.append(coordinate)
-	return CoordinateList.new(options)
-
-func calculate_empty_movement_options(map: Map) -> CoordinateList:
-	var options = []
-	for coordinate in movement_options.to_array():
-		if not map.node_array().at(coordinate):
-			options.append(coordinate)
-	options.append(coordinate())
-	return CoordinateList.new(options)
+					var a_remain = u_remain - a_cost
+					if a_remain > remaining_movement_at_cell.at(a):
+						remaining_movement_at_cell.set_value(a, a_remain)
+						new_updates.append(a)
+		updates = CoordinateList.new(new_updates)
 
 func movement_cost_of_cell(map: Map, coordinate: Coordinate) -> int:
 	var terrain: int = map.terrain_grid.at(coordinate)
@@ -359,19 +337,19 @@ func movement_cost_of_cell(map: Map, coordinate: Coordinate) -> int:
 
 func get_path_to_coords(map: Map, coordinate: Coordinate) -> CoordinateList:
 	
-	if movement_remaining.at(coordinate) < 0:
+	if remaining_movement_at_cell.at(coordinate) < 0:
 		return CoordinateList.new([coordinate])
 	
 	var out = CoordinateList.new([coordinate])
 	var u = coordinate
-	var u_remain = movement_remaining.at(coordinate)
+	var u_remain = remaining_movement_at_cell.at(coordinate)
 	while !u.equals(coordinate()):
 		var adjacent_cells = map.get_adjacent_cells(u)
 		var u_cost = movement_cost_of_cell(map, u)
 		for a in adjacent_cells.to_array():
 			var a_node = map.node_array().at(a)
 			if (a_node == null) or (a_node.team == team):
-				var a_remain = movement_remaining.at(a)
+				var a_remain = remaining_movement_at_cell.at(a)
 				if a_remain == u_remain + u_cost:
 					out = out.append(a)
 					u = a

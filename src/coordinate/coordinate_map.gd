@@ -4,7 +4,7 @@ class_name CoordinateMap
 
 var data: Array = []
 
-func _init(width: int = 0, height: int = 0, grid_nodes: Array = [], default = 0):
+func _init(width: int = 0, height: int = 0, grid_nodes: Array = [], default = null):
 	data.resize(width)
 	for i in width:
 		var col = []
@@ -28,4 +28,12 @@ func coordinates() -> Array:
 	for i in data.size():
 		for j in data[0].size():
 			out.append(Coordinate.new(i, j))
+	return out
+
+func non_empty_coordinates() -> Array:
+	var out = []
+	for i in data.size():
+		for j in data[0].size():
+			if data[i][j]:
+				out.append(Coordinate.new(i, j))
 	return out
