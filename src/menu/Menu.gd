@@ -5,9 +5,9 @@ class_name Menu
 signal option_selected
 
 var options = [
-	"Option 1",
-	"Option 2",
-	"Option 3",
+	MenuOption.new("option_1", "Option 1"),
+	MenuOption.new("option_2", "Option 2"),
+	MenuOption.new("option_3", "Option 3"),
 ]
 var width = 100
 var height = grid_size
@@ -19,9 +19,9 @@ func _ready():
 	draw_grid()
 
 func set_options(options: Array = [
-	"Option 1",
-	"Option 2",
-	"Option 3",
+	MenuOption.new("option_1", "Option 1"),
+	MenuOption.new("option_2", "Option 2"),
+	MenuOption.new("option_3", "Option 3"),
 ]):
 	self.options = options
 	height = grid_size * options.size()
@@ -30,7 +30,7 @@ func set_options(options: Array = [
 func click_position(coordinate: Coordinate):
 	var option = options[coordinate.y]
 	print("menu clicking")
-	emit_signal("option_selected", option)
+	emit_signal("option_selected", option.id)
 
 func position_from_coordinates(coordinate: Coordinate) -> Vector2:
 	return Vector2(0, coordinate.y * grid_size)
@@ -57,7 +57,7 @@ func draw_grid():
 		container.rect_size = Vector2(width, grid_size)
 		container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		var text = Label.new()
-		text.text = option
+		text.text = option.display_name
 		text.add_color_override("font_color", Color.black)
 		text.set_align(Label.ALIGN_LEFT)
 		text.set_valign(Label.VALIGN_CENTER)

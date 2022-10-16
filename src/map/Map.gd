@@ -97,7 +97,10 @@ func click_position(coordinate: Coordinate):
 						return node.select(self)
 			# If no unit selected
 			var menu = new_menu.instance()
-			menu.set_options(["End turn", "Cancel"])
+			menu.set_options([
+				MenuOption.new("end_turn", "End turn"),
+				MenuOption.new("cancel", "Cancel"),
+			])
 			menu.position = position_from_coordinates(cursor) + Vector2(grid_size, 0)
 			menu.z_index = 10
 			add_child(menu)
@@ -105,7 +108,7 @@ func click_position(coordinate: Coordinate):
 			var option = yield(menu, "option_selected")
 			
 			menu.queue_free()
-			if option == "End turn":
+			if option == "end_turn":
 				next_turn()
 			yield(get_tree(), "idle_frame")
 			set_active(true)

@@ -98,9 +98,12 @@ func state_to_action_select(map: Map, path: CoordinateList):
 	
 	var attack_options = valid_attacks(map, new_location)
 	
-	var menu_options = ["Wait", "Cancel"]
+	var menu_options = [
+		MenuOption.new("wait", "Wait"),
+		MenuOption.new("cancel", "Cancel"),
+	]
 	if attack_options.non_empty_coordinates().size() > 0:
-		menu_options.push_front("Attack")
+		menu_options.push_front(MenuOption.new("attack", "Attack"))
 	
 	var menu = new_menu.instance()
 	menu.set_options(menu_options)
@@ -110,14 +113,14 @@ func state_to_action_select(map: Map, path: CoordinateList):
 	var option = yield(menu, "option_selected")
 	menu.queue_free()
 	
-	if option == "Cancel":
+	if option == "cancel":
 		position = map.position_from_coordinates(path.at(0))
 		yield(get_tree(), "idle_frame")
 		state_to_selected(map, path)
-	if option == "Wait":
+	if option == "wait":
 		update_position(map, new_location)
 		state_to_done(map)
-	if option == "Attack":
+	if option == "attack":
 		state_to_attack_select(map, path, new_location)
 
 func state_to_attack_select(map: Map, path: CoordinateList, new_location: Coordinate):
@@ -141,7 +144,10 @@ func state_to_attack_confirm(map: Map, path: CoordinateList):
 	unit_state = UnitState.ATTACK_CONFIRM
 	var attacked_node = map.node_array().at(map.cursor)
 	
-	var menu_options = ["999% Damage", "Cancel"]
+	var menu_options = [
+		MenuOption.new("confirm", "999% Damage"),
+		MenuOption.new("cancel", "Cancel"),
+	]
 	
 	var menu = new_menu.instance()
 	menu.set_options(menu_options)
@@ -155,11 +161,11 @@ func state_to_attack_confirm(map: Map, path: CoordinateList):
 	menu.queue_free()
 	map.set_active(true)
 	
-	if option == "999% Damage":
+	if option == "confirm":
 		attacked_node.queue_free() # TODO: damage rather than instadeath
 		update_position(map, path.last())
 		state_to_done(map)
-	if option == "Cancel":
+	if option == "cancel":
 		position = map.position_from_coordinates(path.at(0))
 		yield(get_tree(), "idle_frame")
 		state_to_selected(map, path)

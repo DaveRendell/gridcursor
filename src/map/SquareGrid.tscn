@@ -10,9 +10,6 @@ script = ExtResource( 2 )
 [node name="Background" parent="." index="0"]
 show_behind_parent = true
 
-[node name="Cursor" parent="." index="1"]
-frame = 1
-
 [node name="Unit" parent="GridNodes" index="0" instance=ExtResource( 4 )]
 x = 6
 y = 8
