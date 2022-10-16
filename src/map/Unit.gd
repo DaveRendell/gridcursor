@@ -1,6 +1,8 @@
 extends "res://src/grid/GridNode.gd"
 class_name Unit
 
+var character: Character
+
 export var movement = 6
 export var movement_type = "foot"
 var attacks = [
@@ -29,11 +31,17 @@ var attack_options: CoordinateList = null
 
 var new_menu = preload("res://src/menu/Menu.tscn")
 
-func _ready():
+func from_char(character: Character, team: int, coordinate: Coordinate):
+	self.character = character
+	self.team = team
+	self.x = coordinate.x
+	self.y = coordinate.y
+	self.attacks = character.attacks()
+	
 	if team == 0:
 		$AnimatedSprite.animation = "purple"
 	if team == 1:
-		$AnimatedSprite.animation = "yellow"
+		$AnimatedSprite.animation = "yellow"	
 
 func select(map: Map):
 	if unit_state == UnitState.UNSELECTED and map.current_turn == team:
