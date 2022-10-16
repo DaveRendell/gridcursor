@@ -2,11 +2,8 @@ class_name Character
 
 var display_name: String
 
-# Stats
-var might: int = 0
-var precision: int = 0
-var knowledge: int = 0
-var wit: int = 0
+# Might, Precision, Knowledge, Wit
+var stats = [0, 0, 0, 0]
 
 var hp: int = 1
 
@@ -35,15 +32,12 @@ func _init(
 	wit: int = 0
 ):
 	self.display_name = display_name
-	self.might = might
-	self.precision = precision
-	self.knowledge = knowledge
-	self.wit = wit
+	self.stats = [might, precision, knowledge, wit]
 	self.hp = max_hp()
 	self.equipment = CharacterEquipment.new()
 
 func max_hp() -> int:
-	return int(max(2 * might + precision + knowledge + wit, 1))
+	return int(max(2 * stats[0] + stats[1] + stats[2] + stats[3], 1))
 
 func defence() -> int:
 	var base_defence: int = 7
@@ -55,7 +49,7 @@ func defence() -> int:
 			base_defence = max(base_defence, item.set_base_defence())
 			defence_boost += item.set_defence_boost()
 	
-	return base_defence + precision + defence_boost
+	return base_defence + stats[1] + defence_boost
 
 func equip(slot: String, item: Equipment) -> void:
 	if slot == "dual_hand":

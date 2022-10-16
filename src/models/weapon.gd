@@ -32,4 +32,4 @@ func _init(
 		self.equipable_slots = ["main_hand", "off_hand"]
 
 func get_attacks() -> Array:
-	return [Attack.new(display_name, min_range, max_range)]
+	return [Attack.new(display_name, min_range, max_range, attacking_stats, damage)]

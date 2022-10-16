@@ -5,10 +5,6 @@ var character: Character
 
 export var movement = 6
 export var movement_type = "foot"
-var attacks = [
-	Attack.new("Greatsword", 1, 1),
-	Attack.new("Shortbow", 2, 6),
-]
 
 export var team = 0
 
@@ -22,6 +18,7 @@ enum UnitState {
 }
 var unit_state: int = 0
 
+# Calculated on unit select
 var remaining_movement_at_cell: CoordinateMap = null
 var default_attack_sources: CoordinateMap = null
 var all_attack_sources: CoordinateMap = null
@@ -36,7 +33,6 @@ func from_char(character: Character, team: int, coordinate: Coordinate):
 	self.team = team
 	self.x = coordinate.x
 	self.y = coordinate.y
-	self.attacks = character.attacks()
 	
 	if team == 0:
 		$AnimatedSprite.animation = "purple"
@@ -154,8 +150,8 @@ func state_to_attack_confirm(map: Map, path: CoordinateList):
 	
 	var distance_to_target = map.distance(path.last(), map.cursor)
 	var menu_options = []
-	for i in attacks.size():
-		var attack: Attack = attacks[i]
+	for i in character.attacks().size():
+		var attack: Attack = character.attacks()[i]
 		if attack.can_attack_distance(distance_to_target):
 			menu_options.append(MenuOption.new(str(i), attack.name))
 	menu_options.append(MenuOption.new("cancel", "Cancel"))
@@ -178,9 +174,27 @@ func state_to_attack_confirm(map: Map, path: CoordinateList):
 		state_to_selected(map, path)
 	else:
 		var attack_id = int(option)
-		var attack = attacks[attack_id]
+		var attack = character.attacks()[attack_id]
 		print("Attacking using %s" % [attack.name])
-		attacked_node.queue_free() # TODO: damage rather than instadeath
+		
+		var best_stat = -1
+		for stat in attack.attacking_stats:
+			if character.stats[stat] > character.stats[best_stat]:
+				best_stat = stat
+		
+		var rng = RandomNumberGenerator.new()
+		rng.randomize()
+		var d1 = rng.randi_range(1, 6)
+		var d2 = rng.randi_range(1, 6)
+		var roll = d1 + d2 + character.stats[best_stat]
+		print("Rolled %s = [%s + %s] + %s" % [roll, d1, d2, character.stats[best_stat]])
+		var def = attacked_node.character.defence()
+		
+		if roll >= def:
+			print("Beat enemy defence (%s)" % [def])
+			attacked_node.queue_free()
+		else:
+			print("Failed to beat enemy defence (%s)" % [def])
 		update_position(map, path.last())
 		state_to_done(map)	
 
@@ -283,8 +297,8 @@ func valid_attacks(map: Map, position: Coordinate) -> CoordinateMap:
 		var unit: Unit = map.node_array().at(unit_coordinate)
 		if unit.team != team:
 			var attacks_in_range = []
-			for i in attacks.size():
-				var attack = attacks[i]
+			for i in character.attacks().size():
+				var attack = character.attacks()[i]
 				if attack.can_attack_distance(map.distance(position, unit_coordinate)):
 					attacks_in_range.append(i)
 			if attacks_in_range.size() > 0:
