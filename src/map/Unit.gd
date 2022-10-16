@@ -5,7 +5,7 @@ export var movement = 6
 export var movement_type = "foot"
 var attacks = [
 	Attack.new("Greatsword", 1, 1),
-	#Attack.new("Shortbow", 2, 6),
+	Attack.new("Shortbow", 2, 6),
 ]
 
 export var team = 0
@@ -144,10 +144,13 @@ func state_to_attack_confirm(map: Map, path: CoordinateList):
 	unit_state = UnitState.ATTACK_CONFIRM
 	var attacked_node = map.node_array().at(map.cursor)
 	
-	var menu_options = [
-		MenuOption.new("confirm", "999% Damage"),
-		MenuOption.new("cancel", "Cancel"),
-	]
+	var distance_to_target = map.distance(path.last(), map.cursor)
+	var menu_options = []
+	for i in attacks.size():
+		var attack: Attack = attacks[i]
+		if attack.can_attack_distance(distance_to_target):
+			menu_options.append(MenuOption.new(str(i), attack.name))
+	menu_options.append(MenuOption.new("cancel", "Cancel"))
 	
 	var menu = new_menu.instance()
 	menu.set_options(menu_options)
@@ -160,16 +163,18 @@ func state_to_attack_confirm(map: Map, path: CoordinateList):
 	var option = yield(menu, "option_selected")
 	menu.queue_free()
 	map.set_active(true)
-	
-	if option == "confirm":
-		attacked_node.queue_free() # TODO: damage rather than instadeath
-		update_position(map, path.last())
-		state_to_done(map)
+
 	if option == "cancel":
 		position = map.position_from_coordinates(path.at(0))
 		yield(get_tree(), "idle_frame")
 		state_to_selected(map, path)
-	
+	else:
+		var attack_id = int(option)
+		var attack = attacks[attack_id]
+		print("Attacking using %s" % [attack.name])
+		attacked_node.queue_free() # TODO: damage rather than instadeath
+		update_position(map, path.last())
+		state_to_done(map)	
 
 func state_to_done(map: Map):
 	print("Unit state: Done")
@@ -315,12 +320,16 @@ func calculate_options(map: Map) -> void:
 				var best_attack = attack_targets.at(attack_target)[0]
 				var existing_attacks_at_target: AttackSource = default_attack_sources.at(attack_target)
 				
-				if !map.node_array().at(u)\
-				and (!existing_attacks_at_target\
-					or (existing_attacks_at_target.attack_id > best_attack)\
-					or u_remain > remaining_movement_at_cell.at(existing_attacks_at_target.source)):
-					default_attack_sources.set_value(attack_target, AttackSource.new(best_attack, u))
-			
+				if !map.node_array().at(u):
+					if !existing_attacks_at_target:
+						default_attack_sources.set_value(attack_target, AttackSource.new(best_attack, u))
+					else:
+						if existing_attacks_at_target.attack_id < best_attack:
+							default_attack_sources.set_value(attack_target, AttackSource.new(best_attack, u))
+						elif existing_attacks_at_target.attack_id == best_attack\
+						and u_remain > remaining_movement_at_cell.at(existing_attacks_at_target.source):
+							default_attack_sources.set_value(attack_target, AttackSource.new(best_attack, u))
+
 			# Calculate adjacent movment options
 			var adjacent_cells = map.get_adjacent_cells(u)
 			for a in adjacent_cells.to_array():
