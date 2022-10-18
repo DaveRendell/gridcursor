@@ -1,6 +1,7 @@
 class_name Character
 
 var display_name: String
+var sprite_sheet = preload("res://img/characters/Mage-Red.png")
 
 # Might, Precision, Knowledge, Wit
 var stats = [0, 0, 0, 0]
@@ -65,3 +66,6 @@ func attacks() -> Array:
 		if item:
 			attacks.append_array(x.get_attacks())
 	return attacks
+
+func sprite() -> AnimatedSprite:
+	return PunyCharacterSprite.from_file(sprite_sheet)

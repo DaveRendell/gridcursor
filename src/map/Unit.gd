@@ -33,11 +33,8 @@ func from_char(character: Character, team: int, coordinate: Coordinate):
 	self.team = team
 	self.x = coordinate.x
 	self.y = coordinate.y
-	
-	if team == 0:
-		$AnimatedSprite.animation = "purple"
-	if team == 1:
-		$AnimatedSprite.animation = "yellow"	
+	var sprite = character.sprite()
+	add_child(sprite)
 
 func select(map: Map):
 	if unit_state == UnitState.UNSELECTED and map.current_turn == team:
@@ -53,6 +50,8 @@ func state_to_unselected(map: Map):
 func state_to_selected(map: Map, initial_path: CoordinateList):
 	print("Unit state: Selected")
 	unit_state = UnitState.SELECTED
+	
+	get_sprite().set_animation("default")
 
 	var all_options = empty_movement_options.concat(attack_options)
 	
@@ -217,13 +216,36 @@ func wait_for_cell_option_select(
 	map.send_clicks_as_signal = false
 	map.clickable_cells = null	
 
+func get_sprite() -> AnimatedSprite:
+	var sprite = null
+	for child in get_children():
+		var sprite_child = child as AnimatedSprite
+		if sprite_child:
+			sprite = sprite_child
+			break
+	return sprite
+
 func animate_movement_along_path(map: Map) -> SceneTreeTween:
+	var sprite = get_sprite()
+	
 	var tween = get_tree().create_tween()
 	if map.path.size() <= 1:
 		tween.tween_interval(0)
 	for i in range(1, map.path.size()):
-		var pos = map.position_from_coordinates(map.path.at(i))
-		tween.tween_property(self, "position", pos, 0.1)
+		var from = map.position_from_coordinates(map.path.at(i - 1))
+		var to = map.position_from_coordinates(map.path.at(i))
+		var direction: String
+		if from.y == to.y:
+			if from.x < to.x:
+				direction = "right"
+			else:
+				direction = "left"
+		elif from.y < to.y:
+			direction = "down"
+		else:
+			direction = "up"
+		tween.tween_callback(sprite, "set_animation", [direction])
+		tween.tween_property(self, "position", to, 0.1)
 	map.path = CoordinateList.new()
 	map.set_active(false)
 	map.update()
@@ -238,6 +260,8 @@ func update_position(map: Map, coordinate: Coordinate):
 	map.send_clicks_as_signal = false
 	map.disconnect("cursor_move", self, "handle_cursor_move")
 	map.path = CoordinateList.new()
+	
+	get_sprite().set_animation("default")
 	
 	remaining_movement_at_cell = null
 	default_attack_sources = null
