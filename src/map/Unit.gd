@@ -188,14 +188,16 @@ func state_to_attack_confirm(map: Map, path: CoordinateList):
 		var d1 = rng.randi_range(1, 6)
 		var d2 = rng.randi_range(1, 6)
 		var roll = d1 + d2 + character.stats[best_stat]
+		var attack_text = "Rolled %s = [%s + %s] + %s" % [roll, d1, d2, character.stats[best_stat]]
 		print("Rolled %s = [%s + %s] + %s" % [roll, d1, d2, character.stats[best_stat]])
 		var def = attacked_node.character.defence()
 		
 		if roll >= def:
-			print("Beat enemy defence (%s)" % [def])
+			attack_text += "\nBeat enemy defence (%s)" % [def]
 			attacked_node.queue_free()
 		else:
-			print("Failed to beat enemy defence (%s)" % [def])
+			attack_text += "\nFailed to beat enemy defence (%s)" % [def]
+		map.display_toast(attack_text, 3.0)
 		update_position(map, path.last())
 		state_to_done(map)	
 

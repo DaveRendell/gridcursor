@@ -134,11 +134,11 @@ func next_turn():
 				message = "Purple team's turn"
 			display_toast(message)
 
-func display_toast(text: String) -> void:
+func display_toast(text: String, delay: float = 1.0) -> void:
 	var toast = new_toast.instance()
 	toast.get_node("CenterContainer/Label").text = text
 	add_child(toast)
 	toast.popup_centered()
-	var timer = get_tree().create_timer(1)
+	var timer = get_tree().create_timer(delay)
 	timer.connect("timeout", toast, "queue_free")
 	

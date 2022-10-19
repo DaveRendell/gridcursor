@@ -25,8 +25,8 @@ func _ready():
 	reginald.equip("off_hand", shield)
 	reginald.equip("clothing", leather_armour)
 	
-	var blob1 = Mob.new("Blob", slime_sprite_1, 0, 0, 0, 0, Attack.new("Slime", 1, 1, [1], 2))
-	var blob2 = Mob.new("Blob", slime_sprite_2, 0, 0, 0, 0, Attack.new("Slime", 1, 1, [1], 2))
+	var blob1 = Mob.new("Blobber", slime_sprite_1, 0, 0, 0, 0, Attack.new("Slime", 1, 1, [1], 2))
+	var blob2 = Mob.new("Blobber", slime_sprite_2, 0, 0, 0, 0, Attack.new("Slime", 1, 1, [1], 2))
 	
 	var reginald_unit = new_unit.instance()
 	var blob1_unit = new_unit.instance()
