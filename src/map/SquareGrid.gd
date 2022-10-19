@@ -6,6 +6,12 @@ var height = grid_height * grid_size
 var new_unit = preload("res://src/map/Unit.tscn")
 
 func _ready():
+	var blue_soldier_sprite_sheet = preload("res://img/characters/Soldier-Blue.png")
+	var blue_soldier_sprite = PunyCharacterSprite.character_sprite(blue_soldier_sprite_sheet)
+	var slime_sprite_sheet = preload("res://img/characters/Slime.png")
+	var slime_sprite_1 = PunyCharacterSprite.slime_sprite(slime_sprite_sheet)
+	var slime_sprite_2 = PunyCharacterSprite.slime_sprite(slime_sprite_sheet)
+	
 	var sword = Weapon.new("Sword", 5, [0], 3)
 	var short_bow = Weapon.new("Short bow", 5, [1], 2, 2, 8)
 	var great_sword = Weapon.new("Greatsword", 10, [1], 5, 1, 1, true)
@@ -14,24 +20,24 @@ func _ready():
 
 	var shield = Shield.new("Buckler", 4, 1)
 
-	var reginald = Character.new("Reginald", 3, 2, 1, 1)
+	var reginald = Character.new("Reginald", blue_soldier_sprite, 3, 2, 1, 1)
 	reginald.equip("main_hand", sword)
 	reginald.equip("off_hand", shield)
 	reginald.equip("clothing", leather_armour)
 	
-	var goblin1 = Goblin.new()
-	var goblin2 = Goblin.new()
+	var blob1 = Mob.new("Blob", slime_sprite_1, 0, 0, 0, 0, Attack.new("Slime", 1, 1, [1], 2))
+	var blob2 = Mob.new("Blob", slime_sprite_2, 0, 0, 0, 0, Attack.new("Slime", 1, 1, [1], 2))
 	
 	var reginald_unit = new_unit.instance()
-	var goblin1_unit = new_unit.instance()
-	var goblin2_unit = new_unit.instance()
+	var blob1_unit = new_unit.instance()
+	var blob2_unit = new_unit.instance()
 	reginald_unit.from_char(reginald, 0, Coordinate.new(5, 6))
-	goblin1_unit.from_char(goblin1, 1, Coordinate.new(5, 7))
-	goblin2_unit.from_char(goblin2, 1, Coordinate.new(5, 8))
+	blob1_unit.from_char(blob1, 1, Coordinate.new(5, 7))
+	blob2_unit.from_char(blob2, 1, Coordinate.new(5, 8))
 	
 	$GridNodes.add_child(reginald_unit)
-	$GridNodes.add_child(goblin1_unit)
-	$GridNodes.add_child(goblin2_unit)
+	$GridNodes.add_child(blob1_unit)
+	$GridNodes.add_child(blob2_unit)
 	
 	draw_nodes()
 

@@ -18,6 +18,8 @@ enum UnitState {
 }
 var unit_state: int = 0
 
+var sprite: AnimatedSprite
+
 # Calculated on unit select
 var remaining_movement_at_cell: CoordinateMap = null
 var default_attack_sources: CoordinateMap = null
@@ -33,7 +35,7 @@ func from_char(character: Character, team: int, coordinate: Coordinate):
 	self.team = team
 	self.x = coordinate.x
 	self.y = coordinate.y
-	var sprite = character.sprite()
+	sprite = character.sprite
 	add_child(sprite)
 
 func select(map: Map):
@@ -51,7 +53,7 @@ func state_to_selected(map: Map, initial_path: CoordinateList):
 	print("Unit state: Selected")
 	unit_state = UnitState.SELECTED
 	
-	get_sprite().set_animation("default")
+	set_sprite_animation("default")
 
 	var all_options = empty_movement_options.concat(attack_options)
 	
@@ -216,18 +218,7 @@ func wait_for_cell_option_select(
 	map.send_clicks_as_signal = false
 	map.clickable_cells = null	
 
-func get_sprite() -> AnimatedSprite:
-	var sprite = null
-	for child in get_children():
-		var sprite_child = child as AnimatedSprite
-		if sprite_child:
-			sprite = sprite_child
-			break
-	return sprite
-
 func animate_movement_along_path(map: Map) -> SceneTreeTween:
-	var sprite = get_sprite()
-	
 	var tween = get_tree().create_tween()
 	if map.path.size() <= 1:
 		tween.tween_interval(0)
@@ -244,8 +235,8 @@ func animate_movement_along_path(map: Map) -> SceneTreeTween:
 			direction = "down"
 		else:
 			direction = "up"
-		tween.tween_callback(sprite, "set_animation", [direction])
-		tween.tween_property(self, "position", to, 0.1)
+		tween.tween_callback(self, "set_sprite_animation", [direction])
+		tween.tween_property(self, "position", to, 0.15)
 	map.path = CoordinateList.new()
 	map.set_active(false)
 	map.update()
@@ -261,7 +252,7 @@ func update_position(map: Map, coordinate: Coordinate):
 	map.disconnect("cursor_move", self, "handle_cursor_move")
 	map.path = CoordinateList.new()
 	
-	get_sprite().set_animation("default")
+	set_sprite_animation("default")
 	
 	remaining_movement_at_cell = null
 	default_attack_sources = null
@@ -419,8 +410,12 @@ func get_path_to_coords(map: Map, coordinate: Coordinate) -> CoordinateList:
 	out = out.reverse()
 	return out
 
-func movement_cost_of_path(map: Map, p: CoordinateList):
+func movement_cost_of_path(map: Map, p: CoordinateList) -> int:
 	var cost = 0
 	for i in range(1, p.size()):
 		cost += movement_cost_of_cell(map, p.at(i))
 	return cost
+
+func set_sprite_animation(animation: String) -> void:
+	if animation != sprite.animation:
+		sprite.animation = animation

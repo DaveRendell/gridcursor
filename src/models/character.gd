@@ -1,7 +1,7 @@
 class_name Character
 
 var display_name: String
-var sprite_sheet = preload("res://img/characters/Mage-Red.png")
+var sprite: AnimatedSprite
 
 # Might, Precision, Knowledge, Wit
 var stats = [0, 0, 0, 0]
@@ -27,6 +27,7 @@ class CharacterEquipment:
 
 func _init(
 	display_name: String,
+	sprite: AnimatedSprite,
 	might: int = 0,
 	precision: int = 0,
 	knowledge: int = 0,
@@ -36,6 +37,7 @@ func _init(
 	self.stats = [might, precision, knowledge, wit]
 	self.hp = max_hp()
 	self.equipment = CharacterEquipment.new()
+	self.sprite = sprite
 
 func max_hp() -> int:
 	return int(max(2 * stats[0] + stats[1] + stats[2] + stats[3], 1))
@@ -66,6 +68,3 @@ func attacks() -> Array:
 		if item:
 			attacks.append_array(x.get_attacks())
 	return attacks
-
-func sprite() -> AnimatedSprite:
-	return PunyCharacterSprite.from_file(sprite_sheet)

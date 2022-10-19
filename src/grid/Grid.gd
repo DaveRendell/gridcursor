@@ -21,7 +21,7 @@ var clickable_cells: CoordinateList = null
 signal click
 signal cursor_move
 
-	
+
 # Returns the relative position of an object at the given grid coordinates
 # Should be overwritten to match the coordinate system of this grid
 func position_from_coordinates(coordinate: Coordinate) -> Vector2:
