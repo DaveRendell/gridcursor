@@ -111,7 +111,7 @@ func click_position(coordinate: Coordinate):
 			
 			menu.queue_free()
 			if option == "end_turn":
-				emit_signal("next_turn")
+				next_turn()
 			yield(get_tree(), "idle_frame")
 			set_active(true)
 
@@ -124,6 +124,8 @@ func draw_nodes():
 func draw_grid():
 	push_error("Implement draw_grid in inheriting scene")
 
+func next_turn():
+	emit_signal("next_turn")
 
 func display_toast(text: String, delay: float = 1.0) -> Popup:
 	var toast = new_toast.instance()
