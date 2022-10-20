@@ -8,3 +8,6 @@ script = ExtResource( 2 )
 
 [node name="Background" parent="." index="0"]
 show_behind_parent = true
+
+[node name="Cursor" parent="." index="1"]
+frame = 1

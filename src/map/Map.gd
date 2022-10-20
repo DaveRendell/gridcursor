@@ -2,6 +2,8 @@ extends "res://src/grid/Grid.gd"
 class_name Map
 # A grid that represents a map, with player interactable objects on it.
 
+signal next_turn
+
 var terrain_grid: CoordinateMap = CoordinateMap.new(grid_width, grid_height, [], 0)
 var highlights: CoordinateMap = CoordinateMap.new(grid_width, grid_height, [], null)
 var path = CoordinateList.new()
@@ -109,7 +111,7 @@ func click_position(coordinate: Coordinate):
 			
 			menu.queue_free()
 			if option == "end_turn":
-				next_turn()
+				emit_signal("next_turn")
 			yield(get_tree(), "idle_frame")
 			set_active(true)
 
@@ -122,23 +124,13 @@ func draw_nodes():
 func draw_grid():
 	push_error("Implement draw_grid in inheriting scene")
 
-func next_turn():
-	current_turn = (current_turn + 1) % teams
-	for child in $GridNodes.get_children():
-		if child.has_method("state_to_unselected"):
-			child.state_to_unselected(self)
-			var message: String
-			if current_turn == 1:
-				message = "Yellow team's turn"
-			else:
-				message = "Purple team's turn"
-			display_toast(message)
 
-func display_toast(text: String, delay: float = 1.0) -> void:
+func display_toast(text: String, delay: float = 1.0) -> Popup:
 	var toast = new_toast.instance()
 	toast.get_node("CenterContainer/Label").text = text
 	add_child(toast)
 	toast.popup_centered()
 	var timer = get_tree().create_timer(delay)
 	timer.connect("timeout", toast, "queue_free")
+	return toast
 	
