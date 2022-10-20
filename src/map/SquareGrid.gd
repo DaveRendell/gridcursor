@@ -33,7 +33,7 @@ func _ready():
 	var blob2_unit = new_unit.instance()
 	reginald_unit.from_char(reginald, 0, Coordinate.new(5, 6))
 	blob1_unit.from_char(blob1, 1, Coordinate.new(5, 7))
-	blob2_unit.from_char(blob2, 1, Coordinate.new(5, 8))
+	blob2_unit.from_char(blob2, 1, Coordinate.new(0, 0))
 	
 	$GridNodes.add_child(reginald_unit)
 	$GridNodes.add_child(blob1_unit)

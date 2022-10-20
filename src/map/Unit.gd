@@ -176,28 +176,7 @@ func state_to_attack_confirm(map: Map, path: CoordinateList):
 	else:
 		var attack_id = int(option)
 		var attack = character.attacks()[attack_id]
-		print("Attacking using %s" % [attack.name])
-		
-		var best_stat = -1
-		for stat in attack.attacking_stats:
-			if character.stats[stat] > character.stats[best_stat]:
-				best_stat = stat
-		
-		var rng = RandomNumberGenerator.new()
-		rng.randomize()
-		var d1 = rng.randi_range(1, 6)
-		var d2 = rng.randi_range(1, 6)
-		var roll = d1 + d2 + character.stats[best_stat]
-		var attack_text = "Rolled %s = [%s + %s] + %s" % [roll, d1, d2, character.stats[best_stat]]
-		print("Rolled %s = [%s + %s] + %s" % [roll, d1, d2, character.stats[best_stat]])
-		var def = attacked_node.character.defence()
-		
-		if roll >= def:
-			attack_text += "\nBeat enemy defence (%s)" % [def]
-			attacked_node.queue_free()
-		else:
-			attack_text += "\nFailed to beat enemy defence (%s)" % [def]
-		map.display_toast(attack_text, 3.0)
+		perform_attack(map, attacked_node, attack)
 		update_position(map, path.last())
 		state_to_done(map)	
 
@@ -206,6 +185,30 @@ func state_to_done(map: Map):
 	unit_state == UnitState.DONE
 	modulate = Color(0.5, 0.5, 0.5, 1.0)
 	map.clear_highlights()
+
+func perform_attack(map: Map, target: Unit, attack: Attack) -> Popup:
+	print("Attacking using %s" % [attack.name])
+		
+	var best_stat = -1
+	for stat in attack.attacking_stats:
+		if character.stats[stat] > character.stats[best_stat]:
+			best_stat = stat
+	
+	var rng = RandomNumberGenerator.new()
+	rng.randomize()
+	var d1 = rng.randi_range(1, 6)
+	var d2 = rng.randi_range(1, 6)
+	var roll = d1 + d2 + character.stats[best_stat]
+	var attack_text = "Rolled %s = [%s + %s] + %s" % [roll, d1, d2, character.stats[best_stat]]
+	print("Rolled %s = [%s + %s] + %s" % [roll, d1, d2, character.stats[best_stat]])
+	var def = target.character.defence()
+	
+	if roll >= def:
+		attack_text += "\nBeat enemy defence (%s)" % [def]
+		target.queue_free()
+	else:
+		attack_text += "\nFailed to beat enemy defence (%s)" % [def]
+	return map.display_toast(attack_text, 3.0)
 
 func wait_for_cell_option_select(
 	map: Map,
