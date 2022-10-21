@@ -48,12 +48,23 @@ func _draw():
 		if colour:
 			colour.a = 0.6
 			draw_colored_polygon(cell_corners(coordinate), colour, PoolVector2Array(), null, null, true)
-	if path.size() > 0:
+	if path.size() > 1:
+		var color = Color.coral
 		for i in range(1, path.size()):
 			var from = cell_centre_position(path.at(i - 1))
 			var to = cell_centre_position(path.at(i))
 
-			draw_line(from, to, Color.coral, grid_size * 0.5, true)
+			draw_line(from, to, color, grid_size * 0.5, true)
+			draw_circle(from, grid_size * 0.25, color)
+		var last_point = cell_centre_position(path.last())
+		var second_last_point = cell_centre_position(path.at(-2))
+		var rotation = (last_point - second_last_point).angle()
+		var arrow_head_points = [
+			last_point + grid_size * Vector2(-0.25, -0.5).rotated(rotation),
+			last_point + grid_size * Vector2(0.25, 0).rotated(rotation),
+			last_point + grid_size * Vector2(-0.25, 0.5).rotated(rotation),
+		]
+		draw_colored_polygon(arrow_head_points, color)
 	
 	draw_grid()
 
