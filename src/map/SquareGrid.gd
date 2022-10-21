@@ -6,6 +6,26 @@ var height = grid_height * grid_size
 var new_unit = preload("res://src/map/Unit.tscn")
 
 func _ready():
+	var view_size = get_viewport().size
+	var width = grid_size * grid_width
+	var height = grid_size * grid_height
+	var h_margin = max(0, (view_size.x / zoom_level - width) / 2)
+	var v_margin = max(0, (view_size.y / zoom_level - height) / 2)
+	var camera = $Cursor/Camera
+	camera.zoom = Vector2(1.0 / 3, 1.0 / 3)
+	camera.limit_left = -h_margin
+	camera.limit_right = width + h_margin
+	camera.limit_top = -v_margin
+	camera.limit_bottom = height + v_margin
+	
+	var h_drag_margin = 1 - (4 * zoom_level * grid_size / view_size.x)
+	var v_drag_margin = 1 - (4 * zoom_level * grid_size / view_size.y)
+	camera.drag_margin_left = h_drag_margin
+	camera.drag_margin_right = h_drag_margin
+	camera.drag_margin_top = v_drag_margin
+	camera.drag_margin_bottom = v_drag_margin
+	camera.position = Vector2(grid_size / 2, grid_size / 2)
+	
 	var blue_soldier_sprite_sheet = preload("res://img/characters/Soldier-Blue.png")
 	var blue_soldier_sprite = PunyCharacterSprite.character_sprite(blue_soldier_sprite_sheet)
 	var slime_sprite_sheet = preload("res://img/characters/Slime.png")

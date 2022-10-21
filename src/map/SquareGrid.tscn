@@ -6,5 +6,18 @@
 [node name="SquareGrid" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
 
-[node name="Background" parent="." index="0"]
+[node name="PopupLayer" type="CanvasLayer" parent="." index="0"]
+
+[node name="Background" parent="." index="1"]
 show_behind_parent = true
+
+[node name="Camera" type="Camera2D" parent="Cursor" index="0"]
+current = true
+zoom = Vector2( 0.333, 0.333 )
+limit_left = -160
+limit_right = 1120
+drag_margin_h_enabled = true
+drag_margin_v_enabled = true
+smoothing_enabled = true
+editor_draw_limits = true
+editor_draw_drag_margin = true

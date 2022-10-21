@@ -13,6 +13,8 @@ var terrain_types = []
 var teams = 2
 var current_turn = 0
 
+var zoom_level = 3
+
 var new_menu = preload("res://src/menu/Menu.tscn")
 var new_toast = preload("res://src/PopupDialog.tscn")
 
@@ -54,6 +56,11 @@ func _draw():
 			draw_line(from, to, Color.coral, grid_size * 0.5, true)
 	
 	draw_grid()
+
+func move_cursor(dx: int, dy: int):
+	.move_cursor(dx, dy)
+	# Update Camera
+	var view_size = get_viewport().size
 
 func distance(coordinate_1: Coordinate, coordinate_2: Coordinate) -> int:
 	push_error("Implement distance in inheriting class")
@@ -130,7 +137,8 @@ func next_turn():
 func display_toast(text: String, delay: float = 1.0) -> Popup:
 	var toast = new_toast.instance()
 	toast.get_node("Panel/CenterContainer/Label").text = text
-	add_child(toast)
+	toast.rect_scale = Vector2(zoom_level, zoom_level)
+	$PopupLayer.add_child(toast)
 	toast.popup_centered()
 	var timer = get_tree().create_timer(delay)
 	timer.connect("timeout", toast, "queue_free")

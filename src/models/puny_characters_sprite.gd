@@ -13,8 +13,7 @@ static func character_sprite(sprite_sheet: Texture) -> AnimatedSprite:
 	add_animation(frames, sprite_sheet, "left", 6, [0, 2, 0, 3])
 
 	sprite.frames = frames
-	sprite.scale = Vector2(2, 2)
-	sprite.position = Vector2(16, 16)
+	sprite.position = Vector2(8, 8)
 	sprite.play()
 	return sprite
 
@@ -30,8 +29,7 @@ static func slime_sprite(sprite_sheet: Texture) -> AnimatedSprite:
 	add_animation(frames, sprite_sheet, "left", 0, [0, 1, 2, 3, 4, 5], 7.0)
 
 	sprite.frames = frames
-	sprite.scale = Vector2(2, 2)
-	sprite.position = Vector2(14, 16)
+	sprite.position = Vector2(7, 8)
 	sprite.play()
 	return sprite
 

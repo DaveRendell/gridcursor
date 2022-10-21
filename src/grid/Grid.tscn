@@ -21,7 +21,6 @@ margin_bottom = 32.0
 color = Color( 1, 1, 1, 0 )
 
 [node name="Cursor" type="AnimatedSprite" parent="."]
-scale = Vector2( 2, 2 )
 z_index = 5
 frames = SubResource( 2 )
 playing = true

@@ -6,7 +6,7 @@ class_name Grid
 # This scene is abstract, and must have various methods implemented by 
 # inheriting scenes
 
-export var grid_size: int = 32
+export var grid_size: int = 16
 export var grid_width: int = 20
 export var grid_height: int = 20
 
