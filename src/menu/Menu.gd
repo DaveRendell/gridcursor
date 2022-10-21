@@ -4,6 +4,8 @@ class_name Menu
 
 signal option_selected
 
+var panel_border = preload("res://src/Panel.tscn")
+
 var options = [
 	MenuOption.new("option_1", "Option 1"),
 	MenuOption.new("option_2", "Option 2"),
@@ -42,6 +44,9 @@ func cell_centre_position(coordinate: Coordinate) -> Vector2:
 	return Vector2(width / 2, (coordinate.y + 0.5) * grid_size)
 
 func draw_grid():
+	var border = panel_border.instance()
+	border.rect_size = Vector2(width + 16, height + 16)
+	border.rect_position = Vector2(-8, -8)
 	$Background.rect_size = Vector2(width, height)
 	for i in options.size():
 		var option = options[i]
@@ -64,3 +69,4 @@ func draw_grid():
 		container.add_child(text)
 		rect.add_child(container)
 		add_child(rect)
+	add_child(border)

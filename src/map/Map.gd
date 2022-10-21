@@ -129,7 +129,7 @@ func next_turn():
 
 func display_toast(text: String, delay: float = 1.0) -> Popup:
 	var toast = new_toast.instance()
-	toast.get_node("CenterContainer/Label").text = text
+	toast.get_node("Panel/CenterContainer/Label").text = text
 	add_child(toast)
 	toast.popup_centered()
 	var timer = get_tree().create_timer(delay)
