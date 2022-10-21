@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/1.png-c915bee85e3f8386c2bdd469dce66b94.stex"
+path="res://.import/RocksnStumps.png-2b0ec1c77a304da3471492301d760ebc.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://img/ui/grid/cursor/1.png"
-dest_files=[ "res://.import/1.png-c915bee85e3f8386c2bdd469dce66b94.stex" ]
+source_file="res://img/battle/RocksnStumps.png"
+dest_files=[ "res://.import/RocksnStumps.png-2b0ec1c77a304da3471492301d760ebc.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=false
+flags/filter=true
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2

@@ -84,6 +84,7 @@ func draw_grid():
 		var line = Line2D.new()
 		line.width = 1
 		line.default_color = Color.darkslategray
+		line.default_color.a = 0.5
 		line.add_point(Vector2(offset, 0))
 		line.add_point(Vector2(offset, height))
 		add_child(line)
@@ -93,6 +94,7 @@ func draw_grid():
 		var line = Line2D.new()
 		line.width = 1
 		line.default_color = Color.darkslategray
+		line.default_color.a = 0.5
 		line.add_point(Vector2(0, offset))
 		line.add_point(Vector2(width, offset))
 		add_child(line)

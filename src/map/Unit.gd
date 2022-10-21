@@ -3,6 +3,9 @@ class_name Unit
 
 var character: Character
 
+const move_option_color = Color.lightblue
+const attack_option_color = Color.red
+
 export var movement = 6
 export var movement_type = "foot"
 
@@ -59,8 +62,9 @@ func state_to_selected(map: Map, initial_path: CoordinateList):
 	
 	# Set map to display possible movement options and show movement path
 	map.clear_highlights()
-	map.add_highlights(movement_options, Color.lightblue)
-	map.add_highlights(attack_options, Color.lightpink)
+	
+	map.add_highlights(movement_options, move_option_color)
+	map.add_highlights(attack_options, attack_option_color)
 	map.path = initial_path
 	map.connect("cursor_move", self, "handle_cursor_move")
 	
@@ -133,7 +137,7 @@ func state_to_attack_select(map: Map, path: CoordinateList, new_location: Coordi
 	unit_state = UnitState.ATTACK_SELECT
 	var attack_options = CoordinateList.new(valid_attacks(map, new_location).non_empty_coordinates())
 	map.clear_highlights()
-	map.add_highlights(attack_options, Color.lightpink)
+	map.add_highlights(attack_options, attack_option_color)
 	
 	var attack_selected = wait_for_cell_option_select(map, attack_options)
 	var result = yield(map, "click")

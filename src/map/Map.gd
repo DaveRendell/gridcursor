@@ -31,22 +31,9 @@ func _ready() -> void:
 	draw_nodes()
 
 func _draw():
-	for coordinate in terrain_grid.coordinates():
-		var terrain = terrain_grid.at(coordinate)
-		var colour: Color = Color.black
-		if terrain == 0:
-			colour = Color.lightgreen
-		if terrain == 1:
-			colour = Color.lightgray
-		if terrain == 2:
-			colour = Color.darkgreen
-		if terrain == 3:
-			colour = Color.aqua
-		draw_colored_polygon(cell_corners(coordinate), colour, PoolVector2Array(), null, null, true)
 	for coordinate in highlights.coordinates():
 		var colour = highlights.at(coordinate)
 		if colour:
-			colour.a = 0.6
 			draw_colored_polygon(cell_corners(coordinate), colour, PoolVector2Array(), null, null, true)
 	if path.size() > 1:
 		var color = Color.coral
@@ -82,6 +69,7 @@ func add_highlight(coordinate: Coordinate, colour: Color):
 	update()
 
 func add_highlights(coordinates: CoordinateList, colour: Color):
+	colour.a = 0.3
 	for coordinate in coordinates.to_array():
 		highlights.set_value(coordinate, colour)
 	update()	
