@@ -43,6 +43,11 @@ static func execute_unit_turn(unit: Unit, map: Map, unit_turn: UnitTurnComplete)
 		
 		unit.update_position(map, attack_source.source)
 	else:
+		# Move closer to enemies - fairly rudimental for now, just finds the
+		# spot that uses all its movement range that puts it closest to an
+		# enemy as the bird flies
+		# TODO: avoid getting stuck behind walls
+		# TODO: think a bit more about where to move
 		var edge_of_movement_range = edge_of_movement_range(unit)
 		var nearest_distance = INF
 		var best_location: Coordinate
@@ -52,13 +57,13 @@ static func execute_unit_turn(unit: Unit, map: Map, unit_turn: UnitTurnComplete)
 				nearest_distance = nearest_distance_at_cell
 				best_location = cell
 		
-		map.path = unit.get_path_to_coords(map, best_location)
-		print(map.path)
-		var animation = unit.animate_movement_along_path(map)
-		yield(animation, "finished")
+		if best_location:
+			map.path = unit.get_path_to_coords(map, best_location)
+			var animation = unit.animate_movement_along_path(map)
+			yield(animation, "finished")
 		
-		unit.update_position(map, best_location)
-				
+			unit.update_position(map, best_location)
+	
 	unit.state_to_done(map)
 	# Brief pause for effect...
 	yield(unit.get_tree().create_timer(0.25), "timeout")	
