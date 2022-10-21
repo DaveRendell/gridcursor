@@ -29,12 +29,13 @@ func _ready() -> void:
 	terrain_grid.set_value(Coordinate.new(7, 8), 3)
 	
 	draw_nodes()
+	draw_grid()
 
 func _draw():
 	for coordinate in highlights.coordinates():
 		var colour = highlights.at(coordinate)
 		if colour:
-			draw_colored_polygon(cell_corners(coordinate), colour, PoolVector2Array(), null, null, true)
+			draw_colored_polygon(cell_corners(coordinate), colour)
 	if path.size() > 1:
 		var color = Color.coral
 		for i in range(1, path.size()):
@@ -52,8 +53,6 @@ func _draw():
 			last_point + grid_size * Vector2(-0.25, 0.5).rotated(rotation),
 		]
 		draw_colored_polygon(arrow_head_points, color)
-	
-	draw_grid()
 
 func move_cursor(dx: int, dy: int):
 	.move_cursor(dx, dy)

@@ -392,6 +392,8 @@ func movement_cost_of_cell(map: Map, coordinate: Coordinate) -> int:
 	var node: Unit = map.node_array().at(coordinate)
 	if (node != null) and (node.team != team):
 		return -1
+	if terrain == -1:
+		return 1
 	if map.terrain_types[terrain]["movement"].has(movement_type):
 		return map.terrain_types[terrain]["movement"][movement_type]
 	return -1

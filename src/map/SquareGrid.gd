@@ -26,6 +26,10 @@ func _ready():
 	camera.drag_margin_bottom = v_drag_margin
 	camera.position = Vector2(grid_size / 2, grid_size / 2)
 	
+	for coordinate in terrain_grid.coordinates():
+		var cell = $Tiles/TerrainTypes.get_cell(coordinate.x, coordinate.y)
+		terrain_grid.set_value(coordinate, cell)
+	
 	var blue_soldier_sprite_sheet = preload("res://img/characters/Soldier-Blue.png")
 	var blue_soldier_sprite = PunyCharacterSprite.character_sprite(blue_soldier_sprite_sheet)
 	var slime_sprite_sheet = preload("res://img/characters/Slime.png")
@@ -53,7 +57,7 @@ func _ready():
 	var blob2_unit = new_unit.instance()
 	reginald_unit.from_char(reginald, 0, Coordinate.new(5, 6))
 	blob1_unit.from_char(blob1, 1, Coordinate.new(5, 7))
-	blob2_unit.from_char(blob2, 1, Coordinate.new(0, 0))
+	blob2_unit.from_char(blob2, 1, Coordinate.new(6, 0))
 	
 	$GridNodes.add_child(reginald_unit)
 	$GridNodes.add_child(blob1_unit)
@@ -84,7 +88,7 @@ func draw_grid():
 		var line = Line2D.new()
 		line.width = 1
 		line.default_color = Color.darkslategray
-		line.default_color.a = 0.5
+		line.default_color.a = 0.2
 		line.add_point(Vector2(offset, 0))
 		line.add_point(Vector2(offset, height))
 		add_child(line)
@@ -94,7 +98,7 @@ func draw_grid():
 		var line = Line2D.new()
 		line.width = 1
 		line.default_color = Color.darkslategray
-		line.default_color.a = 0.5
+		line.default_color.a = 0.2
 		line.add_point(Vector2(0, offset))
 		line.add_point(Vector2(width, offset))
 		add_child(line)
