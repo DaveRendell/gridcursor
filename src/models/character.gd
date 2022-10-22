@@ -66,5 +66,13 @@ func attacks() -> Array:
 	for x in equipment.to_array():
 		var item = x as Equipment
 		if item:
-			attacks.append_array(x.get_attacks())
+			attacks.append_array(item.get_attacks())
 	return attacks
+
+func spells() -> Array:
+	var spells = []
+	for x in equipment.to_array():
+		var item = x as Equipment
+		if item:
+			spells.append_array(item.get_spells())
+	return spells

@@ -94,6 +94,21 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/models/shield.gd"
 }, {
+"base": "Reference",
+"class": "Spell",
+"language": "GDScript",
+"path": "res://src/models/spell.gd"
+}, {
+"base": "Equipment",
+"class": "Staff",
+"language": "GDScript",
+"path": "res://src/models/staff.gd"
+}, {
+"base": "Spell",
+"class": "Teleport",
+"language": "GDScript",
+"path": "res://src/models/spells/teleport.gd"
+}, {
 "base": "Node2D",
 "class": "Unit",
 "language": "GDScript",
@@ -122,6 +137,9 @@ _global_script_class_icons={
 "Mob": "",
 "PunyCharacterSprite": "",
 "Shield": "",
+"Spell": "",
+"Staff": "",
+"Teleport": "",
 "Unit": "",
 "Weapon": ""
 }

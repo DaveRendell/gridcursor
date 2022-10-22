@@ -11,6 +11,8 @@ static func character_sprite(sprite_sheet: Texture) -> AnimatedSprite:
 	add_animation(frames, sprite_sheet, "right", 2, [0, 2, 0, 3])
 	add_animation(frames, sprite_sheet, "up", 4, [0, 2, 0, 3])
 	add_animation(frames, sprite_sheet, "left", 6, [0, 2, 0, 3])
+	
+	add_spin_animation(frames, sprite_sheet)
 
 	sprite.frames = frames
 	sprite.position = Vector2(8, 8)
@@ -54,3 +56,17 @@ static func add_animation(
 		frames.add_frame(name, frame_texture, i)
 
 	frames.set_animation_speed(name, speed)
+
+static func add_spin_animation(
+	frames: SpriteFrames,
+	sprite_sheet: Texture
+) -> void:
+	var sprite_size = 32
+	
+	frames.add_animation("spin")
+	for i in 8:
+		var frame_texture = AtlasTexture.new()
+		frame_texture.atlas = sprite_sheet
+		frame_texture.region = Rect2(0, i * sprite_size, sprite_size, sprite_size)
+		frames.add_frame("spin", frame_texture, i)
+	frames.set_animation_speed("spin", 5)

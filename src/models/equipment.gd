@@ -17,3 +17,6 @@ func set_defence_boost() -> int:
 
 func get_attacks() -> Array:
 	return []
+
+func get_spells() -> Array:
+	return []

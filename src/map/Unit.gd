@@ -106,14 +106,21 @@ func state_to_action_select(map: Map, path: CoordinateList):
 	unit_state = UnitState.ACTION_SELECT
 	var new_location = path.last()
 	
+	map.clear_highlights()
+	
+	map.add_highlights(movement_options, move_option_color)
+	map.add_highlights(attack_options, attack_option_color)
+	
 	var attack_options = valid_attacks(map, new_location)
 	
 	var menu_options = [
 		MenuOption.new("wait", "Wait"),
 		MenuOption.new("cancel", "Cancel"),
 	]
+	if character.spells().size() > 0:
+		menu_options.push_front(MenuOption.new("spells", "Spells"))		
 	if attack_options.non_empty_coordinates().size() > 0:
-		menu_options.push_front(MenuOption.new("attack", "Attack"))
+		menu_options.push_front(MenuOption.new("attack", "Attack"))		
 	
 	var menu = new_menu.instance()
 	menu.set_options(menu_options)
@@ -132,6 +139,8 @@ func state_to_action_select(map: Map, path: CoordinateList):
 		state_to_done(map)
 	if option == "attack":
 		state_to_attack_select(map, path, new_location)
+	if option == "spells":
+		state_to_spell_select(map, path)
 
 func state_to_attack_select(map: Map, path: CoordinateList, new_location: Coordinate):
 	print("Unit state: Attack select")
@@ -184,6 +193,32 @@ func state_to_attack_confirm(map: Map, path: CoordinateList):
 		perform_attack(map, attacked_node, attack)
 		update_position(map, path.last())
 		state_to_done(map)	
+
+func state_to_spell_select(map: Map, path: CoordinateList):
+	var menu = new_menu.instance()
+	menu.position = Vector2(map.grid_size, 0)
+	var menu_options = []
+	for i in character.spells().size():
+		var spell = character.spells()[i]
+		menu_options.append(MenuOption.new(str(i), spell.display_name))
+	menu_options.append(MenuOption.new("cancel", "Cancel"))
+	menu.set_options(menu_options)
+	menu.z_index = 10
+	add_child(menu)
+	map.set_active(false)
+	var option = yield(menu, "option_selected")
+	menu.queue_free()
+	
+	yield(get_tree(), "idle_frame")
+	map.set_active(true)
+	
+	if option == "cancel":
+		yield(get_tree(), "idle_frame")
+		state_to_action_select(map, path)
+	else:
+		var spell_id = int(option)
+		var spell = character.spells()[spell_id]
+		spell.battle_action(map, self, path)
 
 func state_to_done(map: Map):
 	print("Unit state: Done")
