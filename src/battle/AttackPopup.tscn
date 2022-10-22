@@ -1,0 +1,269 @@
+[gd_scene load_steps=21 format=2]
+
+[ext_resource path="res://img/ui/GUI_1x.png" type="Texture" id=1]
+[ext_resource path="res://img/ui/d6.png" type="Texture" id=2]
+[ext_resource path="res://img/characters/Slime.png" type="Texture" id=3]
+[ext_resource path="res://src/battle/AttackPopup.gd" type="Script" id=4]
+[ext_resource path="res://img/characters/Archer-Green.png" type="Texture" id=5]
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 1 )
+region = Rect2( 96, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=3]
+flags = 4
+atlas = ExtResource( 5 )
+region = Rect2( 0, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=4]
+flags = 4
+atlas = ExtResource( 5 )
+region = Rect2( 32, 0, 32, 32 )
+
+[sub_resource type="SpriteFrames" id=5]
+animations = [ {
+"frames": [ SubResource( 3 ), SubResource( 4 ) ],
+"loop": true,
+"name": "default",
+"speed": 2.5
+} ]
+
+[sub_resource type="AtlasTexture" id=9]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=10]
+atlas = ExtResource( 2 )
+region = Rect2( 16, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=11]
+atlas = ExtResource( 2 )
+region = Rect2( 32, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=12]
+atlas = ExtResource( 2 )
+region = Rect2( 48, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=13]
+atlas = ExtResource( 2 )
+region = Rect2( 64, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=14]
+atlas = ExtResource( 2 )
+region = Rect2( 80, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=15]
+atlas = ExtResource( 2 )
+region = Rect2( 96, 0, 16, 16 )
+
+[sub_resource type="SpriteFrames" id=16]
+animations = [ {
+"frames": [ SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ), SubResource( 15 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="AtlasTexture" id=6]
+flags = 4
+atlas = ExtResource( 3 )
+region = Rect2( 0, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=7]
+flags = 4
+atlas = ExtResource( 3 )
+region = Rect2( 32, 0, 32, 32 )
+
+[sub_resource type="SpriteFrames" id=8]
+animations = [ {
+"frames": [ SubResource( 6 ), SubResource( 7 ) ],
+"loop": true,
+"name": "default",
+"speed": 2.5
+} ]
+
+[node name="Popup" type="Popup"]
+margin_right = 288.0
+margin_bottom = 104.0
+script = ExtResource( 4 )
+
+[node name="PopupContainer" type="MarginContainer" parent="."]
+margin_right = 288.0
+margin_bottom = 104.0
+
+[node name="Background" type="NinePatchRect" parent="PopupContainer"]
+margin_right = 288.0
+margin_bottom = 104.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = SubResource( 1 )
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="ContentContainer" type="MarginContainer" parent="PopupContainer"]
+margin_right = 288.0
+margin_bottom = 104.0
+
+[node name="Rows" type="VBoxContainer" parent="PopupContainer/ContentContainer"]
+margin_right = 288.0
+margin_bottom = 104.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="CenterContainer" type="CenterContainer" parent="PopupContainer/ContentContainer/Rows"]
+margin_right = 288.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+size_flags_vertical = 0
+
+[node name="AttackTitle" type="Label" parent="PopupContainer/ContentContainer/Rows/CenterContainer"]
+margin_left = 105.0
+margin_right = 183.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 0, 24 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "AttackName"
+valign = 2
+
+[node name="Columns" type="HBoxContainer" parent="PopupContainer/ContentContainer/Rows"]
+margin_top = 28.0
+margin_right = 288.0
+margin_bottom = 95.0
+alignment = 1
+
+[node name="AttackerDetails" type="VBoxContainer" parent="PopupContainer/ContentContainer/Rows/Columns"]
+margin_left = 12.0
+margin_right = 92.0
+margin_bottom = 67.0
+
+[node name="CenterContainer" type="HBoxContainer" parent="PopupContainer/ContentContainer/Rows/Columns/AttackerDetails"]
+margin_right = 80.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 0, 32 )
+alignment = 1
+
+[node name="Container" type="Container" parent="PopupContainer/ContentContainer/Rows/Columns/AttackerDetails/CenterContainer"]
+margin_left = 14.0
+margin_right = 46.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 32, 32 )
+
+[node name="Sprite" type="AnimatedSprite" parent="PopupContainer/ContentContainer/Rows/Columns/AttackerDetails/CenterContainer/Container"]
+position = Vector2( -14, 0 )
+frames = SubResource( 5 )
+playing = true
+centered = false
+
+[node name="ToHitBonus" type="Label" parent="PopupContainer/ContentContainer/Rows/Columns/AttackerDetails/CenterContainer"]
+margin_left = 50.0
+margin_top = 9.0
+margin_right = 66.0
+margin_bottom = 23.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "+5"
+
+[node name="AttackerName" type="Label" parent="PopupContainer/ContentContainer/Rows/Columns/AttackerDetails"]
+margin_top = 36.0
+margin_right = 80.0
+margin_bottom = 67.0
+rect_min_size = Vector2( 80, 0 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Attacker Name"
+align = 1
+autowrap = true
+
+[node name="DiceDetails" type="VBoxContainer" parent="PopupContainer/ContentContainer/Rows/Columns"]
+margin_left = 96.0
+margin_right = 192.0
+margin_bottom = 67.0
+rect_min_size = Vector2( 96, 0 )
+alignment = 1
+
+[node name="Dice" type="HBoxContainer" parent="PopupContainer/ContentContainer/Rows/Columns/DiceDetails"]
+margin_top = 7.0
+margin_right = 96.0
+margin_bottom = 23.0
+alignment = 1
+
+[node name="Container" type="Container" parent="PopupContainer/ContentContainer/Rows/Columns/DiceDetails/Dice"]
+margin_left = 14.0
+margin_right = 46.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 32, 16 )
+
+[node name="Dice1" type="AnimatedSprite" parent="PopupContainer/ContentContainer/Rows/Columns/DiceDetails/Dice/Container"]
+position = Vector2( 8, 0 )
+frames = SubResource( 16 )
+frame = 2
+centered = false
+
+[node name="Container2" type="Container" parent="PopupContainer/ContentContainer/Rows/Columns/DiceDetails/Dice"]
+margin_left = 50.0
+margin_right = 82.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 32, 16 )
+
+[node name="Dice2" type="AnimatedSprite" parent="PopupContainer/ContentContainer/Rows/Columns/DiceDetails/Dice/Container2"]
+position = Vector2( 8, 0 )
+frames = SubResource( 16 )
+frame = 4
+centered = false
+
+[node name="Result" type="Label" parent="PopupContainer/ContentContainer/Rows/Columns/DiceDetails"]
+margin_top = 27.0
+margin_right = 96.0
+margin_bottom = 41.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "13 to hit"
+
+[node name="Consequence" type="Label" parent="PopupContainer/ContentContainer/Rows/Columns/DiceDetails"]
+margin_top = 45.0
+margin_right = 96.0
+margin_bottom = 59.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "8 Cut Damage"
+
+[node name="TargetDetails" type="VBoxContainer" parent="PopupContainer/ContentContainer/Rows/Columns"]
+margin_left = 196.0
+margin_right = 276.0
+margin_bottom = 67.0
+
+[node name="CenterContainer" type="HBoxContainer" parent="PopupContainer/ContentContainer/Rows/Columns/TargetDetails"]
+margin_right = 80.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 0, 32 )
+alignment = 1
+
+[node name="Defence" type="Label" parent="PopupContainer/ContentContainer/Rows/Columns/TargetDetails/CenterContainer"]
+margin_left = 4.0
+margin_top = 9.0
+margin_right = 40.0
+margin_bottom = 23.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "8 DEF"
+
+[node name="Container" type="Container" parent="PopupContainer/ContentContainer/Rows/Columns/TargetDetails/CenterContainer"]
+margin_left = 44.0
+margin_right = 76.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 32, 32 )
+
+[node name="Sprite" type="AnimatedSprite" parent="PopupContainer/ContentContainer/Rows/Columns/TargetDetails/CenterContainer/Container"]
+frames = SubResource( 8 )
+frame = 1
+playing = true
+centered = false
+
+[node name="TargetName" type="Label" parent="PopupContainer/ContentContainer/Rows/Columns/TargetDetails"]
+margin_top = 36.0
+margin_right = 80.0
+margin_bottom = 67.0
+rect_min_size = Vector2( 80, 0 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Attacker Name"
+align = 1
+autowrap = true

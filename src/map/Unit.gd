@@ -10,6 +10,7 @@ export var movement = 6
 export var movement_type = "foot"
 
 export var team = 0
+var attack_popup = preload("res://src/battle/AttackPopup.tscn")
 
 enum UnitState {
 	UNSELECTED,
@@ -192,27 +193,12 @@ func state_to_done(map: Map):
 
 func perform_attack(map: Map, target: Unit, attack: Attack) -> Popup:
 	print("Attacking using %s" % [attack.name])
-		
-	var best_stat = -1
-	for stat in attack.attacking_stats:
-		if character.stats[stat] > character.stats[best_stat]:
-			best_stat = stat
-	
-	var rng = RandomNumberGenerator.new()
-	rng.randomize()
-	var d1 = rng.randi_range(1, 6)
-	var d2 = rng.randi_range(1, 6)
-	var roll = d1 + d2 + character.stats[best_stat]
-	var attack_text = "Rolled %s = [%s + %s] + %s" % [roll, d1, d2, character.stats[best_stat]]
-	print("Rolled %s = [%s + %s] + %s" % [roll, d1, d2, character.stats[best_stat]])
-	var def = target.character.defence()
-	
-	if roll >= def:
-		attack_text += "\nBeat enemy defence (%s)" % [def]
-		target.queue_free()
-	else:
-		attack_text += "\nFailed to beat enemy defence (%s)" % [def]
-	return map.display_toast(attack_text, 3.0)
+	var popup = attack_popup.instance()
+	popup.for_attack(attack, character, target.character)
+	popup.rect_scale = Vector2(map.zoom_level, map.zoom_level)
+	map.get_node("PopupLayer").add_child(popup)
+	popup.popup_centered()
+	return popup
 
 func wait_for_cell_option_select(
 	map: Map,
