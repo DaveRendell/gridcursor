@@ -41,7 +41,12 @@ func _ready():
 	var sword = Weapon.new("Sword", 5, [0], 3)
 	var short_bow = Weapon.new("Short bow", 5, [1], 2, 2, 8)
 	var great_sword = Weapon.new("Greatsword", 10, [1], 5, 1, 1, true)
-	var staff = Staff.new("Fire Rod", 3, [Attack.new("Firebolt", 1, 4, [3], 3)], [Teleport.new()])
+	var staff = Staff.new(
+		"Fire Rod",
+		3,
+		[Attack.new("Firebolt", 1, 4, [3], 3)],
+		[Teleport.new(), Fireball.new()]
+		)
 
 	var leather_armour = Armour.new("Leather armour", 5, 8)
 

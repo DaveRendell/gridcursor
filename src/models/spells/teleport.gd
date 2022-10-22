@@ -17,9 +17,9 @@ func battle_action(map: Map, caster: Unit, path: CoordinateList) -> void:
 	map.clear_highlights()
 	map.add_highlights(CoordinateList.new(teleport_options), highlight_colour)
 	
-	var attack_selected = caster.wait_for_cell_option_select(map, CoordinateList.new(teleport_options))
+	var teleport_selected = caster.wait_for_cell_option_select(map, CoordinateList.new(teleport_options))
 	var result = yield(map, "click")
-	attack_selected.resume()
+	teleport_selected.resume()
 	
 	if typeof(result) == TYPE_STRING and result == "cancel":
 		map.clear_highlights()

@@ -54,11 +54,6 @@ func _draw():
 		]
 		draw_colored_polygon(arrow_head_points, color)
 
-func move_cursor(dx: int, dy: int):
-	.move_cursor(dx, dy)
-	# Update Camera
-	var view_size = get_viewport().size
-
 func distance(coordinate_1: Coordinate, coordinate_2: Coordinate) -> int:
 	push_error("Implement distance in inheriting class")
 	return 0
@@ -71,7 +66,7 @@ func add_highlights(coordinates: CoordinateList, colour: Color):
 	colour.a = 0.3
 	for coordinate in coordinates.to_array():
 		highlights.set_value(coordinate, colour)
-	update()	
+	update()
 
 func get_adjacent_cells(coordinate: Coordinate) -> CoordinateList:
 	push_error("Implement get_adjacent_cells in inheriting scene")
