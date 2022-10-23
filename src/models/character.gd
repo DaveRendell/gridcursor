@@ -76,3 +76,9 @@ func spells() -> Array:
 		if item:
 			spells.append_array(item.get_spells())
 	return spells
+
+func take_damage(damage: int) -> void:
+	hp = max(0, hp - damage)
+
+func is_down() -> bool:
+	return hp <= 0

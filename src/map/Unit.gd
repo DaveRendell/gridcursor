@@ -233,6 +233,18 @@ func perform_attack(map: Map, target: Unit, attack: Attack) -> Toast:
 		if character.stats[stat] > character.stats[best_stat]:
 			best_stat = stat
 	
+	var angle_to_target = (target.position - position).angle()
+	# 0 = 0 = right
+	# 90 = tau / 4 = down
+	# 180 = tau / 2 = left
+	# 270 = 3tau / 4 = up
+	# round(angle * 4 / tau) % 4
+	var directions = ["right", "down", "left", "up"]
+	var direction = directions[int(round(angle_to_target * 4 / TAU)) % 4]
+	sprite.animation = "%s_%s" % [attack.animation, direction]
+	yield(sprite, "animation_finished")
+	sprite.animation = "default"
+	
 	var rng = RandomNumberGenerator.new()
 	rng.randomize()
 	var d1 = rng.randi_range(1, 6)
@@ -246,6 +258,18 @@ func perform_attack(map: Map, target: Unit, attack: Attack) -> Toast:
 	toast.add_icon(DiceTexture.d6(d1))
 	toast.add_icon(DiceTexture.d6(d2))
 	toast.add_text("+ %s = %s" % [character.stats[best_stat], roll])
+	
+	if roll >= def:
+		target.character.take_damage(attack.damage)
+		target.sprite.animation = "damage"
+		yield(target.sprite, "animation_finished")
+		if target.character.is_down():
+			target.sprite.animation = "knocked_down"
+			yield(target.sprite, "animation_finished")
+			target.queue_free()
+		else:
+			target.sprite.animation = "default"
+		
 	
 	return toast
 
