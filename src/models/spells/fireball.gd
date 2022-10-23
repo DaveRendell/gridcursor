@@ -15,7 +15,7 @@ func _init().("Fireball"):
 func battle_action(map: Map, caster: Unit, path: CoordinateList) -> void:
 	var possible_targets = []
 	for coordinate in map.terrain_grid.coordinates():
-		if map.distance(caster.coordinate(), coordinate) <= spell_range:
+		if map.distance(path.last(), coordinate) <= spell_range:
 			possible_targets.append(coordinate)
 	var targets = CoordinateList.new(possible_targets)
 	apply_highlights(map, targets)

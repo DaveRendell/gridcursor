@@ -208,6 +208,13 @@ script = ExtResource( 2 )
 
 [node name="PopupLayer" type="CanvasLayer" parent="." index="0"]
 
+[node name="Toasts" type="VBoxContainer" parent="PopupLayer" index="0"]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 16.0
+margin_bottom = 16.0
+rect_scale = Vector2( 3, 3 )
+
 [node name="Background" parent="." index="1"]
 show_behind_parent = true
 

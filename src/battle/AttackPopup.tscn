@@ -155,6 +155,7 @@ rect_min_size = Vector2( 32, 32 )
 [node name="Sprite" type="AnimatedSprite" parent="PopupContainer/ContentContainer/Rows/Columns/AttackerDetails/CenterContainer/Container"]
 position = Vector2( -14, 0 )
 frames = SubResource( 5 )
+frame = 1
 playing = true
 centered = false
 
@@ -254,7 +255,6 @@ rect_min_size = Vector2( 32, 32 )
 
 [node name="Sprite" type="AnimatedSprite" parent="PopupContainer/ContentContainer/Rows/Columns/TargetDetails/CenterContainer/Container"]
 frames = SubResource( 8 )
-frame = 1
 playing = true
 centered = false
 

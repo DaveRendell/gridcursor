@@ -226,14 +226,28 @@ func state_to_done(map: Map):
 	modulate = Color(0.5, 0.5, 0.5, 1.0)
 	map.clear_highlights()
 
-func perform_attack(map: Map, target: Unit, attack: Attack) -> Popup:
+func perform_attack(map: Map, target: Unit, attack: Attack) -> Toast:
 	print("Attacking using %s" % [attack.name])
-	var popup = attack_popup.instance()
-	popup.for_attack(attack, character, target.character)
-	popup.rect_scale = Vector2(map.zoom_level, map.zoom_level)
-	map.get_node("PopupLayer").add_child(popup)
-	popup.popup_centered()
-	return popup
+	var best_stat = -1
+	for stat in attack.attacking_stats:
+		if character.stats[stat] > character.stats[best_stat]:
+			best_stat = stat
+	
+	var rng = RandomNumberGenerator.new()
+	rng.randomize()
+	var d1 = rng.randi_range(1, 6)
+	var d2 = rng.randi_range(1, 6)
+	var roll = d1 + d2 + character.stats[best_stat]
+	var def = target.character.defence()
+	
+	var toast = map.display_toast("", 3.0)
+	toast.add_text("%s:" % [character.display_name], Color.skyblue)
+	toast.add_text("Rolled")
+	toast.add_icon(DiceTexture.d6(d1))
+	toast.add_icon(DiceTexture.d6(d2))
+	toast.add_text("+ %s = %s" % [character.stats[best_stat], roll])
+	
+	return toast
 
 func wait_for_cell_option_select(
 	map: Map,

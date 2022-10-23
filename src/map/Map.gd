@@ -16,7 +16,7 @@ var current_turn = 0
 var zoom_level = 3
 
 var new_menu = preload("res://src/menu/Menu.tscn")
-var new_toast = preload("res://src/PopupDialog.tscn")
+var new_toast = preload("res://src/ui/Toast.tscn")
 
 func _ready() -> void:
 	var file = File.new()
@@ -127,13 +127,19 @@ func draw_grid():
 func next_turn():
 	emit_signal("next_turn")
 
-func display_toast(text: String, delay: float = 1.0) -> Popup:
+func display_toast(text: String, delay: float = 1.0):
+	var toasts_container = $PopupLayer/Toasts
 	var toast = new_toast.instance()
-	toast.get_node("Panel/CenterContainer/Label").text = text
 	toast.rect_scale = Vector2(zoom_level, zoom_level)
-	$PopupLayer.add_child(toast)
-	toast.popup_centered()
-	var timer = get_tree().create_timer(delay)
-	timer.connect("timeout", toast, "queue_free")
+	toast.add_text(text)
+	toasts_container.add_child(toast)
+	toasts_container.move_child(toast, 0)
+	
+	toasts_container.rect_position = Vector2(0, -(zoom_level * toast.rect_size.y))
+	var animation = get_tree().create_tween()
+	animation.tween_property(toasts_container, "rect_position", Vector2.ZERO, 0.25)
+	
+	get_tree().create_timer(delay).connect("timeout", toast, "delete", [Vector2.LEFT])
+	
 	return toast
 	

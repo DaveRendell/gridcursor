@@ -44,6 +44,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/coordinate/coordinate_map.gd"
 }, {
+"base": "Reference",
+"class": "DiceTexture",
+"language": "GDScript",
+"path": "res://img/ui/dice_texture.gd"
+}, {
 "base": "Item",
 "class": "Equipment",
 "language": "GDScript",
@@ -114,6 +119,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/models/spells/teleport.gd"
 }, {
+"base": "MarginContainer",
+"class": "Toast",
+"language": "GDScript",
+"path": "res://src/ui/Toast.gd"
+}, {
 "base": "Node2D",
 "class": "Unit",
 "language": "GDScript",
@@ -132,6 +142,7 @@ _global_script_class_icons={
 "Coordinate": "",
 "CoordinateList": "",
 "CoordinateMap": "",
+"DiceTexture": "",
 "Equipment": "",
 "Fireball": "",
 "Grid": "",
@@ -146,6 +157,7 @@ _global_script_class_icons={
 "Spell": "",
 "Staff": "",
 "Teleport": "",
+"Toast": "",
 "Unit": "",
 "Weapon": ""
 }
