@@ -38,13 +38,13 @@ func _ready():
 	var slime_sprite_1 = PunyCharacterSprite.slime_sprite(slime_sprite_sheet)
 	var slime_sprite_2 = PunyCharacterSprite.slime_sprite(slime_sprite_sheet)
 	
-	var sword = Weapon.new("Sword", 5, [0], 3)
-	var short_bow = Weapon.new("Short bow", 5, [1], 2, 2, 8)
-	var great_sword = Weapon.new("Greatsword", 10, [1], 5, 1, 1, true)
+	var sword = Weapon.new("Sword", 5, [0], 3, 1, 1, false, "sword")
+	var short_bow = Weapon.new("Short bow", 5, [1], 2, 2, 8, true, "bow")
+	var great_sword = Weapon.new("Greatsword", 10, [1], 5, 1, 1, true, "sword")
 	var staff = Staff.new(
 		"Fire Rod",
 		3,
-		[Attack.new("Firebolt", 1, 4, [3], 3)],
+		[Attack.new("Firebolt", 1, 4, [3], 3, "staff")],
 		[Teleport.new(), Fireball.new()]
 		)
 
@@ -60,8 +60,8 @@ func _ready():
 	var yanil = Character.new("Yanil", red_mage_sprite, 0, 2, 3, 2)
 	yanil.equip("main_hand", staff)
 	
-	var blob1 = Mob.new("Blobber", slime_sprite_1, 0, 0, 0, 0, Attack.new("Slime", 1, 1, [1], 2))
-	var blob2 = Mob.new("Blobber", slime_sprite_2, 0, 0, 0, 0, Attack.new("Slime", 1, 1, [1], 2))
+	var blob1 = Mob.new("Blobber", slime_sprite_1, 10, 0, 0, 0, Attack.new("Slime", 1, 1, [0], 5))
+	var blob2 = Mob.new("Blobber", slime_sprite_2, 10, 0, 0, 0, Attack.new("Slime", 1, 1, [0], 5))
 	
 	var reginald_unit = new_unit.instance()
 	var yanil_unit = new_unit.instance()

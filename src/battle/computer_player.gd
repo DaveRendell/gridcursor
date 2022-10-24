@@ -39,7 +39,7 @@ static func execute_unit_turn(unit: Unit, map: Map, unit_turn: UnitTurnComplete)
 		yield(animation, "finished")
 		
 		var popup = unit.perform_attack(map, target, attack)
-		yield(popup, "hide")
+		yield(unit.sprite, "animation_finished")
 		
 		unit.update_position(map, attack_source.source)
 	else:

@@ -191,6 +191,7 @@ func state_to_attack_confirm(map: Map, path: CoordinateList):
 		var attack_id = int(option)
 		var attack = character.attacks()[attack_id]
 		perform_attack(map, attacked_node, attack)
+		yield(sprite, "animation_finished")
 		update_position(map, path.last())
 		state_to_done(map)	
 
@@ -226,7 +227,7 @@ func state_to_done(map: Map):
 	modulate = Color(0.5, 0.5, 0.5, 1.0)
 	map.clear_highlights()
 
-func perform_attack(map: Map, target: Unit, attack: Attack) -> Toast:
+func perform_attack(map: Map, target: Unit, attack: Attack) -> void:
 	print("Attacking using %s" % [attack.name])
 	var best_stat = -1
 	for stat in attack.attacking_stats:
@@ -269,9 +270,6 @@ func perform_attack(map: Map, target: Unit, attack: Attack) -> Toast:
 			target.queue_free()
 		else:
 			target.sprite.animation = "default"
-		
-	
-	return toast
 
 func wait_for_cell_option_select(
 	map: Map,
