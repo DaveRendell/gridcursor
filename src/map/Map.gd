@@ -15,8 +15,8 @@ var current_turn = 0
 
 var zoom_level = 3
 
-var new_menu = preload("res://src/menu/Menu.tscn")
 var new_toast = preload("res://src/ui/Toast.tscn")
+var theme = preload("res://src/ui/theme.tres")
 
 func _ready() -> void:
 	var file = File.new()
@@ -98,22 +98,36 @@ func click_position(coordinate: Coordinate):
 					if node.coordinate().equals(coordinate):
 						return node.select(self)
 			# If no unit selected
-			var menu = new_menu.instance()
-			menu.set_options([
-				MenuOption.new("end_turn", "End turn"),
-				MenuOption.new("cancel", "Cancel"),
-			])
-			menu.position = position_from_coordinates(cursor) + Vector2(grid_size, 0)
-			menu.z_index = 10
-			add_child(menu)
-			set_active(false)
-			var option = yield(menu, "option_selected")
+			var popup_menu = PopupMenu.new()
 			
-			menu.queue_free()
-			if option == "end_turn":
+			var options = ["End turn", "Cancel"]
+			for i in options.size():
+				var option = options[i]
+				popup_menu.add_item(option, i)
+			
+			display_menu(popup_menu)
+			
+			var id = yield(popup_menu, "id_pressed")
+			var option = options[id]
+			
+			if option == "End turn":
 				next_turn()
-			yield(get_tree(), "idle_frame")
 			set_active(true)
+
+func display_menu(popup_menu: PopupMenu) -> void:
+	popup_menu.theme = theme
+	popup_menu.popup_exclusive = true
+	popup_menu.rect_scale = Vector2(zoom_level, zoom_level)
+	popup_menu.set_current_index(0)
+	set_active(false)
+	
+	yield(get_tree(), "idle_frame")
+	$PopupLayer.add_child(popup_menu)
+	popup_menu.popup_centered()
+	
+	yield(popup_menu, "id_pressed")
+	popup_menu.queue_free()
+	popup_menu.hide()
 
 func draw_nodes():
 	for node in $GridNodes.get_children():
@@ -142,4 +156,4 @@ func display_toast(text: String, delay: float = 1.0):
 	get_tree().create_timer(delay).connect("timeout", toast, "delete", [Vector2.LEFT])
 	
 	return toast
-	
+

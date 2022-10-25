@@ -79,16 +79,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/map/Map.gd"
 }, {
-"base": "Node2D",
-"class": "Menu",
-"language": "GDScript",
-"path": "res://src/menu/Menu.gd"
-}, {
-"base": "Reference",
-"class": "MenuOption",
-"language": "GDScript",
-"path": "res://src/menu/menu_option.gd"
-}, {
 "base": "Character",
 "class": "Mob",
 "language": "GDScript",
@@ -149,8 +139,6 @@ _global_script_class_icons={
 "GridNode": "",
 "Item": "",
 "Map": "",
-"Menu": "",
-"MenuOption": "",
 "Mob": "",
 "PunyCharacterSprite": "",
 "Shield": "",

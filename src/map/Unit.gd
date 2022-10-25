@@ -11,6 +11,7 @@ export var movement_type = "foot"
 
 export var team = 0
 var attack_popup = preload("res://src/battle/AttackPopup.tscn")
+var theme = preload("res://src/ui/theme.tres")
 
 enum UnitState {
 	UNSELECTED,
@@ -31,8 +32,6 @@ var all_attack_sources: CoordinateMap = null
 var movement_options: CoordinateList = null
 var empty_movement_options: CoordinateList = null
 var attack_options: CoordinateList = null
-
-var new_menu = preload("res://src/menu/Menu.tscn")
 
 func from_char(character: Character, team: int, coordinate: Coordinate):
 	self.character = character
@@ -114,33 +113,31 @@ func state_to_action_select(map: Map, path: CoordinateList):
 	
 	var attack_options = valid_attacks(map, new_location)
 	
-	var menu_options = [
-		MenuOption.new("wait", "Wait"),
-		MenuOption.new("cancel", "Cancel"),
-	]
+	var popup_menu = PopupMenu.new()
+	var options = ["Wait", "Cancel"]
 	if character.spells().size() > 0:
-		menu_options.push_front(MenuOption.new("spells", "Spells"))		
+		options.push_front("Spells")
 	if attack_options.non_empty_coordinates().size() > 0:
-		menu_options.push_front(MenuOption.new("attack", "Attack"))		
+		options.push_front("Attack")
 	
-	var menu = new_menu.instance()
-	menu.set_options(menu_options)
-	menu.position = Vector2(map.grid_size, 0)
-	menu.z_index = 10
-	add_child(menu)
-	var option = yield(menu, "option_selected")
-	menu.queue_free()
+	for i in options.size():
+		popup_menu.add_item(options[i], i)
 	
-	if option == "cancel":
+	map.display_menu(popup_menu)
+
+	var id = yield(popup_menu, "id_pressed")
+	var option = options[id]
+	
+	if option == "Cancel":
 		position = map.position_from_coordinates(path.at(0))
 		yield(get_tree(), "idle_frame")
 		state_to_selected(map, path)
-	if option == "wait":
+	if option == "Wait":
 		update_position(map, new_location)
 		state_to_done(map)
-	if option == "attack":
+	if option == "Attack":
 		state_to_attack_select(map, path, new_location)
-	if option == "spells":
+	if option == "Spells":
 		state_to_spell_select(map, path)
 
 func state_to_attack_select(map: Map, path: CoordinateList, new_location: Coordinate):
@@ -165,61 +162,44 @@ func state_to_attack_confirm(map: Map, path: CoordinateList):
 	var attacked_node = map.node_array().at(map.cursor)
 	
 	var distance_to_target = map.distance(path.last(), map.cursor)
-	var menu_options = []
+	var popup_menu = PopupMenu.new()
 	for i in character.attacks().size():
 		var attack: Attack = character.attacks()[i]
 		if attack.can_attack_distance(distance_to_target):
-			menu_options.append(MenuOption.new(str(i), attack.name))
-	menu_options.append(MenuOption.new("cancel", "Cancel"))
+			popup_menu.add_item(attack.name, i)
+	popup_menu.add_item("Cancel")
 	
-	var menu = new_menu.instance()
-	menu.set_options(menu_options)
-	menu.position = map.position_from_coordinates(map.cursor)\
-		+ Vector2(map.grid_size, 0)\
-		- map.position_from_coordinates(coordinate())
-	menu.z_index = 10
-	add_child(menu)
-	map.set_active(false)
-	var option = yield(menu, "option_selected")
-	menu.queue_free()
-	map.set_active(true)
+	map.display_menu(popup_menu)
+	var id = yield(popup_menu, "id_pressed")
 
-	if option == "cancel":
+	if id == character.attacks().size():
+		# Cancel selected
 		position = map.position_from_coordinates(path.at(0))
 		yield(get_tree(), "idle_frame")
 		state_to_selected(map, path)
 	else:
-		var attack_id = int(option)
-		var attack = character.attacks()[attack_id]
+		var attack = character.attacks()[id]
 		perform_attack(map, attacked_node, attack)
 		yield(sprite, "animation_finished")
 		update_position(map, path.last())
 		state_to_done(map)	
 
 func state_to_spell_select(map: Map, path: CoordinateList):
-	var menu = new_menu.instance()
-	menu.position = Vector2(map.grid_size, 0)
-	var menu_options = []
+	var popup_menu = PopupMenu.new()
 	for i in character.spells().size():
 		var spell = character.spells()[i]
-		menu_options.append(MenuOption.new(str(i), spell.display_name))
-	menu_options.append(MenuOption.new("cancel", "Cancel"))
-	menu.set_options(menu_options)
-	menu.z_index = 10
-	add_child(menu)
-	map.set_active(false)
-	var option = yield(menu, "option_selected")
-	menu.queue_free()
+		popup_menu.add_item(spell.display_name, i)
+	popup_menu.add_item("Cancel")
 	
-	yield(get_tree(), "idle_frame")
-	map.set_active(true)
+	map.display_menu(popup_menu)
+	var id = yield(popup_menu, "id_pressed")
 	
-	if option == "cancel":
+	if id == character.spells().size():
+		# Cancel selected
 		yield(get_tree(), "idle_frame")
 		state_to_action_select(map, path)
 	else:
-		var spell_id = int(option)
-		var spell = character.spells()[spell_id]
+		var spell = character.spells()[id]
 		spell.battle_action(map, self, path)
 
 func state_to_done(map: Map):
@@ -284,7 +264,7 @@ func wait_for_cell_option_select(
 	yield()
 	
 	map.send_clicks_as_signal = false
-	map.clickable_cells = null	
+	map.clickable_cells = null
 
 func animate_movement_along_path(map: Map) -> SceneTreeTween:
 	var tween = get_tree().create_tween()
