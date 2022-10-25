@@ -53,7 +53,7 @@ static func execute_unit_turn(unit: Unit, map: Map, unit_turn: UnitTurnComplete)
 		var best_location: Coordinate
 		for cell in edge_of_movement_range.to_array():
 			var nearest_distance_at_cell = distance_to_nearest_enemy(cell, unit, map)
-			if nearest_distance_at_cell < nearest_distance:
+			if nearest_distance_at_cell < nearest_distance and map.node_array().at(cell) == null:
 				nearest_distance = nearest_distance_at_cell
 				best_location = cell
 		
