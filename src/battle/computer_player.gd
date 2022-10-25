@@ -22,6 +22,7 @@ static func get_units(map: Map) -> Array:
 	return units
 
 static func execute_unit_turn(unit: Unit, map: Map, unit_turn: UnitTurnComplete) -> void:
+	map.get_node("Cursor").position = map.position_from_coordinates(unit.coordinate())
 	unit.calculate_options(map)
 	
 	if unit.attack_options.size() > 0:
