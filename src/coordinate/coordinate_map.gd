@@ -37,3 +37,11 @@ func non_empty_coordinates() -> Array:
 			if data[i][j]:
 				out.append(Coordinate.new(i, j))
 	return out
+
+func _to_string() -> String:
+	var out = ""
+	for row in data:
+		for value in row:
+			out += str(value)
+		out += "\n"
+	return out

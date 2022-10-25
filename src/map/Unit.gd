@@ -25,7 +25,7 @@ var unit_state: int = 0
 var sprite: AnimatedSprite
 
 # Calculated on unit select
-var remaining_movement_at_cell: CoordinateMap = null
+var distance_to_cell: CoordinateMap = null
 var default_attack_sources: CoordinateMap = null
 var all_attack_sources: CoordinateMap = null
 var movement_options: CoordinateList = null
@@ -313,7 +313,7 @@ func update_position(map: Map, coordinate: Coordinate):
 	
 	set_sprite_animation("default")
 	
-	remaining_movement_at_cell = null
+	distance_to_cell = null
 	default_attack_sources = null
 	all_attack_sources = null
 	movement_options = null
@@ -387,23 +387,23 @@ class AttackSource:
 		self.source = source
 
 func calculate_options(map: Map) -> void:
-	remaining_movement_at_cell = CoordinateMap.new(map.grid_width, map.grid_width, [], -1) # -> int
+	distance_to_cell = CoordinateMap.new(map.grid_width, map.grid_width) # -> int
 	default_attack_sources = CoordinateMap.new(map.grid_width, map.grid_height) # -> AttackSource
 	all_attack_sources = CoordinateMap.new(map.grid_width, map.grid_height, [], CoordinateList.new()) # -> CoordinateList
 	movement_options = CoordinateList.new()
 	empty_movement_options = CoordinateList.new([coordinate()])
 	attack_options = CoordinateList.new()
 	
-	remaining_movement_at_cell.set_value(coordinate(), movement)
+	distance_to_cell.set_value(coordinate(), 0)
 	var updates = CoordinateList.new([coordinate()])
 	
 	while updates.size() > 0:
 		var new_updates = []
 		for u in updates.to_array():
-			var u_remain = remaining_movement_at_cell.at(u)
+			var u_distance = distance_to_cell.at(u)
 			
 			# Add to movement options if valid
-			if u_remain >= 0:
+			if u_distance <= movement:
 				movement_options = movement_options.append(u)
 				if !map.node_array().at(u):
 					empty_movement_options = empty_movement_options.append(u)
@@ -423,7 +423,7 @@ func calculate_options(map: Map) -> void:
 						if existing_attacks_at_target.attack_id < best_attack:
 							default_attack_sources.set_value(attack_target, AttackSource.new(best_attack, u))
 						elif existing_attacks_at_target.attack_id == best_attack\
-						and u_remain > remaining_movement_at_cell.at(existing_attacks_at_target.source):
+						and u_distance < distance_to_cell.at(existing_attacks_at_target.source):
 							default_attack_sources.set_value(attack_target, AttackSource.new(best_attack, u))
 
 			# Calculate adjacent movment options
@@ -431,9 +431,9 @@ func calculate_options(map: Map) -> void:
 			for a in adjacent_cells.to_array():
 				var a_cost = movement_cost_of_cell(map, a)
 				if a_cost >= 0:
-					var a_remain = u_remain - a_cost
-					if a_remain > remaining_movement_at_cell.at(a):
-						remaining_movement_at_cell.set_value(a, a_remain)
+					var a_distance = u_distance + a_cost
+					if distance_to_cell.at(a) == null or a_distance < distance_to_cell.at(a):
+						distance_to_cell.set_value(a, a_distance)
 						new_updates.append(a)
 		updates = CoordinateList.new(new_updates)
 
@@ -450,23 +450,23 @@ func movement_cost_of_cell(map: Map, coordinate: Coordinate) -> int:
 
 func get_path_to_coords(map: Map, coordinate: Coordinate) -> CoordinateList:
 	
-	if remaining_movement_at_cell.at(coordinate) < 0:
+	if distance_to_cell.at(coordinate) > movement:
 		return CoordinateList.new([coordinate])
 	
 	var out = CoordinateList.new([coordinate])
 	var u = coordinate
-	var u_remain = remaining_movement_at_cell.at(coordinate)
+	var u_distance = distance_to_cell.at(coordinate)
 	while !u.equals(coordinate()):
 		var adjacent_cells = map.get_adjacent_cells(u)
 		var u_cost = movement_cost_of_cell(map, u)
 		for a in adjacent_cells.to_array():
 			var a_node = map.node_array().at(a)
 			if (a_node == null) or (a_node.team == team):
-				var a_remain = remaining_movement_at_cell.at(a)
-				if a_remain == u_remain + u_cost:
+				var a_distance = distance_to_cell.at(a)
+				if a_distance == u_distance - u_cost:
 					out = out.append(a)
 					u = a
-					u_remain = a_remain
+					u_distance = a_distance
 					break
 	out = out.reverse()
 	return out
