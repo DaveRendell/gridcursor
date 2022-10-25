@@ -33,18 +33,19 @@ func battle_action(map: Map, caster: Unit, path: CoordinateList) -> void:
 		map.clear_highlights()
 		var target = map.cursor
 		
-		var explosion = explosion_scene.instance()
-		explosion.position = map.cell_centre_position(target)
-		map.add_child(explosion)
-		yield(explosion, "animation_finished")
-		explosion.queue_free()
-		
 		var aoe = calculate_aoe(map, target)
 		var hit_units = []
 		for coordinate in map.node_array().non_empty_coordinates():
 			if aoe.has(coordinate):
 				hit_units.append(map.node_array().at(coordinate))
-		print(hit_units.size())
+		for unit in hit_units:
+			unit.take_damage(3)
+		
+		var explosion = explosion_scene.instance()
+		explosion.position = map.cell_centre_position(target)
+		map.add_child(explosion)
+		yield(explosion, "animation_finished")
+		explosion.queue_free()
 		caster.update_position(map, path.last())
 		caster.state_to_done(map)
 		

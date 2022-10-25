@@ -13,6 +13,7 @@ func _init(
 	attack: Attack
 ).(display_name, sprite, might, precision, knowledge, wit):
 	self.attack = attack
+	self.die_when_downed = true
 
 func attacks() -> Array:
 	return [attack]

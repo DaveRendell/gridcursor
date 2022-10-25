@@ -44,8 +44,9 @@ func from_char(character: Character, team: int, coordinate: Coordinate):
 
 func select(map: Map):
 	if unit_state == UnitState.UNSELECTED and map.current_turn == team:
-		calculate_options(map)
-		state_to_selected(map, CoordinateList.new([coordinate()]))
+		if !character.is_down():
+			calculate_options(map)
+			state_to_selected(map, CoordinateList.new([coordinate()]))
 
 func state_to_unselected(map: Map):
 	unit_state = UnitState.UNSELECTED
@@ -261,15 +262,7 @@ func perform_attack(map: Map, target: Unit, attack: Attack) -> void:
 	toast.add_text("+ %s = %s" % [character.stats[best_stat], roll])
 	
 	if roll >= def:
-		target.character.take_damage(attack.damage)
-		target.sprite.animation = "damage"
-		yield(target.sprite, "animation_finished")
-		if target.character.is_down():
-			target.sprite.animation = "knocked_down"
-			yield(target.sprite, "animation_finished")
-			target.queue_free()
-		else:
-			target.sprite.animation = "default"
+		target.take_damage(attack.damage)
 
 func wait_for_cell_option_select(
 	map: Map,
@@ -376,7 +369,7 @@ func valid_attacks(map: Map, position: Coordinate) -> CoordinateMap:
 	var out = CoordinateMap.new(map.grid_width, map.grid_height)
 	for unit_coordinate in map.node_array().non_empty_coordinates():
 		var unit: Unit = map.node_array().at(unit_coordinate)
-		if unit.team != team:
+		if unit.team != team and !unit.character.is_down():
 			var attacks_in_range = []
 			for i in character.attacks().size():
 				var attack = character.attacks()[i]
@@ -487,3 +480,25 @@ func movement_cost_of_path(map: Map, p: CoordinateList) -> int:
 func set_sprite_animation(animation: String) -> void:
 	if animation != sprite.animation:
 		sprite.animation = animation
+
+func take_damage(damage: int) -> void:
+	character.take_damage(damage)
+	
+	$HPBar.visible = true
+	$HPBar.frame = round((float(character.hp) / character.max_hp()) * 14)
+	
+	sprite.animation = "damage"
+	yield(sprite, "animation_finished")
+	
+	if character.is_down():
+		sprite.animation = "knocked_down"
+		yield(sprite, "animation_finished")
+		if character.die_when_downed:
+			queue_free()
+		else:
+			$HPBar.visible = false
+			sprite.stop()
+			sprite.frame = 1
+	else:
+		sprite.animation = "default"
+	

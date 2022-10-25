@@ -10,6 +10,8 @@ var hp: int = 1
 
 var equipment: CharacterEquipment
 
+var die_when_downed = false
+
 class CharacterEquipment:
 	func _init():
 		pass
