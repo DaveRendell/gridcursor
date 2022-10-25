@@ -417,23 +417,23 @@ func calculate_options(map: Map) -> void:
 				if !map.node_array().at(u):
 					empty_movement_options = empty_movement_options.append(u)
 			
-			# Check attacks from u
-			var attack_targets = valid_attacks(map, u)
-			for attack_target in attack_targets.non_empty_coordinates():
-				attack_options = attack_options.append(attack_target)
-				all_attack_sources.set_value(attack_target, all_attack_sources.at(attack_target).append(u))
-				var best_attack = attack_targets.at(attack_target)[0]
-				var existing_attacks_at_target: AttackSource = default_attack_sources.at(attack_target)
-				
-				if !map.node_array().at(u):
-					if !existing_attacks_at_target:
-						default_attack_sources.set_value(attack_target, AttackSource.new(best_attack, u))
-					else:
-						if existing_attacks_at_target.attack_id < best_attack:
+				# Check attacks from u
+				var attack_targets = valid_attacks(map, u)
+				for attack_target in attack_targets.non_empty_coordinates():
+					attack_options = attack_options.append(attack_target)
+					all_attack_sources.set_value(attack_target, all_attack_sources.at(attack_target).append(u))
+					var best_attack = attack_targets.at(attack_target)[0]
+					var existing_attacks_at_target: AttackSource = default_attack_sources.at(attack_target)
+					
+					if !map.node_array().at(u):
+						if !existing_attacks_at_target:
 							default_attack_sources.set_value(attack_target, AttackSource.new(best_attack, u))
-						elif existing_attacks_at_target.attack_id == best_attack\
-						and u_distance < distance_to_cell.at(existing_attacks_at_target.source):
-							default_attack_sources.set_value(attack_target, AttackSource.new(best_attack, u))
+						else:
+							if existing_attacks_at_target.attack_id < best_attack:
+								default_attack_sources.set_value(attack_target, AttackSource.new(best_attack, u))
+							elif existing_attacks_at_target.attack_id == best_attack\
+							and u_distance < distance_to_cell.at(existing_attacks_at_target.source):
+								default_attack_sources.set_value(attack_target, AttackSource.new(best_attack, u))
 
 			# Calculate adjacent movment options
 			var adjacent_cells = map.get_adjacent_cells(u)

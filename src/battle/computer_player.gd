@@ -43,19 +43,21 @@ static func execute_unit_turn(unit: Unit, map: Map, unit_turn: UnitTurnComplete)
 		
 		unit.update_position(map, attack_source.source)
 	else:
-		# Move closer to enemies - fairly rudimental for now, just finds the
-		# spot that uses all its movement range that puts it closest to an
-		# enemy as the bird flies
-		# TODO: avoid getting stuck behind walls
+		# Move closer to enemies
 		# TODO: think a bit more about where to move
-		var edge_of_movement_range = edge_of_movement_range(unit)
+		var paths_to_enemies = paths_to_enemies(unit, map)
 		var nearest_distance = INF
 		var best_location: Coordinate
-		for cell in edge_of_movement_range.to_array():
-			var nearest_distance_at_cell = distance_to_nearest_enemy(cell, unit, map)
-			if nearest_distance_at_cell < nearest_distance and map.node_array().at(cell) == null:
-				nearest_distance = nearest_distance_at_cell
-				best_location = cell
+		
+		for path in paths_to_enemies:
+			var distance_to_enemy = unit.distance_to_cell.at(path.last())
+			var furthest_reachable_point = last_movement_option_in_path(unit, path)
+			var distance_at_furthest_reachable_point = unit.distance_to_cell.at(furthest_reachable_point)
+			var distance_remaining = distance_to_enemy - distance_at_furthest_reachable_point
+			
+			if distance_remaining < nearest_distance:
+				nearest_distance = distance_remaining
+				best_location = furthest_reachable_point
 		
 		if best_location:
 			map.path = unit.get_path_to_coords(map, best_location)
@@ -69,19 +71,28 @@ static func execute_unit_turn(unit: Unit, map: Map, unit_turn: UnitTurnComplete)
 	yield(unit.get_tree().create_timer(0.25), "timeout")	
 	return unit_turn.emit_signal("complete", unit)
 
-static func edge_of_movement_range(unit: Unit) -> CoordinateList:
-	var out = []
-	for coordinate in unit.remaining_movement_at_cell.coordinates():
-		if unit.remaining_movement_at_cell.at(coordinate) == 0:
-			out.append(coordinate)
-	return CoordinateList.new(out)
+static func last_movement_option_in_path(unit: Unit, path: CoordinateList) -> Coordinate:
+	var out: Coordinate
+	for coordinate in path.to_array():
+		if unit.empty_movement_options.has(coordinate):
+			out = coordinate
+	return out
 
-static func distance_to_nearest_enemy(position: Coordinate, unit: Unit, map: Map) -> int:
-	var nearest_distance = INF
-	for child in map.get_node("GridNodes").get_children():
-		var other_unit = child as Unit
-		if other_unit and other_unit.team != unit.team:
-			var distance = map.distance(unit.coordinate(), other_unit.coordinate())
-			nearest_distance = min(nearest_distance, distance)
-	return nearest_distance
+static func paths_to_enemies(unit: Unit, map: Map) -> Array:
+	var out = []
+	for coordinate in map.node_array().non_empty_coordinates():
+		var enemy = map.node_array().at(coordinate) as Unit
+		if enemy and enemy.team != unit.team and !enemy.character.is_down():
+			var adjacent_cells = map.get_adjacent_cells(coordinate)
+			var closest_cell
+			var closest_distance = INF
+			for cell in adjacent_cells.to_array():
+				var distance_to_cell = unit.distance_to_cell.at(cell)
+				if distance_to_cell != null:
+					if !closest_cell or distance_to_cell < closest_distance:
+						closest_cell = cell
+						closest_distance = distance_to_cell
 			
+			out.append(unit.get_path_to_coords(map, closest_cell))
+				
+	return out

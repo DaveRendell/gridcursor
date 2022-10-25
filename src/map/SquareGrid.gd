@@ -60,8 +60,8 @@ func _ready():
 	var yanil = Character.new("Yanil", red_mage_sprite, 0, 2, 3, 2)
 	yanil.equip("main_hand", staff)
 	
-	var blob1 = Mob.new("Blobber", slime_sprite_1, 0, 0, 0, 0, Attack.new("Slime", 1, 1, [0], 5))
-	var blob2 = Mob.new("Blobber", slime_sprite_2, 0, 0, 0, 0, Attack.new("Slime", 1, 1, [0], 5))
+	var blob1 = Mob.new("Blobber", slime_sprite_1, 10, 0, 0, 0, Attack.new("Slime", 1, 1, [0], 5))
+	var blob2 = Mob.new("Blobber", slime_sprite_2, 10, 0, 0, 0, Attack.new("Slime", 1, 1, [0], 5))
 	
 	var reginald_unit = new_unit.instance()
 	var yanil_unit = new_unit.instance()
