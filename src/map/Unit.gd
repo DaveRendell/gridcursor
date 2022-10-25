@@ -263,6 +263,15 @@ func perform_attack(map: Map, target: Unit, attack: Attack) -> void:
 	
 	if roll >= def:
 		target.take_damage(attack.damage)
+	else:
+		target.display_label("miss")
+
+var ephemeral_label_scene = preload("res://src/battle/EphemeralLabel.tscn")
+func display_label(text: String, colour: Color = Color.white):
+	var label = ephemeral_label_scene.instance()
+	label.text = text
+	label.add_color_override("font_color", colour)
+	add_child(label)
 
 func wait_for_cell_option_select(
 	map: Map,
@@ -448,11 +457,7 @@ func movement_cost_of_cell(map: Map, coordinate: Coordinate) -> int:
 		return map.terrain_types[terrain]["movement"][movement_type]
 	return -1
 
-func get_path_to_coords(map: Map, coordinate: Coordinate) -> CoordinateList:
-	
-	if distance_to_cell.at(coordinate) > movement:
-		return CoordinateList.new([coordinate])
-	
+func get_path_to_coords(map: Map, coordinate: Coordinate) -> CoordinateList:	
 	var out = CoordinateList.new([coordinate])
 	var u = coordinate
 	var u_distance = distance_to_cell.at(coordinate)
@@ -483,6 +488,7 @@ func set_sprite_animation(animation: String) -> void:
 
 func take_damage(damage: int) -> void:
 	character.take_damage(damage)
+	display_label("-%s" % [damage], Color.lightcoral)
 	
 	$HPBar.visible = true
 	$HPBar.frame = round((float(character.hp) / character.max_hp()) * 14)
