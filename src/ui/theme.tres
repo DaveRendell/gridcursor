@@ -20,4 +20,6 @@ font_data = ExtResource( 1 )
 
 [resource]
 default_font = SubResource( 2 )
+Panel/styles/panel = SubResource( 3 )
 PopupMenu/styles/panel = SubResource( 3 )
+PopupPanel/styles/panel = SubResource( 3 )

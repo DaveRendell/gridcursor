@@ -17,6 +17,8 @@ var zoom_level = 3
 
 var new_toast = preload("res://src/ui/Toast.tscn")
 var theme = preload("res://src/ui/theme.tres")
+var tpk_popup_scene = preload("res://src/map/TPKPopup.tscn")
+var victory_screen_scene = preload("res://src/map/VictoryScreen.tscn")
 
 func _ready() -> void:
 	var file = File.new()
@@ -157,3 +159,32 @@ func display_toast(text: String, delay: float = 1.0):
 	
 	return toast
 
+func check_win_condition():
+	var player_unit_count = 0
+	var enemy_unit_count = 0
+	for unit in $GridNodes.get_children():
+		if !unit.character.is_down():
+			if unit.team == 0:
+				player_unit_count += 1
+			else:
+				enemy_unit_count += 1
+	if player_unit_count == 0:
+		set_active(false)
+		var tween = create_tween()
+		tween.tween_property(self, "modulate", Color.black, 1.0)
+		yield(tween, "finished")
+
+		var tpk_popup = tpk_popup_scene.instance()
+		tpk_popup.rect_scale = Vector2(zoom_level, zoom_level)
+		$PopupLayer.add_child(tpk_popup)
+		tpk_popup.popup_centered()
+		
+		print("TPK")
+	elif enemy_unit_count == 0:
+		set_active(false)
+		var victory_popup = victory_screen_scene.instance()
+		victory_popup.rect_scale = Vector2(zoom_level, zoom_level)
+		$PopupLayer.add_child(victory_popup)
+		victory_popup.popup_centered()
+		
+		print("A winner is you")

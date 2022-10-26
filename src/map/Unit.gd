@@ -242,7 +242,7 @@ func perform_attack(map: Map, target: Unit, attack: Attack) -> void:
 	toast.add_text("+ %s = %s" % [character.stats[best_stat], roll])
 	
 	if roll >= def:
-		target.take_damage(attack.damage)
+		target.take_damage(attack.damage, map)
 	else:
 		target.display_label("miss")
 
@@ -466,7 +466,7 @@ func set_sprite_animation(animation: String) -> void:
 	if animation != sprite.animation:
 		sprite.animation = animation
 
-func take_damage(damage: int) -> void:
+func take_damage(damage: int, map: Map) -> void:
 	character.take_damage(damage)
 	display_label("-%s" % [damage], Color.lightcoral)
 	
@@ -479,6 +479,7 @@ func take_damage(damage: int) -> void:
 	if character.is_down():
 		sprite.animation = "knocked_down"
 		yield(sprite, "animation_finished")
+		map.check_win_condition()
 		if character.die_when_downed:
 			queue_free()
 		else:

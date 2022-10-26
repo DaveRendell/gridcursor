@@ -39,7 +39,7 @@ func battle_action(map: Map, caster: Unit, path: CoordinateList) -> void:
 			if aoe.has(coordinate):
 				hit_units.append(map.node_array().at(coordinate))
 		for unit in hit_units:
-			unit.take_damage(3)
+			unit.take_damage(3, map)
 		
 		var explosion = explosion_scene.instance()
 		explosion.position = map.cell_centre_position(target)
