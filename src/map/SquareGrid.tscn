@@ -244,9 +244,6 @@ tile_data = PoolIntArray( 0, 1, 0, 1, 1, 0, 2, 1, 0, 3, 1, 0, 13, 1, 0, 14, 1, 0
 
 [node name="Highlights" type="Node2D" parent="." index="3"]
 
-[node name="Cursor" parent="." index="4"]
-frame = 0
-
 [node name="Camera" type="Camera2D" parent="Cursor" index="0"]
 current = true
 zoom = Vector2( 0.333, 0.333 )

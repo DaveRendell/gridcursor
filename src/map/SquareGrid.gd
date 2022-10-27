@@ -65,28 +65,34 @@ func _ready():
 	var tobias = Character.new("Tobias", green_archer_sprite, 1, 3, 2, 1)
 	tobias.equip("main_hand", short_bow)
 	
-	var blob1 = Mob.new("Blobber", slime_sprite_1, 10, 0, 0, 0, Attack.new("Slime", 1, 1, [0], 5))
-	var blob2 = Mob.new("Blobber", slime_sprite_2, 10, 0, 0, 0, Attack.new("Slime", 1, 1, [0], 5))
-	
 	var reginald_unit = new_unit.instance()
 	var yanil_unit = new_unit.instance()
 	var tobias_unit = new_unit.instance()
-	var blob1_unit = new_unit.instance()
-	var blob2_unit = new_unit.instance()
 	reginald_unit.from_char(reginald, 0, Coordinate.new(5, 6))
 	yanil_unit.from_char(yanil, 0, Coordinate.new(6, 7))
 	tobias_unit.from_char(tobias, 0, Coordinate.new(5, 9))
-	blob1_unit.from_char(blob1, 1, Coordinate.new(5, 7))
-	blob2_unit.from_char(blob2, 1, Coordinate.new(6, 0))
 	
 	$GridNodes.add_child(reginald_unit)
 	$GridNodes.add_child(yanil_unit)
 	$GridNodes.add_child(tobias_unit)
-	$GridNodes.add_child(blob1_unit)
-	$GridNodes.add_child(blob2_unit)
+	add_blob(4, 4)
+	add_blob(6, 6)
+	add_blob(8, 5)
+	add_blob(5, 3)
+	add_blob(6, 4)
+	add_blob(7, 11)
+	add_blob(3, 12)
+	add_blob(5, 11)
 	
 	draw_nodes()
 
+func add_blob(x: int, y: int):
+	var slime_sprite_sheet = preload("res://img/characters/Slime.png")
+	var slime_sprite_1 = PunyCharacterSprite.slime_sprite(slime_sprite_sheet)
+	var blob1 = Mob.new("Blobber", slime_sprite_1, 2, 0, 0, 0, Attack.new("Slime", 1, 1, [0], 5))
+	var blob1_unit = new_unit.instance()
+	blob1_unit.from_char(blob1, 1, Coordinate.new(x, y))
+	$GridNodes.add_child(blob1_unit)
 
 func position_from_coordinates(coordinate: Coordinate) -> Vector2:
 	return Vector2(coordinate.x * grid_size, coordinate.y * grid_size)
