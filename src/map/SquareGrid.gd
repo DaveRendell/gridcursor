@@ -81,7 +81,7 @@ func _ready():
 	
 	$GridNodes.add_child(reginald_unit)
 	$GridNodes.add_child(yanil_unit)
-	#$GridNodes.add_child(tobias_unit)
+	$GridNodes.add_child(tobias_unit)
 	$GridNodes.add_child(blob1_unit)
 	$GridNodes.add_child(blob2_unit)
 	
