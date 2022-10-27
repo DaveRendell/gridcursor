@@ -67,7 +67,7 @@ static func execute_unit_turn(unit: Unit, map: Map, unit_turn: UnitTurnComplete)
 		
 			unit.update_position(map, best_location)
 	
-	unit.state_to_done(map)
+	unit.set_state_done(map)
 	# Brief pause for effect...
 	yield(unit.get_tree().create_timer(0.25), "timeout")	
 	return unit_turn.emit_signal("complete", unit)

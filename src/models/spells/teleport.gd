@@ -17,13 +17,14 @@ func battle_action(map: Map, caster: Unit, path: CoordinateList) -> void:
 	map.clear_highlights()
 	map.add_highlights(CoordinateList.new(teleport_options), highlight_colour)
 	
-	var teleport_selected = caster.wait_for_cell_option_select(map, CoordinateList.new(teleport_options))
+
+	map.set_state_unit_controlled(CoordinateList.new(teleport_options))
 	var result = yield(map, "click")
-	teleport_selected.resume()
+	map.set_state_in_menu()
 	
 	if typeof(result) == TYPE_STRING and result == "cancel":
 		map.clear_highlights()
-		caster.state_to_spell_select(map, path)
+		caster.set_state_spell_select(map, path)
 	else:
 		map.clear_highlights()
 		var destination_coordinates = map.cursor
@@ -31,7 +32,7 @@ func battle_action(map: Map, caster: Unit, path: CoordinateList) -> void:
 		var small_size = 4.0 / map.grid_size
 		var high_point = Vector2(0, -100 * map.grid_size)
 		var destination = map.position_from_coordinates(destination_coordinates)
-		map.set_active(false)
+		map.set_state_in_menu()
 		
 		caster.sprite.animation = "spin"
 		
@@ -46,5 +47,5 @@ func battle_action(map: Map, caster: Unit, path: CoordinateList) -> void:
 		yield(animation, "finished")
 		caster.sprite.animation = "default"
 		caster.update_position(map, destination_coordinates)
-		caster.state_to_done(map)
+		caster.set_state_done(map)
 	

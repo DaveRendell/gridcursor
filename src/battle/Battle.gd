@@ -12,7 +12,7 @@ func _ready():
 
 
 func next_turn():
-	map.active = false
+	map.set_state_in_menu()
 	map.current_turn = (map.current_turn + 1) % teams
 	
 	var message: String
@@ -24,12 +24,12 @@ func next_turn():
 	yield(toast, "tree_exiting")
 	
 	for child in map.get_node("GridNodes").get_children():
-		if child.has_method("state_to_unselected"):
-			child.state_to_unselected(map)
+		if child.has_method("set_state_unselected"):
+			child.set_state_unselected(map)
 	
 	if map.current_turn == 0:
 		print("Player turn starter")
-		map.active = true
+		map.set_state_nothing_selected()
 	else:
 		print("CPU turn started")
 		ComputerPlayer.execute_turn(map)

@@ -85,43 +85,41 @@ func clear_highlights():
 	update()
 
 func click_position(coordinate: Coordinate):
-	if active:
+	if state == GridState.NOTHING_SELECTED:
 		print("Clicked grid position %s" % [coordinate])
-		if send_clicks_as_signal:
-			if !clickable_cells or clickable_cells.has(coordinate):
-				print("Cursor on clickable cell, emitting click signal")
-				emit_signal("click", self)
-			else:
-				print("Cursor on non clickable cell, ignoring...")
-		else:
-			for child in $GridNodes.get_children():
+		for child in $GridNodes.get_children():
 				var node = child as GridNode
 				if node and node.has_method("select"):
 					if node.coordinate().equals(coordinate):
 						return node.select(self)
-			# If no unit selected
-			var popup_menu = PopupMenu.new()
-			
-			var options = ["End turn", "Cancel"]
-			for i in options.size():
-				var option = options[i]
-				popup_menu.add_item(option, i)
-			
-			display_menu(popup_menu)
-			
-			var id = yield(popup_menu, "id_pressed")
-			var option = options[id]
-			
-			if option == "End turn":
-				next_turn()
-			set_active(true)
+		# If no unit selected
+		var popup_menu = PopupMenu.new()
+		
+		var options = ["End turn", "Cancel"]
+		for i in options.size():
+			var option = options[i]
+			popup_menu.add_item(option, i)
+		
+		display_menu(popup_menu)
+		
+		var id = yield(popup_menu, "id_pressed")
+		var option = options[id]
+		
+		if option == "End turn":
+			next_turn()
+		if option == "Cancel":
+			set_state_nothing_selected()
+	if state == GridState.UNIT_CONTROLLED:
+		print("Clicked grid position %s" % [coordinate])
+		if clickable_cells.has(coordinate):
+			emit_signal("click", self)
 
 func display_menu(popup_menu: PopupMenu) -> void:
 	popup_menu.theme = theme
 	popup_menu.popup_exclusive = true
 	popup_menu.rect_scale = Vector2(zoom_level, zoom_level)
 	popup_menu.set_current_index(0)
-	set_active(false)
+	set_state_in_menu()
 	
 	yield(get_tree(), "idle_frame")
 	$PopupLayer.add_child(popup_menu)
@@ -169,7 +167,7 @@ func check_win_condition():
 			else:
 				enemy_unit_count += 1
 	if player_unit_count == 0:
-		set_active(false)
+		set_state_in_menu()
 		var tween = create_tween()
 		tween.tween_property(self, "modulate", Color.black, 1.0)
 		yield(tween, "finished")
@@ -181,7 +179,7 @@ func check_win_condition():
 		
 		print("TPK")
 	elif enemy_unit_count == 0:
-		set_active(false)
+		set_state_in_menu()
 		var victory_popup = victory_screen_scene.instance()
 		victory_popup.rect_scale = Vector2(zoom_level, zoom_level)
 		$PopupLayer.add_child(victory_popup)

@@ -21,14 +21,14 @@ func battle_action(map: Map, caster: Unit, path: CoordinateList) -> void:
 	apply_highlights(map, targets)
 	
 	map.connect("cursor_move", self, "apply_highlights", [targets])
-	var target_selected = caster.wait_for_cell_option_select(map, targets)
+	map.set_state_unit_controlled(targets)
 	var result = yield(map, "click")
-	target_selected.resume()
+	map.set_state_in_menu()
 	map.disconnect("cursor_move", self, "apply_highlights")
 	
 	if typeof(result) == TYPE_STRING and result == "cancel":
 		map.clear_highlights()
-		caster.state_to_spell_select(map, path)
+		caster.set_state_spell_select(map, path)
 	else:
 		map.clear_highlights()
 		var target = map.cursor
@@ -47,7 +47,7 @@ func battle_action(map: Map, caster: Unit, path: CoordinateList) -> void:
 		yield(explosion, "animation_finished")
 		explosion.queue_free()
 		caster.update_position(map, path.last())
-		caster.state_to_done(map)
+		caster.set_state_done(map)
 		
 func apply_highlights(map: Map, targets: CoordinateList) -> void:
 	map.clear_highlights()

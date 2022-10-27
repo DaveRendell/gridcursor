@@ -11,16 +11,42 @@ export var grid_width: int = 20
 export var grid_height: int = 20
 
 # Cursor properties
-var active = true
 var cursor: Coordinate = Coordinate.new(0, 0)
 var mouse_in_grid = false
 var scrolling: bool = false
 
-var send_clicks_as_signal = false
 var clickable_cells: CoordinateList = null
+
 signal click
 signal cursor_move
 
+enum GridState {
+	NOTHING_SELECTED, # Cursor active, select units on click
+	IN_MENU, # Hide cursor, accept no input
+	UNIT_CONTROLLED # Input passed to selected unit, limited options for selection
+}
+var state = GridState.NOTHING_SELECTED
+
+func set_state_nothing_selected() -> void:
+	print("Grid state: Nothing Selected")
+	state = GridState.NOTHING_SELECTED
+	
+	$Cursor.visible = true
+	clickable_cells = null
+
+func set_state_in_menu() -> void:
+	print("Grid state: In Menu")
+	state = GridState.IN_MENU
+	
+	$Cursor.visible = false
+	clickable_cells = null
+
+func set_state_unit_controlled(clickable_cells: CoordinateList) -> void:
+	print("Grid state: Unit Controlled")
+	state = GridState.UNIT_CONTROLLED
+	
+	$Cursor.visible = true
+	self.clickable_cells = clickable_cells
 
 # Returns the relative position of an object at the given grid coordinates
 # Should be overwritten to match the coordinate system of this grid
@@ -43,18 +69,18 @@ func set_position_to_mouse_cursor() -> void:
 	var coordinate = coordinates_from_position(mouse_relative_position)
 	if not cursor.equals(coordinate):
 		cursor = coordinate.trim(grid_width, grid_height)
-		if send_clicks_as_signal:
+		if state == GridState.UNIT_CONTROLLED:
 			emit_signal("cursor_move", self)
 		$Cursor.position = position_from_coordinates(cursor)
 
 func move_cursor(dx: int, dy: int):
 	cursor = cursor.add_x(dx).add_y(dy)
-	if send_clicks_as_signal:
+	if state == GridState.UNIT_CONTROLLED:
 		emit_signal("cursor_move", self)
 	$Cursor.position = position_from_coordinates(cursor)
 
 func _input(event):
-	if active:
+	if state == GridState.NOTHING_SELECTED or state == GridState.UNIT_CONTROLLED:
 		if event.is_action_pressed("ui_up") and cursor.y > 0:
 			move_cursor(0, -1)
 			$Cursor/ScrollStartTimer.start()
@@ -99,10 +125,6 @@ func scroll_cursor():
 
 func click_position(coordinate: Coordinate):
 	push_error("Implement click_position in inheriting scene")
-
-func set_active(value: bool) -> void:
-	active = value
-	$Cursor.visible = value
 
 # Signals
 func _on_Background_mouse_entered():
