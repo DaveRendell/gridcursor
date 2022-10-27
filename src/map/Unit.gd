@@ -382,15 +382,15 @@ func calculate_options(map: Map) -> void:
 				if !map.node_array().at(u):
 					empty_movement_options = empty_movement_options.append(u)
 			
-				# Check attacks from u
-				var attack_targets = valid_attacks(map, u)
-				for attack_target in attack_targets.non_empty_coordinates():
-					attack_options = attack_options.append(attack_target)
-					all_attack_sources.set_value(attack_target, all_attack_sources.at(attack_target).append(u))
-					var best_attack = attack_targets.at(attack_target)[0]
-					var existing_attacks_at_target: AttackSource = default_attack_sources.at(attack_target)
-					
-					if !map.node_array().at(u):
+				# If U is empty, check attacks from u
+				if !map.node_array().at(u) || coordinate().equals(u):
+					var attack_targets = valid_attacks(map, u)
+					for attack_target in attack_targets.non_empty_coordinates():
+						attack_options = attack_options.append(attack_target)
+						all_attack_sources.set_value(attack_target, all_attack_sources.at(attack_target).append(u))
+						var best_attack = attack_targets.at(attack_target)[0]
+						var existing_attacks_at_target: AttackSource = default_attack_sources.at(attack_target)
+						
 						if !existing_attacks_at_target:
 							default_attack_sources.set_value(attack_target, AttackSource.new(best_attack, u))
 						else:

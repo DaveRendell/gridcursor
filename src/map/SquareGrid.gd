@@ -34,6 +34,8 @@ func _ready():
 	var blue_soldier_sprite = PunyCharacterSprite.character_sprite(blue_soldier_sprite_sheet)
 	var red_mage_sprite_sheet = preload("res://img/characters/Mage-Red.png")
 	var red_mage_sprite = PunyCharacterSprite.character_sprite(red_mage_sprite_sheet)
+	var green_archer_sprite_sheet = preload("res://img/characters/Archer-Green.png")
+	var green_archer_sprite= PunyCharacterSprite.character_sprite(green_archer_sprite_sheet)
 	var slime_sprite_sheet = preload("res://img/characters/Slime.png")
 	var slime_sprite_1 = PunyCharacterSprite.slime_sprite(slime_sprite_sheet)
 	var slime_sprite_2 = PunyCharacterSprite.slime_sprite(slime_sprite_sheet)
@@ -60,20 +62,26 @@ func _ready():
 	var yanil = Character.new("Yanil", red_mage_sprite, 0, 2, 3, 2)
 	yanil.equip("main_hand", staff)
 	
-	var blob1 = Mob.new("Blobber", slime_sprite_1, 1, 0, 0, 0, Attack.new("Slime", 1, 1, [0], 5))
-	var blob2 = Mob.new("Blobber", slime_sprite_2, 1, 0, 0, 0, Attack.new("Slime", 1, 1, [0], 5))
+	var tobias = Character.new("Tobias", green_archer_sprite, 1, 3, 2, 1)
+	tobias.equip("main_hand", short_bow)
+	
+	var blob1 = Mob.new("Blobber", slime_sprite_1, 10, 0, 0, 0, Attack.new("Slime", 1, 1, [0], 5))
+	var blob2 = Mob.new("Blobber", slime_sprite_2, 10, 0, 0, 0, Attack.new("Slime", 1, 1, [0], 5))
 	
 	var reginald_unit = new_unit.instance()
 	var yanil_unit = new_unit.instance()
+	var tobias_unit = new_unit.instance()
 	var blob1_unit = new_unit.instance()
 	var blob2_unit = new_unit.instance()
 	reginald_unit.from_char(reginald, 0, Coordinate.new(5, 6))
 	yanil_unit.from_char(yanil, 0, Coordinate.new(6, 7))
+	tobias_unit.from_char(tobias, 0, Coordinate.new(5, 9))
 	blob1_unit.from_char(blob1, 1, Coordinate.new(5, 7))
 	blob2_unit.from_char(blob2, 1, Coordinate.new(6, 0))
 	
 	$GridNodes.add_child(reginald_unit)
 	$GridNodes.add_child(yanil_unit)
+	#$GridNodes.add_child(tobias_unit)
 	$GridNodes.add_child(blob1_unit)
 	$GridNodes.add_child(blob2_unit)
 	

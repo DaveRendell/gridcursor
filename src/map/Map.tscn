@@ -14,9 +14,6 @@ margin_bottom = 40.0
 
 [node name="Highlights" type="Node2D" parent="." index="2"]
 
-[node name="Cursor" parent="." index="3"]
-frame = 0
-
 [node name="Camera" type="Camera2D" parent="Cursor" index="0"]
 current = true
 limit_smoothed = true

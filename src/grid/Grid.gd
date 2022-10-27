@@ -104,12 +104,16 @@ func _input(event):
 		
 		if event is InputEventMouseMotion and mouse_in_grid:
 			set_position_to_mouse_cursor()
-		
-		if (event.is_action_pressed("ui_accept"))\
-		|| (event is InputEventMouseButton and event.is_pressed()):
+			
+		if event.is_action_pressed("ui_accept"):
+			click_position(cursor)
+			
+		if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.is_pressed():
+			set_position_to_mouse_cursor()
 			click_position(cursor)
 		
-		if event.is_action_pressed("ui_cancel"):
+		if event.is_action_pressed("ui_cancel")\
+		|| (event is InputEventMouseButton and event.button_index == BUTTON_RIGHT and event.is_pressed()):
 			emit_signal("click", "cancel")
 
 
