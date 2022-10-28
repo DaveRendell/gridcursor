@@ -13,7 +13,7 @@ func _ready():
 	var h_margin = max(0, (view_size.x / zoom_level - width) / 2)
 	var v_margin = max(0, (view_size.y / zoom_level - height) / 2)
 	var camera = $Cursor/Camera
-	camera.zoom = Vector2(3.0, 3.0)
+	camera.zoom = Vector2(zoom_level, zoom_level)
 	camera.limit_left = -h_margin
 	camera.limit_right = width + h_margin
 	camera.limit_top = -v_margin

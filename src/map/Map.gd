@@ -13,7 +13,7 @@ var terrain_types = []
 var teams = 2
 var current_turn = 0
 
-var zoom_level = 3
+var zoom_level = 1.0
 
 var new_toast = preload("res://src/ui/Toast.tscn")
 var theme = preload("res://src/ui/theme.tres")

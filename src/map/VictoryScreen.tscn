@@ -18,7 +18,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Title" type="Label" parent="Rows"]
-layout_mode = 2
 offset_right = 84.0
 offset_bottom = 19.0
 size_flags_horizontal = 3
@@ -26,49 +25,42 @@ size_flags_vertical = 1
 text = "Victory!"
 
 [node name="LootRow" type="HBoxContainer" parent="Rows"]
-layout_mode = 2
 offset_top = 23.0
 offset_right = 84.0
 offset_bottom = 42.0
 alignment = 1
 
 [node name="Label" type="Label" parent="Rows/LootRow"]
-layout_mode = 2
 offset_left = 16.0
 offset_right = 42.0
 offset_bottom = 19.0
 text = "Loot"
 
 [node name="Label2" type="Label" parent="Rows/LootRow"]
-layout_mode = 2
 offset_left = 46.0
 offset_right = 67.0
 offset_bottom = 19.0
 text = "23G"
 
 [node name="ExpRow" type="HBoxContainer" parent="Rows"]
-layout_mode = 2
 offset_top = 46.0
 offset_right = 84.0
 offset_bottom = 65.0
 alignment = 1
 
 [node name="Label" type="Label" parent="Rows/ExpRow"]
-layout_mode = 2
 offset_left = 21.0
 offset_right = 43.0
 offset_bottom = 19.0
 text = "EXP"
 
 [node name="Label2" type="Label" parent="Rows/ExpRow"]
-layout_mode = 2
 offset_left = 47.0
 offset_right = 62.0
 offset_bottom = 19.0
 text = "74"
 
 [node name="Button" type="Button" parent="Rows"]
-layout_mode = 2
 offset_top = 69.0
 offset_right = 84.0
 offset_bottom = 93.0
