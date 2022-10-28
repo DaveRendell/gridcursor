@@ -1,8 +1,7 @@
-res://src/map/Map.tscn
+res://src/battle/Battle.tscn
 res://src/ui/theme.tres
 res://src/map/Unit.gd
-res://src/battle/Battle.tscn
 res://src/map/SquareGrid.tscn
 res://src/map/VictoryScreen.tscn
-res://src/map/Map.gd
+res://src/map/Map.tscn
 res://src/map/SquareGrid.gd

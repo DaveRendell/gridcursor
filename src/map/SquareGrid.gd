@@ -10,8 +10,8 @@ func _ready():
 	var view_size = get_viewport().size
 	var width = grid_size * grid_width
 	var height = grid_size * grid_height
-	var h_margin = max(0, (view_size.x / zoom_level - width) / 2)
-	var v_margin = max(0, (view_size.y / zoom_level - height) / 2)
+	var h_margin = max(0, (view_size.x / 3 - width) / 2)
+	var v_margin = max(0, (view_size.y / 3 - height) / 2)
 	var camera = $Cursor/Camera
 	camera.zoom = Vector2(zoom_level, zoom_level)
 	camera.limit_left = -h_margin
@@ -19,8 +19,8 @@ func _ready():
 	camera.limit_top = -v_margin
 	camera.limit_bottom = height + v_margin
 	
-	var h_drag_margin = 1 - (4 * zoom_level * grid_size / view_size.x)
-	var v_drag_margin = 1 - (4 * zoom_level * grid_size / view_size.y)
+	var h_drag_margin = 1 - (12 * zoom_level * grid_size / view_size.x)
+	var v_drag_margin = 1 - (12 * zoom_level * grid_size / view_size.y)
 	camera.drag_left_margin = h_drag_margin
 	camera.drag_right_margin = h_drag_margin
 	camera.drag_top_margin = v_drag_margin
