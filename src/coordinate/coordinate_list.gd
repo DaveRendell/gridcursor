@@ -33,9 +33,9 @@ func slice(start: int, end: int) -> CoordinateList:
 		coords.append(coordinate)
 	return get_script().new(coords)
 
-func remove(position: int) -> CoordinateList:
+func remove_at(position: int) -> CoordinateList:
 	var new_array = array.duplicate()
-	new_array.remove(position)
+	new_array.remove_at(position)
 	return get_script().new(new_array)
 
 func last() -> Coordinate:
@@ -46,7 +46,7 @@ func find(coordinate: Coordinate) -> int:
 
 func reverse() -> CoordinateList:
 	var new_array = to_array()
-	new_array.invert()
+	new_array.reverse()
 	return get_script().new(new_array)
 
 func concat(other: CoordinateList) -> CoordinateList:

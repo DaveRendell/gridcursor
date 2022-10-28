@@ -1,6 +1,6 @@
 [gd_scene load_steps=63 format=2]
 
-[ext_resource path="res://img/battle/effects/Explosion.png" type="Texture" id=1]
+[ext_resource path="res://img/battle/effects/Explosion.png" type="Texture2D" id=1]
 
 [sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 1 )
@@ -250,7 +250,7 @@ animations = [ {
 "speed": 60.0
 } ]
 
-[node name="Explosion" type="AnimatedSprite"]
+[node name="Explosion" type="AnimatedSprite2D"]
 frames = SubResource( 61 )
 frame = 31
 playing = true

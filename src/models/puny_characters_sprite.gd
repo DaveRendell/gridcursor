@@ -1,9 +1,9 @@
 class_name PunyCharacterSprite
 
 # https://godotengine.org/qa/134445/how-to-add-frames-from-a-sprite-sheet-in-code
-static func character_sprite(sprite_sheet: Texture) -> AnimatedSprite:
-	sprite_sheet.flags = 0
-	var sprite = AnimatedSprite.new()
+static func character_sprite(sprite_sheet: Texture2D) -> AnimatedSprite2D:
+	sprite_sheet
+	var sprite = AnimatedSprite2D.new()
 	var frames = SpriteFrames.new()
 	
 	add_animation(frames, sprite_sheet, "default", 0, [0, 1], 2.5)
@@ -42,9 +42,8 @@ static func character_sprite(sprite_sheet: Texture) -> AnimatedSprite:
 	sprite.play()
 	return sprite
 
-static func slime_sprite(sprite_sheet: Texture) -> AnimatedSprite:
-	sprite_sheet.flags = 0
-	var sprite = AnimatedSprite.new()
+static func slime_sprite(sprite_sheet: Texture2D) -> AnimatedSprite2D:
+	var sprite = AnimatedSprite2D.new()
 	var frames = SpriteFrames.new()
 	
 	add_animation(frames, sprite_sheet, "default", 0, [0, 1], 2.5)
@@ -68,11 +67,11 @@ static func slime_sprite(sprite_sheet: Texture) -> AnimatedSprite:
 
 static func add_animation(
 	frames: SpriteFrames,
-	sprite_sheet: Texture,
+	sprite_sheet: Texture2D,
 	name: String,
 	row: int,
 	cells: Array,
-	speed: float = 5
+	speed: float = 5.0
 ) -> void:
 	var sprite_size = 32
 	
@@ -90,7 +89,7 @@ static func add_animation(
 
 static func add_spin_animation(
 	frames: SpriteFrames,
-	sprite_sheet: Texture
+	sprite_sheet: Texture2D
 ) -> void:
 	var sprite_size = 32
 	

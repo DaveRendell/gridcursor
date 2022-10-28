@@ -4,7 +4,8 @@ extends Equipment
 var attacks: Array
 var spells: Array
 
-func _init(display_name: String, weight: int, attacks: Array, spells: Array).(display_name, weight):
+func _init(display_name: String,weight: int,attacks: Array,spells: Array):
+	super(display_name,weight)
 	self.attacks = attacks
 	self.spells = spells
 	self.equipable_slots = ["main_hand"]

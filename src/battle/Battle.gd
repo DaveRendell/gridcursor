@@ -6,9 +6,9 @@ var map_scene = preload("res://src/map/SquareGrid.tscn")
 var map: Map
 
 func _ready():
-	map = map_scene.instance()
+	map = map_scene.instantiate()
 	add_child(map)
-	map.connect("next_turn", self, "next_turn")
+	map.connect("next_turn",Callable(self,"next_turn"))
 
 
 func next_turn():
@@ -21,7 +21,7 @@ func next_turn():
 	else:
 		message = "Player's turn"
 	var toast = map.display_toast(message)
-	yield(toast, "tree_exiting")
+	await toast.tree_exiting
 	
 	for child in map.get_node("GridNodes").get_children():
 		if child.has_method("set_state_unselected"):

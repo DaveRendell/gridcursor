@@ -1,25 +1,32 @@
-[gd_resource type="Theme" load_steps=5 format=2]
+[gd_resource type="Theme" load_steps=5 format=3 uid="uid://cq6hal2383lbi"]
 
-[ext_resource path="res://img/ui/fonts/EquipmentPro.ttf" type="DynamicFontData" id=1]
-[ext_resource path="res://img/ui/GUI_1x.png" type="Texture" id=2]
+[ext_resource type="FontFile" uid="uid://qa3i2e1ba41c" path="res://img/ui/fonts/EquipmentPro.ttf" id="1"]
+[ext_resource type="Texture2D" uid="uid://cdmxcv1oet22x" path="res://img/ui/GUI_1x.png" id="2"]
 
-[sub_resource type="StyleBoxTexture" id=3]
-texture = ExtResource( 2 )
-region_rect = Rect2( 96, 0, 24, 24 )
+[sub_resource type="StyleBoxTexture" id="3"]
+texture = ExtResource("2")
 margin_left = 8.0
-margin_right = 8.0
 margin_top = 8.0
+margin_right = 8.0
 margin_bottom = 8.0
 axis_stretch_horizontal = 1
 axis_stretch_vertical = 1
+region_rect = Rect2(96, 0, 24, 24)
 
-[sub_resource type="DynamicFont" id=2]
-outline_size = 1
-outline_color = Color( 0, 0, 0, 1 )
-font_data = ExtResource( 1 )
+[sub_resource type="FontFile" id="2"]
+fallbacks = [ExtResource("1")]
+face_index = null
+embolden = null
+transform = null
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+cache/0/16/0/kerning_overrides/16/0 = Vector2(0, 0)
 
 [resource]
-default_font = SubResource( 2 )
-Panel/styles/panel = SubResource( 3 )
-PopupMenu/styles/panel = SubResource( 3 )
-PopupPanel/styles/panel = SubResource( 3 )
+default_font = SubResource("2")
+Panel/styles/panel = SubResource("3")
+PopupMenu/styles/panel = SubResource("3")
+PopupPanel/styles/panel = SubResource("3")

@@ -1,7 +1,7 @@
 class_name Character
 
 var display_name: String
-var sprite: AnimatedSprite
+var sprite: AnimatedSprite2D
 
 # Might, Precision, Knowledge, Wit
 var stats = [0, 0, 0, 0]
@@ -29,7 +29,7 @@ class CharacterEquipment:
 
 func _init(
 	display_name: String,
-	sprite: AnimatedSprite,
+	sprite: AnimatedSprite2D,
 	might: int = 0,
 	precision: int = 0,
 	knowledge: int = 0,

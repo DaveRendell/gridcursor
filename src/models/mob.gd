@@ -5,13 +5,14 @@ var attack: Attack
 
 func _init(
 	display_name: String,
-	sprite: AnimatedSprite,
+	sprite: AnimatedSprite2D,
 	might: int,
 	precision: int,
 	knowledge: int,
 	wit: int,
 	attack: Attack
-).(display_name, sprite, might, precision, knowledge, wit):
+):
+	super(display_name, sprite, might, precision, knowledge, wit)
 	self.attack = attack
 	self.die_when_downed = true
 

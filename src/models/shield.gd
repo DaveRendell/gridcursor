@@ -7,7 +7,8 @@ func _init(
 	display_name: String,
 	weight: int,
 	defence_boost: int
-).(display_name, weight):
+):
+	super(display_name, weight)
 	self.equipable_slots = ["off_hand"]
 	self.defence_boost = defence_boost
 

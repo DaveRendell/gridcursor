@@ -7,12 +7,12 @@ func _ready():
 	$TPK/K.modulate.a = 0
 	$YoureDead.modulate.a = 0
 	var tween = create_tween()
-	tween.tween_property($TPK/T, "modulate", Color.white, 0.75)
+	tween.tween_property($TPK/T, "modulate", Color.WHITE, 0.75)
 	tween.tween_interval(0.25)
-	tween.tween_property($TPK/P, "modulate", Color.white, 0.75)
+	tween.tween_property($TPK/P, "modulate", Color.WHITE, 0.75)
 	tween.tween_interval(0.25)
-	tween.tween_property($TPK/K, "modulate", Color.white, 0.75)
+	tween.tween_property($TPK/K, "modulate", Color.WHITE, 0.75)
 	tween.tween_interval(0.5)
-	tween.tween_property($YoureDead, "modulate", Color.white, 0.75)
+	tween.tween_property($YoureDead, "modulate", Color.WHITE, 0.75)
 	tween.play()
 	

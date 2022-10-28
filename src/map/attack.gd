@@ -7,7 +7,7 @@ var attacking_stats: Array
 var damage: int
 var animation: String
 
-func _init(name: String, min_range: int, max_range: int, attacking_stats: Array, damage: int, animation: String = "attack"):
+func _init(name: String,min_range: int,max_range: int,attacking_stats: Array,damage: int,animation: String = "attack"):
 	self.name = name
 	self.min_range = min_range
 	self.max_range = max_range

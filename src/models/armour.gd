@@ -7,7 +7,8 @@ func _init(
 	display_name: String,
 	weight: int,
 	base_defence: int
-).(display_name, weight):
+):
+	super(display_name, weight)
 	self.equipable_slots = ["clothing"]
 	self.base_defence = base_defence
 

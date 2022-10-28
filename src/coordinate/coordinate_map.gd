@@ -1,10 +1,10 @@
 class_name CoordinateMap
-# Custom collection for storing a layer of objects on a grid, e.g. terrain types
-# or units on a map
+# Custom collection for storing a layer of objects checked a grid, e.g. terrain types
+# or units checked a map
 
 var data: Array = []
 
-func _init(width: int = 0, height: int = 0, grid_nodes: Array = [], default = null):
+func _init(width: int = 0,height: int = 0,grid_nodes: Array = [],default = null):
 	data.resize(width)
 	for i in width:
 		var col = []

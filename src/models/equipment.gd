@@ -6,8 +6,8 @@ var equipable_slots: Array = []
 func _init(
 	display_name: String,
 	weight: int
-).(display_name, weight):
-	pass
+):
+	super(display_name, weight)
 
 func set_base_defence() -> int:
 	return 0

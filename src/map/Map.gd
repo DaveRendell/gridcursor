@@ -1,6 +1,6 @@
 extends "res://src/grid/Grid.gd"
 class_name Map
-# A grid that represents a map, with player interactable objects on it.
+# A grid that represents a map, with player interactable objects checked it.
 
 signal next_turn
 
@@ -21,9 +21,10 @@ var tpk_popup_scene = preload("res://src/map/TPKPopup.tscn")
 var victory_screen_scene = preload("res://src/map/VictoryScreen.tscn")
 
 func _ready() -> void:
-	var file = File.new()
-	file.open("res://data/terrain.json", File.READ)
-	terrain_types = parse_json(file.get_as_text())
+	var file = FileAccess.open("res://data/terrain.json", FileAccess.READ)
+	var test_json_conv = JSON.new()
+	test_json_conv.parse(file.get_as_text())
+	terrain_types = test_json_conv.get_data()
 	terrain_grid.set_value(Coordinate.new(5, 5), 2)
 	terrain_grid.set_value(Coordinate.new(5, 6), 2)
 	terrain_grid.set_value(Coordinate.new(6, 6), 2)
@@ -39,12 +40,12 @@ func _draw():
 		if colour:
 			draw_colored_polygon(cell_corners(coordinate), colour)
 	if path.size() > 1:
-		var color = Color.coral
+		var color = Color.CORAL
 		for i in range(1, path.size()):
 			var from = cell_centre_position(path.at(i - 1))
 			var to = cell_centre_position(path.at(i))
 
-			draw_line(from, to, color, grid_size * 0.5, true)
+			draw_line(from,to,color,grid_size * 0.5)
 			draw_circle(from, grid_size * 0.25, color)
 		var last_point = cell_centre_position(path.last())
 		var second_last_point = cell_centre_position(path.at(-2))
@@ -62,13 +63,13 @@ func distance(coordinate_1: Coordinate, coordinate_2: Coordinate) -> int:
 
 func add_highlight(coordinate: Coordinate, colour: Color):
 	highlights.set_value(coordinate, colour)
-	update()
+	queue_redraw()
 
 func add_highlights(coordinates: CoordinateList, colour: Color):
 	colour.a = 0.3
 	for coordinate in coordinates.to_array():
 		highlights.set_value(coordinate, colour)
-	update()
+	queue_redraw()
 
 func get_adjacent_cells(coordinate: Coordinate) -> CoordinateList:
 	push_error("Implement get_adjacent_cells in inheriting scene")
@@ -82,7 +83,7 @@ func node_array() -> CoordinateMap:
 
 func clear_highlights():
 	highlights = CoordinateMap.new(grid_width, grid_height, [], null)
-	update()
+	queue_redraw()
 
 func click_position(coordinate: Coordinate):
 	if state == GridState.NOTHING_SELECTED:
@@ -102,11 +103,11 @@ func click_position(coordinate: Coordinate):
 		
 		display_menu(popup_menu)
 		
-		var id = yield(popup_menu, "id_pressed")
+		var id = await popup_menu.id_pressed
 		var option = options[id]
 		
 		if option == "End turn":
-			next_turn()
+			next_turn.emit()
 		if option == "Cancel":
 			set_state_nothing_selected()
 	if state == GridState.UNIT_CONTROLLED:
@@ -116,16 +117,15 @@ func click_position(coordinate: Coordinate):
 
 func display_menu(popup_menu: PopupMenu) -> void:
 	popup_menu.theme = theme
-	popup_menu.popup_exclusive = true
-	popup_menu.rect_scale = Vector2(zoom_level, zoom_level)
-	popup_menu.set_current_index(0)
+	popup_menu.exclusive = true
+	popup_menu.set_focused_item(0)
 	set_state_in_menu()
 	
-	yield(get_tree(), "idle_frame")
+	await get_tree().process_frame
 	$PopupLayer.add_child(popup_menu)
 	popup_menu.popup_centered()
 	
-	yield(popup_menu, "id_pressed")
+	await popup_menu.id_pressed
 	popup_menu.queue_free()
 	popup_menu.hide()
 
@@ -138,22 +138,20 @@ func draw_nodes():
 func draw_grid():
 	push_error("Implement draw_grid in inheriting scene")
 
-func next_turn():
-	emit_signal("next_turn")
 
 func display_toast(text: String, delay: float = 1.0):
 	var toasts_container = $PopupLayer/Toasts
-	var toast = new_toast.instance()
-	toast.rect_scale = Vector2(zoom_level, zoom_level)
+	var toast = new_toast.instantiate()
+	toast.scale = Vector2(zoom_level, zoom_level)
 	toast.add_text(text)
 	toasts_container.add_child(toast)
 	toasts_container.move_child(toast, 0)
 	
-	toasts_container.rect_position = Vector2(0, -(zoom_level * toast.rect_size.y))
+	toasts_container.position = Vector2(0, -(zoom_level * toast.size.y))
 	var animation = get_tree().create_tween()
-	animation.tween_property(toasts_container, "rect_position", Vector2.ZERO, 0.25)
+	animation.tween_property(toasts_container, "position", Vector2.ZERO, 0.25)
 	
-	get_tree().create_timer(delay).connect("timeout", toast, "delete", [Vector2.LEFT])
+	get_tree().create_timer(delay).connect("timeout",Callable(toast,"delete").bind(Vector2.LEFT))
 	
 	return toast
 
@@ -169,19 +167,18 @@ func check_win_condition():
 	if player_unit_count == 0:
 		set_state_in_menu()
 		var tween = create_tween()
-		tween.tween_property(self, "modulate", Color.black, 1.0)
-		yield(tween, "finished")
+		tween.tween_property(self, "modulate", Color.BLACK, 1.0)
+		await tween.finished
 
-		var tpk_popup = tpk_popup_scene.instance()
-		tpk_popup.rect_scale = Vector2(zoom_level, zoom_level)
+		var tpk_popup = tpk_popup_scene.instantiate()
+		tpk_popup.scale = Vector2(zoom_level, zoom_level)
 		$PopupLayer.add_child(tpk_popup)
 		tpk_popup.popup_centered()
 		
 		print("TPK")
 	elif enemy_unit_count == 0:
 		set_state_in_menu()
-		var victory_popup = victory_screen_scene.instance()
-		victory_popup.rect_scale = Vector2(zoom_level, zoom_level)
+		var victory_popup = victory_screen_scene.instantiate()
 		$PopupLayer.add_child(victory_popup)
 		victory_popup.popup_centered()
 		

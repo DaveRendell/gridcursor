@@ -9,9 +9,9 @@ static func execute_turn(map: Map) -> void:
 	for unit in units:
 		var unit_turn = UnitTurnComplete.new()
 		execute_unit_turn(unit, map, unit_turn)
-		yield(unit_turn, "complete")
+		await unit_turn.complete
 	
-	map.next_turn()
+	map.next_turn.emit()
 
 static func get_units(map: Map) -> Array:
 	var units = []
@@ -37,10 +37,9 @@ static func execute_unit_turn(unit: Unit, map: Map, unit_turn: UnitTurnComplete)
 		
 		map.path = unit.get_path_to_coords(map, attack_source.source)
 		var animation = unit.animate_movement_along_path(map)
-		yield(animation, "finished")
+		await animation.finished
 		
-		var popup = unit.perform_attack(map, target, attack)
-		yield(unit.sprite, "animation_finished")
+		await unit.perform_attack(map, target, attack)
 		
 		unit.update_position(map, attack_source.source)
 	else:
@@ -63,14 +62,14 @@ static func execute_unit_turn(unit: Unit, map: Map, unit_turn: UnitTurnComplete)
 		if best_location:
 			map.path = unit.get_path_to_coords(map, best_location)
 			var animation = unit.animate_movement_along_path(map)
-			yield(animation, "finished")
+			await animation.finished
 		
 			unit.update_position(map, best_location)
 	
 	unit.set_state_done(map)
 	# Brief pause for effect...
-	yield(unit.get_tree().create_timer(0.25), "timeout")	
-	return unit_turn.emit_signal("complete", unit)
+	await unit.get_tree().create_timer(0.25).timeout
+	unit_turn.emit_signal("complete", unit)
 
 static func last_movement_option_in_path(unit: Unit, path: CoordinateList) -> Coordinate:
 	var out: Coordinate

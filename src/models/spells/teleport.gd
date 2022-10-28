@@ -2,10 +2,10 @@ class_name Teleport
 extends Spell
 
 const spell_range = 10
-const highlight_colour = Color.lightgreen
+const highlight_colour = Color.LIGHT_GREEN
 
-func _init().("Teleport"):
-	pass
+func _init():
+	super("Teleport")
 
 func battle_action(map: Map, caster: Unit, path: CoordinateList) -> void:
 	var teleport_options = []
@@ -19,7 +19,7 @@ func battle_action(map: Map, caster: Unit, path: CoordinateList) -> void:
 	
 
 	map.set_state_unit_controlled(CoordinateList.new(teleport_options))
-	var result = yield(map, "click")
+	var result = await map.click
 	map.set_state_in_menu()
 	
 	if typeof(result) == TYPE_STRING and result == "cancel":
@@ -37,14 +37,14 @@ func battle_action(map: Map, caster: Unit, path: CoordinateList) -> void:
 		caster.sprite.animation = "spin"
 		
 		animation.tween_property(caster.sprite, "speed_scale", 10.0, 0.5)
-		animation.tween_property(caster, "modulate", Color.green, 0.5)
+		animation.tween_property(caster, "modulate", Color.GREEN, 0.5)
 		animation.tween_property(caster, "position", caster.position + high_point, 0.7)
 		animation.tween_property(caster, "position", destination + high_point, 0.01)
 		animation.tween_property(caster, "position", destination, 0.7)
-		animation.tween_property(caster, "modulate", Color.white, 0.5)
+		animation.tween_property(caster, "modulate", Color.WHITE, 0.5)
 		animation.tween_property(caster.sprite, "speed_scale", 1.0, 0.5)
 		animation.tween_property(caster.sprite, "speed_scale", 1, 1)
-		yield(animation, "finished")
+		await animation.finished
 		caster.sprite.animation = "default"
 		caster.update_position(map, destination_coordinates)
 		caster.set_state_done(map)

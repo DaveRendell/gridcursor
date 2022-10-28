@@ -23,7 +23,8 @@ func _init(
 	max_range: int = 1,
 	is_two_handed = false,
 	animation = "attack"
-).(display_name, weight):
+):
+	super(display_name, weight)
 	self.attacking_stats = attacking_stats
 	self.damage = damage
 	self.min_range = min_range

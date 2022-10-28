@@ -33,9 +33,9 @@ func _ready():
 	var blob1 = Mob.new("Blob", slime_sprite_1, 0, 0, 0, 0, Attack.new("Slime", 1, 1, [1], 2))
 	var blob2 = Mob.new("Blob", slime_sprite_2, 0, 0, 0, 0, Attack.new("Slime", 1, 1, [1], 2))
 	
-	var reginald_unit = new_unit.instance()
-	var blob1_unit = new_unit.instance()
-	var blob2_unit = new_unit.instance()
+	var reginald_unit = new_unit.instantiate()
+	var blob1_unit = new_unit.instantiate()
+	var blob2_unit = new_unit.instantiate()
 	reginald_unit.from_char(reginald, 0, Coordinate.new(5, 6))
 	blob1_unit.from_char(blob1, 1, Coordinate.new(5, 7))
 	blob2_unit.from_char(blob2, 1, Coordinate.new(5, 8))
@@ -70,13 +70,13 @@ func cell_centre_position(coordinate: Coordinate) -> Vector2:
 
 func draw_grid():
 	# Set background dimensions
-	$Background.rect_size = Vector2(width, height)
+	$Background.size = Vector2(width, height)
 		
 	for i in grid_width:
 		for j in grid_height:
 			var hex = Line2D.new()
 			hex.width = 1
-			hex.default_color = Color.darkslategray
+			hex.default_color = Color.DARK_SLATE_GRAY
 			hex.antialiased = false
 			
 			hex.add_point(Vector2(0, 0))
@@ -108,7 +108,7 @@ func get_adjacent_cells(coordinate: Coordinate) -> CoordinateList:
 
 func cell_corners(coordinate: Coordinate):
 	var start = position_from_coordinates(coordinate) + Vector2(0.5 * grid_size, 0)
-	return PoolVector2Array([
+	return PackedVector2Array([
 		start,
 		start + Vector2(0.5 * grid_size, 0.5 * hex_size),
 		start + Vector2(0.5 * grid_size, 1.5 * hex_size),

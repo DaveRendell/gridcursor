@@ -22,11 +22,11 @@ func for_attack(attack: Attack, attacker: Character, target: Character) -> void:
 	$PopupContainer/ContentContainer/Rows/CenterContainer/AttackTitle.text = attack.name
 	var attacker_details = $PopupContainer/ContentContainer/Rows/Columns/AttackerDetails
 	attacker_details.get_node("AttackerName").text = attacker.display_name
-	attacker_details.get_node("CenterContainer/Container/Sprite").frames = attacker.sprite.frames
+	attacker_details.get_node("CenterContainer/Container/Sprite2D").frames = attacker.sprite.frames
 	
 	var target_details = $PopupContainer/ContentContainer/Rows/Columns/TargetDetails
 	target_details.get_node("TargetName").text = target.display_name
-	target_details.get_node("CenterContainer/Container/Sprite").frames = target.sprite.frames
+	target_details.get_node("CenterContainer/Container/Sprite2D").frames = target.sprite.frames
 	
 	var best_stat = -1
 	for stat in attack.attacking_stats:

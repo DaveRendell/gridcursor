@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://src/grid/Grid.gd" type="Script" id=1]
-[ext_resource path="res://img/ui/grid/cursor/0.png" type="Texture" id=2]
-[ext_resource path="res://img/ui/grid/cursor/1.png" type="Texture" id=3]
+[ext_resource path="res://img/ui/grid/cursor/0.png" type="Texture2D" id=2]
+[ext_resource path="res://img/ui/grid/cursor/1.png" type="Texture2D" id=3]
 
 [sub_resource type="SpriteFrames" id=2]
 animations = [ {
@@ -16,11 +16,11 @@ animations = [ {
 script = ExtResource( 1 )
 
 [node name="Background" type="ColorRect" parent="."]
-margin_right = 32.0
-margin_bottom = 32.0
+offset_right = 32.0
+offset_bottom = 32.0
 color = Color( 1, 1, 1, 0 )
 
-[node name="Cursor" type="AnimatedSprite" parent="."]
+[node name="Cursor" type="AnimatedSprite2D" parent="."]
 z_index = 5
 frames = SubResource( 2 )
 frame = 1

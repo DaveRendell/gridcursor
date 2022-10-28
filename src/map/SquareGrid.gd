@@ -6,13 +6,14 @@ var height = grid_height * grid_size
 var new_unit = preload("res://src/map/Unit.tscn")
 
 func _ready():
+	super()
 	var view_size = get_viewport().size
 	var width = grid_size * grid_width
 	var height = grid_size * grid_height
 	var h_margin = max(0, (view_size.x / zoom_level - width) / 2)
 	var v_margin = max(0, (view_size.y / zoom_level - height) / 2)
 	var camera = $Cursor/Camera
-	camera.zoom = Vector2(1.0 / 3, 1.0 / 3)
+	camera.zoom = Vector2(3.0, 3.0)
 	camera.limit_left = -h_margin
 	camera.limit_right = width + h_margin
 	camera.limit_top = -v_margin
@@ -20,14 +21,14 @@ func _ready():
 	
 	var h_drag_margin = 1 - (4 * zoom_level * grid_size / view_size.x)
 	var v_drag_margin = 1 - (4 * zoom_level * grid_size / view_size.y)
-	camera.drag_margin_left = h_drag_margin
-	camera.drag_margin_right = h_drag_margin
-	camera.drag_margin_top = v_drag_margin
-	camera.drag_margin_bottom = v_drag_margin
+	camera.drag_left_margin = h_drag_margin
+	camera.drag_right_margin = h_drag_margin
+	camera.drag_top_margin = v_drag_margin
+	camera.drag_bottom_margin = v_drag_margin
 	camera.position = Vector2(grid_size / 2, grid_size / 2)
 	
 	for coordinate in terrain_grid.coordinates():
-		var cell = $Tiles/TerrainTypes.get_cell(coordinate.x, coordinate.y)
+		var cell = $Tiles/TerrainTypes.get_cell_source_id(0, Vector2i(coordinate.x, coordinate.y))
 		terrain_grid.set_value(coordinate, cell)
 	
 	var blue_soldier_sprite_sheet = preload("res://img/characters/Soldier-Blue.png")
@@ -65,9 +66,9 @@ func _ready():
 	var tobias = Character.new("Tobias", green_archer_sprite, 1, 3, 2, 1)
 	tobias.equip("main_hand", short_bow)
 	
-	var reginald_unit = new_unit.instance()
-	var yanil_unit = new_unit.instance()
-	var tobias_unit = new_unit.instance()
+	var reginald_unit = new_unit.instantiate()
+	var yanil_unit = new_unit.instantiate()
+	var tobias_unit = new_unit.instantiate()
 	reginald_unit.from_char(reginald, 0, Coordinate.new(13, 9))
 	yanil_unit.from_char(yanil, 0, Coordinate.new(14, 10))
 	tobias_unit.from_char(tobias, 0, Coordinate.new(16, 11))
@@ -90,7 +91,7 @@ func add_blob(x: int, y: int):
 	var slime_sprite_sheet = preload("res://img/characters/Slime.png")
 	var slime_sprite_1 = PunyCharacterSprite.slime_sprite(slime_sprite_sheet)
 	var blob1 = Mob.new("Blobber", slime_sprite_1, 2, 0, 0, 0, Attack.new("Slime", 1, 1, [0], 4))
-	var blob1_unit = new_unit.instance()
+	var blob1_unit = new_unit.instantiate()
 	blob1_unit.from_char(blob1, 1, Coordinate.new(x, y))
 	$GridNodes.add_child(blob1_unit)
 
@@ -108,14 +109,14 @@ func distance(coordinate_1: Coordinate, coordinate_2: Coordinate) -> int:
 
 func draw_grid():
 	# Set background dimensions
-	$Background.rect_size = Vector2(width, height)
+	$Background.size = Vector2(width, height)
 	
 	# Draw vertical lines
 	for i in (grid_width - 1):
 		var offset = grid_size * (i + 1)
 		var line = Line2D.new()
 		line.width = 1
-		line.default_color = Color.darkslategray
+		line.default_color = Color.DARK_SLATE_GRAY
 		line.default_color.a = 0.2
 		line.add_point(Vector2(offset, 0))
 		line.add_point(Vector2(offset, height))
@@ -125,7 +126,7 @@ func draw_grid():
 		var offset = grid_size * (i + 1)
 		var line = Line2D.new()
 		line.width = 1
-		line.default_color = Color.darkslategray
+		line.default_color = Color.DARK_SLATE_GRAY
 		line.default_color.a = 0.2
 		line.add_point(Vector2(0, offset))
 		line.add_point(Vector2(width, offset))
@@ -145,7 +146,7 @@ func get_adjacent_cells(coordinate: Coordinate) -> CoordinateList:
 
 func cell_corners(coordinate: Coordinate):
 	var start = position_from_coordinates(coordinate)
-	return PoolVector2Array([
+	return PackedVector2Array([
 		start,
 		start + Vector2(grid_size, 0),
 		start + Vector2(grid_size, grid_size),

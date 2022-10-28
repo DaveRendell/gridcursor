@@ -4,13 +4,13 @@ extends Spell
 var spell_range = 7
 var aoe_radius = 2
 
-var target_colour = Color.green
-var aoe_colour = Color.red
+var target_colour = Color.GREEN
+var aoe_colour = Color.RED
 
 var explosion_scene = preload("res://img/battle/effects/Explosion.tscn")
 
-func _init().("Fireball"):
-	pass
+func _init():
+	super("Fireball")
 
 func battle_action(map: Map, caster: Unit, path: CoordinateList) -> void:
 	var possible_targets = []
@@ -20,11 +20,11 @@ func battle_action(map: Map, caster: Unit, path: CoordinateList) -> void:
 	var targets = CoordinateList.new(possible_targets)
 	apply_highlights(map, targets)
 	
-	map.connect("cursor_move", self, "apply_highlights", [targets])
+	map.connect("cursor_move",Callable(self,"apply_highlights").bind(targets))
 	map.set_state_unit_controlled(targets)
-	var result = yield(map, "click")
+	var result = await map.click
 	map.set_state_in_menu()
-	map.disconnect("cursor_move", self, "apply_highlights")
+	map.disconnect("cursor_move",Callable(self,"apply_highlights"))
 	
 	if typeof(result) == TYPE_STRING and result == "cancel":
 		map.clear_highlights()
@@ -43,10 +43,10 @@ func battle_action(map: Map, caster: Unit, path: CoordinateList) -> void:
 		for unit in hit_units:
 			unit.take_damage(3, map)
 		
-		var explosion = explosion_scene.instance()
+		var explosion = explosion_scene.instantiate()
 		explosion.position = map.cell_centre_position(target)
 		map.add_child(explosion)
-		yield(explosion, "animation_finished")
+		await explosion.animation_finished
 		explosion.queue_free()
 		caster.update_position(map, path.last())
 		caster.set_state_done(map)

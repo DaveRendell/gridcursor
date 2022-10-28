@@ -1,10 +1,10 @@
 [gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://img/ui/GUI_1x.png" type="Texture" id=2]
-[ext_resource path="res://img/ui/fonts/EquipmentPro.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://img/ui/GUI_1x.png" type="Texture2D" id=2]
+[ext_resource path="res://img/ui/fonts/EquipmentPro.ttf" type="FontFile" id=3]
 [ext_resource path="res://src/ui/Toast.gd" type="Script" id=4]
 
-[sub_resource type="DynamicFont" id=5]
+[sub_resource type="FontFile" id=5]
 outline_size = 1
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 3 )
@@ -18,17 +18,17 @@ atlas = ExtResource( 2 )
 region = Rect2( 96, 0, 24, 24 )
 
 [node name="Toast" type="MarginContainer"]
-margin_right = 83.0
-margin_bottom = 24.0
-rect_clip_content = true
+offset_right = 83.0
+offset_bottom = 24.0
+clip_contents = true
 mouse_filter = 2
 size_flags_horizontal = 3
 theme = SubResource( 6 )
 script = ExtResource( 4 )
 
 [node name="NinePatchRect" type="NinePatchRect" parent="."]
-margin_right = 83.0
-margin_bottom = 24.0
+offset_right = 83.0
+offset_bottom = 24.0
 texture = SubResource( 1 )
 patch_margin_left = 8
 patch_margin_top = 8
@@ -38,17 +38,17 @@ axis_stretch_horizontal = 1
 axis_stretch_vertical = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
-margin_right = 83.0
-margin_bottom = 24.0
-custom_constants/margin_right = 4
-custom_constants/margin_top = 4
-custom_constants/margin_left = 4
-custom_constants/margin_bottom = 4
+offset_right = 83.0
+offset_bottom = 24.0
+custom_constants/offset_right = 4
+custom_constants/offset_top = 4
+custom_constants/offset_left = 4
+custom_constants/offset_bottom = 4
 
 [node name="Content" type="HBoxContainer" parent="MarginContainer"]
-margin_left = 4.0
-margin_top = 4.0
-margin_right = 79.0
-margin_bottom = 20.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 79.0
+offset_bottom = 20.0
 size_flags_horizontal = 3
 size_flags_vertical = 3

@@ -6,124 +6,124 @@
 ;   [section] ; section goes between []
 ;   param=value ; assign values to parameters
 
-config_version=4
+config_version=5
 
-_global_script_classes=[ {
+_global_script_classes=[{
 "base": "Equipment",
-"class": "Armour",
-"language": "GDScript",
+"class": &"Armour",
+"language": &"GDScript",
 "path": "res://src/models/armour.gd"
 }, {
-"base": "Reference",
-"class": "Attack",
-"language": "GDScript",
+"base": "RefCounted",
+"class": &"Attack",
+"language": &"GDScript",
 "path": "res://src/map/attack.gd"
 }, {
-"base": "Reference",
-"class": "Character",
-"language": "GDScript",
+"base": "RefCounted",
+"class": &"Character",
+"language": &"GDScript",
 "path": "res://src/models/character.gd"
 }, {
-"base": "Reference",
-"class": "ComputerPlayer",
-"language": "GDScript",
+"base": "RefCounted",
+"class": &"ComputerPlayer",
+"language": &"GDScript",
 "path": "res://src/battle/computer_player.gd"
 }, {
-"base": "Reference",
-"class": "Coordinate",
-"language": "GDScript",
+"base": "RefCounted",
+"class": &"Coordinate",
+"language": &"GDScript",
 "path": "res://src/coordinate/coordinate.gd"
 }, {
-"base": "Reference",
-"class": "CoordinateList",
-"language": "GDScript",
+"base": "RefCounted",
+"class": &"CoordinateList",
+"language": &"GDScript",
 "path": "res://src/coordinate/coordinate_list.gd"
 }, {
-"base": "Reference",
-"class": "CoordinateMap",
-"language": "GDScript",
+"base": "RefCounted",
+"class": &"CoordinateMap",
+"language": &"GDScript",
 "path": "res://src/coordinate/coordinate_map.gd"
 }, {
-"base": "Reference",
-"class": "DiceTexture",
-"language": "GDScript",
+"base": "RefCounted",
+"class": &"DiceTexture",
+"language": &"GDScript",
 "path": "res://img/ui/dice_texture.gd"
 }, {
 "base": "Item",
-"class": "Equipment",
-"language": "GDScript",
+"class": &"Equipment",
+"language": &"GDScript",
 "path": "res://src/models/equipment.gd"
 }, {
 "base": "Spell",
-"class": "Fireball",
-"language": "GDScript",
+"class": &"Fireball",
+"language": &"GDScript",
 "path": "res://src/models/spells/fireball.gd"
 }, {
 "base": "Node2D",
-"class": "Grid",
-"language": "GDScript",
+"class": &"Grid",
+"language": &"GDScript",
 "path": "res://src/grid/Grid.gd"
 }, {
 "base": "Node2D",
-"class": "GridNode",
-"language": "GDScript",
+"class": &"GridNode",
+"language": &"GDScript",
 "path": "res://src/grid/GridNode.gd"
 }, {
-"base": "Reference",
-"class": "Item",
-"language": "GDScript",
+"base": "RefCounted",
+"class": &"Item",
+"language": &"GDScript",
 "path": "res://src/models/item.gd"
 }, {
 "base": "Node2D",
-"class": "Map",
-"language": "GDScript",
+"class": &"Map",
+"language": &"GDScript",
 "path": "res://src/map/Map.gd"
 }, {
 "base": "Character",
-"class": "Mob",
-"language": "GDScript",
+"class": &"Mob",
+"language": &"GDScript",
 "path": "res://src/models/mob.gd"
 }, {
-"base": "Reference",
-"class": "PunyCharacterSprite",
-"language": "GDScript",
+"base": "RefCounted",
+"class": &"PunyCharacterSprite",
+"language": &"GDScript",
 "path": "res://src/models/puny_characters_sprite.gd"
 }, {
 "base": "Equipment",
-"class": "Shield",
-"language": "GDScript",
+"class": &"Shield",
+"language": &"GDScript",
 "path": "res://src/models/shield.gd"
 }, {
-"base": "Reference",
-"class": "Spell",
-"language": "GDScript",
+"base": "RefCounted",
+"class": &"Spell",
+"language": &"GDScript",
 "path": "res://src/models/spell.gd"
 }, {
 "base": "Equipment",
-"class": "Staff",
-"language": "GDScript",
+"class": &"Staff",
+"language": &"GDScript",
 "path": "res://src/models/staff.gd"
 }, {
 "base": "Spell",
-"class": "Teleport",
-"language": "GDScript",
+"class": &"Teleport",
+"language": &"GDScript",
 "path": "res://src/models/spells/teleport.gd"
 }, {
 "base": "MarginContainer",
-"class": "Toast",
-"language": "GDScript",
+"class": &"Toast",
+"language": &"GDScript",
 "path": "res://src/ui/Toast.gd"
 }, {
 "base": "Node2D",
-"class": "Unit",
-"language": "GDScript",
+"class": &"Unit",
+"language": &"GDScript",
 "path": "res://src/map/Unit.gd"
 }, {
 "base": "Equipment",
-"class": "Weapon",
-"language": "GDScript",
+"class": &"Weapon",
+"language": &"GDScript",
 "path": "res://src/models/weapon.gd"
-} ]
+}]
 _global_script_class_icons={
 "Armour": "",
 "Attack": "",
@@ -154,15 +154,15 @@ _global_script_class_icons={
 
 config/name="Cursor"
 run/main_scene="res://src/battle/Battle.tscn"
+config/features=PackedStringArray("4.0")
 config/icon="res://icon.png"
 
 [display]
 
-window/size/width=1280
-window/size/height=720
-window/dpi/allow_hidpi=true
 window/stretch/mode="2d"
 window/stretch/aspect="keep_width"
+window/size/width=1280
+window/size/height=720
 
 [gui]
 
@@ -180,6 +180,7 @@ common/enable_pause_aware_picking=true
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 quality/filters/anisotropic_filter_level=1
-environment/default_clear_color=Color( 0, 0, 0, 1 )
+environment/default_clear_color=Color(0, 0, 0, 1)
 environment/default_environment="res://default_env.tres"

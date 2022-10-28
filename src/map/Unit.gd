@@ -3,13 +3,13 @@ class_name Unit
 
 var character: Character
 
-const move_option_color = Color.lightblue
-const attack_option_color = Color.red
+const move_option_color = Color.LIGHT_BLUE
+const attack_option_color = Color.RED
 
-export var movement = 6
-export var movement_type = "foot"
+@export var movement = 6
+@export var movement_type = "foot"
 
-export var team = 0
+@export var team = 0
 var attack_popup = preload("res://src/battle/AttackPopup.tscn")
 var theme = preload("res://src/ui/theme.tres")
 
@@ -23,9 +23,9 @@ enum UnitState {
 }
 var unit_state: int = 0
 
-var sprite: AnimatedSprite
+var sprite: AnimatedSprite2D
 
-# Calculated on unit select
+# Calculated checked unit select
 var distance_to_cell: CoordinateMap = null
 var default_attack_sources: CoordinateMap = null
 var all_attack_sources: CoordinateMap = null
@@ -67,15 +67,15 @@ func set_state_selected(map: Map, initial_path: CoordinateList):
 	map.add_highlights(movement_options, move_option_color)
 	map.add_highlights(attack_options, attack_option_color)
 	map.path = initial_path
-	map.connect("cursor_move", self, "handle_cursor_move")
+	map.connect("cursor_move",Callable(self,"handle_cursor_move"))
 	
 	map.set_state_unit_controlled(all_options)
-	var result = yield(map, "click")
+	var result = await map.click
 	map.set_state_in_menu()
 	
 	if typeof(result) == TYPE_STRING and result == "cancel":
 		# Unselect unit
-		map.disconnect("cursor_move", self, "handle_cursor_move")
+		map.disconnect("cursor_move",Callable(self,"handle_cursor_move"))
 		set_state_unselected(map)
 		map.set_state_nothing_selected()
 	else:
@@ -83,9 +83,9 @@ func set_state_selected(map: Map, initial_path: CoordinateList):
 		if movement_options.has(clicked_cell):
 			# Animate movement along movement path, then move to action select
 			var path = map.path
-			map.disconnect("cursor_move", self, "handle_cursor_move")
+			map.disconnect("cursor_move",Callable(self,"handle_cursor_move"))
 			var tween = animate_movement_along_path(map)
-			yield(tween, "finished")
+			await tween.finished
 			set_state_action_select(map, path)
 		if attack_options.has(clicked_cell):
 			var path: CoordinateList
@@ -96,9 +96,9 @@ func set_state_selected(map: Map, initial_path: CoordinateList):
 			else:
 				path = get_path_to_coords(map, default_attack_sources.at(clicked_cell))
 			map.path = path
-			map.disconnect("cursor_move", self, "handle_cursor_move")
+			map.disconnect("cursor_move",Callable(self,"handle_cursor_move"))
 			var tween = animate_movement_along_path(map)
-			yield(tween, "finished")
+			await tween.finished
 			set_state_attack_confirm(map, path)
 			
 
@@ -112,13 +112,13 @@ func set_state_action_select(map: Map, path: CoordinateList):
 	map.add_highlights(movement_options, move_option_color)
 	map.add_highlights(attack_options, attack_option_color)
 	
-	var attack_options = valid_attacks(map, new_location)
+	var current_attack_options = valid_attacks(map, new_location)
 	
 	var popup_menu = PopupMenu.new()
 	var options = ["Wait", "Cancel"]
 	if character.spells().size() > 0:
 		options.push_front("Spells")
-	if attack_options.non_empty_coordinates().size() > 0:
+	if current_attack_options.non_empty_coordinates().size() > 0:
 		options.push_front("Attack")
 	
 	for i in options.size():
@@ -126,12 +126,12 @@ func set_state_action_select(map: Map, path: CoordinateList):
 	
 	map.display_menu(popup_menu)
 
-	var id = yield(popup_menu, "id_pressed")
+	var id = await popup_menu.id_pressed
 	var option = options[id]
 	
 	if option == "Cancel":
 		position = map.position_from_coordinates(path.at(0))
-		yield(get_tree(), "idle_frame")
+		await get_tree().process_frame
 		set_state_selected(map, path)
 	if option == "Wait":
 		update_position(map, new_location)
@@ -149,7 +149,7 @@ func set_state_attack_select(map: Map, path: CoordinateList, new_location: Coord
 	map.add_highlights(attack_options, attack_option_color)
 	
 	map.set_state_unit_controlled(attack_options)
-	var result = yield(map, "click")
+	var result = await map.click
 	map.set_state_in_menu()
 	
 	if typeof(result) == TYPE_STRING and result == "cancel":
@@ -171,17 +171,17 @@ func set_state_attack_confirm(map: Map, path: CoordinateList):
 	popup_menu.add_item("Cancel")
 	
 	map.display_menu(popup_menu)
-	var id = yield(popup_menu, "id_pressed")
+	var id = await popup_menu.id_pressed
 
 	if id == character.attacks().size():
 		# Cancel selected
 		position = map.position_from_coordinates(path.at(0))
-		yield(get_tree(), "idle_frame")
+		await get_tree().process_frame
 		set_state_selected(map, path)
 	else:
 		var attack = character.attacks()[id]
 		perform_attack(map, attacked_node, attack)
-		yield(sprite, "animation_finished")
+		await sprite.animation_finished
 		update_position(map, path.last())
 		set_state_done(map)	
 
@@ -193,11 +193,11 @@ func set_state_spell_select(map: Map, path: CoordinateList):
 	popup_menu.add_item("Cancel")
 	
 	map.display_menu(popup_menu)
-	var id = yield(popup_menu, "id_pressed")
+	var id = await popup_menu.id_pressed
 	
 	if id == character.spells().size():
 		# Cancel selected
-		yield(get_tree(), "idle_frame")
+		await get_tree().process_frame
 		set_state_action_select(map, path)
 	else:
 		var spell = character.spells()[id]
@@ -209,7 +209,7 @@ func set_state_done(map: Map):
 	modulate = Color(0.5, 0.5, 0.5, 1.0)
 	map.clear_highlights()
 	
-	yield(get_tree(), "idle_frame")
+	await get_tree().process_frame
 	map.set_state_nothing_selected()
 
 func perform_attack(map: Map, target: Unit, attack: Attack) -> void:
@@ -228,7 +228,7 @@ func perform_attack(map: Map, target: Unit, attack: Attack) -> void:
 	var directions = ["right", "down", "left", "up"]
 	var direction = directions[int(round(angle_to_target * 4 / TAU)) % 4]
 	sprite.animation = "%s_%s" % [attack.animation, direction]
-	yield(sprite, "animation_finished")
+	await sprite.animation_finished
 	sprite.animation = "default"
 	
 	var rng = RandomNumberGenerator.new()
@@ -239,7 +239,7 @@ func perform_attack(map: Map, target: Unit, attack: Attack) -> void:
 	var def = target.character.defence()
 	
 	var toast = map.display_toast("", 3.0)
-	toast.add_text("%s:" % [character.display_name], Color.skyblue)
+	toast.add_text("%s:" % [character.display_name], Color.SKY_BLUE)
 	toast.add_text("Rolled")
 	toast.add_icon(DiceTexture.d6(d1))
 	toast.add_icon(DiceTexture.d6(d2))
@@ -251,13 +251,13 @@ func perform_attack(map: Map, target: Unit, attack: Attack) -> void:
 		target.display_label("miss")
 
 var ephemeral_label_scene = preload("res://src/battle/EphemeralLabel.tscn")
-func display_label(text: String, colour: Color = Color.white):
-	var label = ephemeral_label_scene.instance()
+func display_label(text: String, colour: Color = Color.WHITE):
+	var label = ephemeral_label_scene.instantiate()
 	label.text = text
-	label.add_color_override("font_color", colour)
+	label.add_theme_color_override("font_color", colour)
 	add_child(label)
 
-func animate_movement_along_path(map: Map) -> SceneTreeTween:
+func animate_movement_along_path(map: Map) -> Tween:
 	var tween = get_tree().create_tween()
 	if map.path.size() <= 1:
 		tween.tween_interval(0)
@@ -274,10 +274,10 @@ func animate_movement_along_path(map: Map) -> SceneTreeTween:
 			direction = "down"
 		else:
 			direction = "up"
-		tween.tween_callback(self, "set_sprite_animation", [direction])
+		tween.tween_callback(Callable(self,"set_sprite_animation").bind(direction))
 		tween.tween_property(self, "position", to, 0.15)
 	map.path = CoordinateList.new()
-	map.update()
+	map.queue_redraw()
 	return tween
 
 func update_position(map: Map, coordinate: Coordinate):
@@ -286,7 +286,7 @@ func update_position(map: Map, coordinate: Coordinate):
 	
 	map.draw_nodes()
 	map.clear_highlights()
-	map.disconnect("cursor_move", self, "handle_cursor_move")
+	map.disconnect("cursor_move",Callable(self,"handle_cursor_move"))
 	map.path = CoordinateList.new()
 	
 	set_sprite_animation("default")
@@ -309,19 +309,19 @@ func handle_cursor_move(map: Map):
 			var auto_path = get_path_to_coords(map, cell_to_end_path_at)
 			if auto_path.size() > 0:
 				map.path = auto_path
-				map.update()
+				map.queue_redraw()
 				return
 	
 	if !movement_options.has(map.cursor):
 		map.path = CoordinateList.new([coordinate()])
-		map.update()
+		map.queue_redraw()
 		return
 		
 	if map.path.size() > 0:
 		var already_on_path = map.path.find(map.cursor)
 		if already_on_path >= 0:
 			map.path = map.path.slice(0, already_on_path)
-			map.update()
+			map.queue_redraw()
 			return
 		var path_end = map.path.last()
 		var adjacent_cells = map.get_adjacent_cells(path_end)
@@ -331,12 +331,12 @@ func handle_cursor_move(map: Map):
 			var manual_path = map.path.append(map.cursor)
 			if movement_cost_of_path(map, manual_path) <= movement:
 				map.path = manual_path
-				map.update()
+				map.queue_redraw()
 				return
 	var auto_path = get_path_to_coords(map, map.cursor)
 	if auto_path.size() > 0:
 		map.path = auto_path
-		map.update()
+		map.queue_redraw()
 
 # CoordinateMap to array of sorted attack inds from position u
 func valid_attacks(map: Map, position: Coordinate) -> CoordinateMap:
@@ -356,7 +356,7 @@ func valid_attacks(map: Map, position: Coordinate) -> CoordinateMap:
 class AttackSource:
 	var attack_id: int
 	var source: Coordinate
-	func _init(attack_id: int, source: Coordinate):
+	func _init(attack_id: int,source: Coordinate):
 		self.attack_id = attack_id
 		self.source = source
 
@@ -453,17 +453,17 @@ func set_sprite_animation(animation: String) -> void:
 
 func take_damage(damage: int, map: Map) -> void:
 	character.take_damage(damage)
-	display_label("-%s" % [damage], Color.lightcoral)
+	display_label("-%s" % [damage], Color.LIGHT_CORAL)
 	
 	$HPBar.visible = true
 	$HPBar.frame = round((float(character.hp) / character.max_hp()) * 14)
 	
 	sprite.animation = "damage"
-	yield(sprite, "animation_finished")
+	await sprite.animation_finished
 	
 	if character.is_down():
 		sprite.animation = "knocked_down"
-		yield(sprite, "animation_finished")
+		await sprite.animation_finished
 		map.check_win_condition()
 		if character.die_when_downed:
 			queue_free()

@@ -6,9 +6,9 @@ class_name Grid
 # This scene is abstract, and must have various methods implemented by 
 # inheriting scenes
 
-export var grid_size: int = 16
-export var grid_width: int = 20
-export var grid_height: int = 20
+@export var grid_size: int = 16
+@export var grid_width: int = 20
+@export var grid_height: int = 20
 
 # Cursor properties
 var cursor: Coordinate = Coordinate.new(0, 0)
@@ -21,7 +21,7 @@ signal click
 signal cursor_move
 
 enum GridState {
-	NOTHING_SELECTED, # Cursor active, select units on click
+	NOTHING_SELECTED, # Cursor active, select units checked click
 	IN_MENU, # Hide cursor, accept no input
 	UNIT_CONTROLLED # Input passed to selected unit, limited options for selection
 }
@@ -108,12 +108,12 @@ func _input(event):
 		if event.is_action_pressed("ui_accept"):
 			click_position(cursor)
 			
-		if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.is_pressed():
+		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
 			set_position_to_mouse_cursor()
 			click_position(cursor)
 		
 		if event.is_action_pressed("ui_cancel")\
-		|| (event is InputEventMouseButton and event.button_index == BUTTON_RIGHT and event.is_pressed()):
+		|| (event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed()):
 			emit_signal("click", "cancel")
 
 
