@@ -11,7 +11,7 @@ class_name Grid
 @export var grid_height: int = 20
 
 # Cursor properties
-var cursor: Coordinate = Coordinate.new(0, 0)
+var cursor: Vector2i = Vector2i(0, 0)
 var mouse_in_grid = false
 var scrolling: bool = false
 
@@ -50,31 +50,31 @@ func set_state_unit_controlled(clickable_cells: CoordinateList) -> void:
 
 # Returns the relative position of an object at the given grid coordinates
 # Should be overwritten to match the coordinate system of this grid
-func position_from_coordinates(coordinate: Coordinate) -> Vector2:
+func position_from_coordinates(coordinate: Vector2i) -> Vector2:
 	push_error("Implement position_from_coordinates in inheriting scene")
 	return Vector2.ZERO
 
-func cell_centre_position(coordinate: Coordinate) -> Vector2:
+func cell_centre_position(coordinate: Vector2i) -> Vector2:
 	push_error("Implement cell_centre_position in inheriting scene")
 	return Vector2.ZERO
 
 # Takes a relative position and returns the 2D grid coordinates in an array
 # Should be overwritten to match the coordinate system of this grid
-func coordinates_from_position(p: Vector2) -> Coordinate:
+func coordinates_from_position(p: Vector2) -> Vector2i:
 	push_error("Implement coordinates_from_position in inheriting scene")
-	return Coordinate.new(0, 0)
+	return Vector2i(0, 0)
 
 func set_position_to_mouse_cursor() -> void:
 	var mouse_relative_position = get_global_mouse_position() - global_position
 	var coordinate = coordinates_from_position(mouse_relative_position)
-	if not cursor.equals(coordinate):
-		cursor = coordinate.trim(grid_width, grid_height)
+	if not cursor == coordinate:
+		cursor = coordinate.clamp(Vector2i.ZERO, Vector2i(grid_width, grid_height))
 		if state == GridState.UNIT_CONTROLLED:
 			emit_signal("cursor_move", self)
 		$Cursor.position = position_from_coordinates(cursor)
 
 func move_cursor(dx: int, dy: int):
-	cursor = cursor.add_x(dx).add_y(dy)
+	cursor = cursor + Vector2i(dx, dy)
 	if state == GridState.UNIT_CONTROLLED:
 		emit_signal("cursor_move", self)
 	$Cursor.position = position_from_coordinates(cursor)
@@ -127,7 +127,7 @@ func scroll_cursor():
 	if Input.is_action_pressed("ui_right") and cursor.x < grid_width - 1:
 		move_cursor(1, 0)
 
-func click_position(coordinate: Coordinate):
+func click_position(coordinate: Vector2i):
 	push_error("Implement click_position in inheriting scene")
 
 # Signals

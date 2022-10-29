@@ -25,11 +25,11 @@ func _ready() -> void:
 	var test_json_conv = JSON.new()
 	test_json_conv.parse(file.get_as_text())
 	terrain_types = test_json_conv.get_data()
-	terrain_grid.set_value(Coordinate.new(5, 5), 2)
-	terrain_grid.set_value(Coordinate.new(5, 6), 2)
-	terrain_grid.set_value(Coordinate.new(6, 6), 2)
-	terrain_grid.set_value(Coordinate.new(7, 7), 3)
-	terrain_grid.set_value(Coordinate.new(7, 8), 3)
+	terrain_grid.set_value(Vector2i(5, 5), 2)
+	terrain_grid.set_value(Vector2i(5, 6), 2)
+	terrain_grid.set_value(Vector2i(6, 6), 2)
+	terrain_grid.set_value(Vector2i(7, 7), 3)
+	terrain_grid.set_value(Vector2i(7, 8), 3)
 	
 	draw_nodes()
 	draw_grid()
@@ -57,11 +57,11 @@ func _draw():
 		]
 		draw_colored_polygon(arrow_head_points, color)
 
-func distance(coordinate_1: Coordinate, coordinate_2: Coordinate) -> int:
+func distance(coordinate_1: Vector2i, coordinate_2: Vector2i) -> int:
 	push_error("Implement distance in inheriting class")
 	return 0
 
-func add_highlight(coordinate: Coordinate, colour: Color):
+func add_highlight(coordinate: Vector2i, colour: Color):
 	highlights.set_value(coordinate, colour)
 	queue_redraw()
 
@@ -71,11 +71,11 @@ func add_highlights(coordinates: CoordinateList, colour: Color):
 		highlights.set_value(coordinate, colour)
 	queue_redraw()
 
-func get_adjacent_cells(coordinate: Coordinate) -> CoordinateList:
+func get_adjacent_cells(coordinate: Vector2i) -> CoordinateList:
 	push_error("Implement get_adjacent_cells in inheriting scene")
 	return CoordinateList.new([])
 
-func cell_corners(coordinate: Coordinate):
+func cell_corners(coordinate: Vector2i):
 	push_error("Implement cell_corners in inheriting scene")
 
 func node_array() -> CoordinateMap:
@@ -85,13 +85,13 @@ func clear_highlights():
 	highlights = CoordinateMap.new(grid_width, grid_height, [], null)
 	queue_redraw()
 
-func click_position(coordinate: Coordinate):
+func click_position(coordinate: Vector2i):
 	if state == GridState.NOTHING_SELECTED:
 		print("Clicked grid position %s" % [coordinate])
 		for child in $GridNodes.get_children():
 				var node = child as GridNode
 				if node and node.has_method("select"):
-					if node.coordinate().equals(coordinate):
+					if node.coordinate() == coordinate:
 						return node.select(self)
 		# If no unit selected
 		var popup_menu = PopupMenu.new()
@@ -121,7 +121,6 @@ func display_menu(popup_menu: PopupMenu) -> void:
 	popup_menu.set_focused_item(0)
 	set_state_in_menu()
 	
-	await get_tree().process_frame
 	$PopupLayer.add_child(popup_menu)
 	popup_menu.popup_centered()
 	
@@ -171,7 +170,6 @@ func check_win_condition():
 		await tween.finished
 
 		var tpk_popup = tpk_popup_scene.instantiate()
-		tpk_popup.scale = Vector2(zoom_level, zoom_level)
 		$PopupLayer.add_child(tpk_popup)
 		tpk_popup.popup_centered()
 		

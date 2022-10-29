@@ -69,9 +69,9 @@ func _ready():
 	var reginald_unit = new_unit.instantiate()
 	var yanil_unit = new_unit.instantiate()
 	var tobias_unit = new_unit.instantiate()
-	reginald_unit.from_char(reginald, 0, Coordinate.new(13, 9))
-	yanil_unit.from_char(yanil, 0, Coordinate.new(14, 10))
-	tobias_unit.from_char(tobias, 0, Coordinate.new(16, 11))
+	reginald_unit.from_char(reginald, 0, Vector2i(13, 9))
+	yanil_unit.from_char(yanil, 0, Vector2i(14, 10))
+	tobias_unit.from_char(tobias, 0, Vector2i(16, 11))
 	
 	$GridNodes.add_child(reginald_unit)
 	$GridNodes.add_child(yanil_unit)
@@ -90,21 +90,21 @@ func _ready():
 func add_blob(x: int, y: int):
 	var slime_sprite_sheet = preload("res://img/characters/Slime.png")
 	var slime_sprite_1 = PunyCharacterSprite.slime_sprite(slime_sprite_sheet)
-	var blob1 = Mob.new("Blobber", slime_sprite_1, 2, 0, 0, 0, Attack.new("Slime", 1, 1, [0], 4))
+	var blob1 = Mob.new("Blobber", slime_sprite_1, 10, 0, 0, 0, Attack.new("Slime", 1, 1, [0], 4))
 	var blob1_unit = new_unit.instantiate()
-	blob1_unit.from_char(blob1, 1, Coordinate.new(x, y))
+	blob1_unit.from_char(blob1, 1, Vector2i(x, y))
 	$GridNodes.add_child(blob1_unit)
 
-func position_from_coordinates(coordinate: Coordinate) -> Vector2:
+func position_from_coordinates(coordinate: Vector2i) -> Vector2:
 	return Vector2(coordinate.x * grid_size, coordinate.y * grid_size)
 
-func cell_centre_position(coordinate: Coordinate) -> Vector2:
+func cell_centre_position(coordinate: Vector2i) -> Vector2:
 	return position_from_coordinates(coordinate) + Vector2(0.5 * grid_size, 0.5 * grid_size)
 
-func coordinates_from_position(p: Vector2) -> Coordinate:
-	return Coordinate.new(p.x / grid_size, p.y / grid_size)
+func coordinates_from_position(p: Vector2) -> Vector2i:
+	return Vector2i(p.x / grid_size, p.y / grid_size)
 
-func distance(coordinate_1: Coordinate, coordinate_2: Coordinate) -> int:
+func distance(coordinate_1: Vector2i, coordinate_2: Vector2i) -> int:
 	return int(abs(coordinate_1.x - coordinate_2.x) + abs(coordinate_1.y - coordinate_2.y))
 
 func draw_grid():
@@ -132,19 +132,19 @@ func draw_grid():
 		line.add_point(Vector2(width, offset))
 		add_child(line)
 
-func get_adjacent_cells(coordinate: Coordinate) -> CoordinateList:
+func get_adjacent_cells(coordinate: Vector2i) -> CoordinateList:
 	var output = []
 	if (coordinate.y - 1) >= 0:
-		output.append(coordinate.add_y(-1))
+		output.append(coordinate + Vector2i.UP)
 	if (coordinate.y + 1) < grid_height:
-		output.append(coordinate.add_y(1))
+		output.append(coordinate + Vector2i.DOWN)
 	if (coordinate.x - 1) >= 0:
-		output.append(coordinate.add_x(-1))
+		output.append(coordinate + Vector2i.LEFT)
 	if (coordinate.x + 1) < grid_width:
-		output.append(coordinate.add_x(1))
+		output.append(coordinate + Vector2i.RIGHT)
 	return CoordinateList.new(output)
 
-func cell_corners(coordinate: Coordinate):
+func cell_corners(coordinate: Vector2i):
 	var start = position_from_coordinates(coordinate)
 	return PackedVector2Array([
 		start,

@@ -30,11 +30,6 @@ _global_script_classes=[{
 "path": "res://src/battle/computer_player.gd"
 }, {
 "base": "RefCounted",
-"class": &"Coordinate",
-"language": &"GDScript",
-"path": "res://src/coordinate/coordinate.gd"
-}, {
-"base": "RefCounted",
 "class": &"CoordinateList",
 "language": &"GDScript",
 "path": "res://src/coordinate/coordinate_list.gd"
@@ -129,7 +124,6 @@ _global_script_class_icons={
 "Attack": "",
 "Character": "",
 "ComputerPlayer": "",
-"Coordinate": "",
 "CoordinateList": "",
 "CoordinateMap": "",
 "DiceTexture": "",
@@ -161,6 +155,7 @@ config/icon="res://icon.png"
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
+window/dpi/allow_hidpi=false
 window/stretch/mode="2d"
 window/stretch/aspect="keep_width"
 window/stretch/scale=3.0
@@ -183,6 +178,8 @@ common/enable_pause_aware_picking=true
 
 [rendering]
 
+2d/snap/snap_2d_transforms_to_pixel=true
+2d/snap/snap_2d_vertices_to_pixel=true
 textures/canvas_textures/default_texture_filter=0
 quality/filters/anisotropic_filter_level=1
 environment/default_clear_color=Color(0, 0, 0, 1)

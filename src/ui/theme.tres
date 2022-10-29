@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=5 format=3 uid="uid://cq6hal2383lbi"]
+[gd_resource type="Theme" load_steps=6 format=3 uid="uid://cq6hal2383lbi"]
 
 [ext_resource type="FontFile" uid="uid://qa3i2e1ba41c" path="res://img/ui/fonts/EquipmentPro.ttf" id="1"]
 [ext_resource type="Texture2D" uid="uid://cdmxcv1oet22x" path="res://img/ui/GUI_1x.png" id="2"]
@@ -13,6 +13,13 @@ axis_stretch_horizontal = 1
 axis_stretch_vertical = 1
 region_rect = Rect2(96, 0, 24, 24)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1ue01"]
+bg_color = Color(1, 1, 1, 0.490196)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
 [sub_resource type="FontFile" id="2"]
 fallbacks = [ExtResource("1")]
 face_index = null
@@ -24,9 +31,22 @@ cache/0/16/0/underline_position = 0.0
 cache/0/16/0/underline_thickness = 0.0
 cache/0/16/0/scale = 1.0
 cache/0/16/0/kerning_overrides/16/0 = Vector2(0, 0)
+cache/0/16/0/kerning_overrides/28/0 = Vector2(0, 0)
+cache/0/28/0/ascent = 0.0
+cache/0/28/0/descent = 0.0
+cache/0/28/0/underline_position = 0.0
+cache/0/28/0/underline_thickness = 0.0
+cache/0/28/0/scale = 1.0
+cache/0/28/0/kerning_overrides/16/0 = Vector2(0, 0)
+cache/0/28/0/kerning_overrides/28/0 = Vector2(0, 0)
 
 [resource]
 default_font = SubResource("2")
+Label/colors/font_outline_color = Color(0, 0, 0, 1)
+Label/constants/outline_size = 3
 Panel/styles/panel = SubResource("3")
+PopupMenu/colors/font_outline_color = Color(0, 0, 0, 1)
+PopupMenu/constants/outline_size = 3
+PopupMenu/styles/hover = SubResource("StyleBoxFlat_1ue01")
 PopupMenu/styles/panel = SubResource("3")
 PopupPanel/styles/panel = SubResource("3")

@@ -47,7 +47,7 @@ static func execute_unit_turn(unit: Unit, map: Map, unit_turn: UnitTurnComplete)
 		# TODO: think a bit more about where to move
 		var paths_to_enemies = paths_to_enemies(unit, map)
 		var nearest_distance = INF
-		var best_location: Coordinate
+		var best_location: Vector2i
 		
 		for path in paths_to_enemies:
 			var distance_to_enemy = unit.distance_to_cell.at(path.last())
@@ -71,8 +71,8 @@ static func execute_unit_turn(unit: Unit, map: Map, unit_turn: UnitTurnComplete)
 	await unit.get_tree().create_timer(0.25).timeout
 	unit_turn.emit_signal("complete", unit)
 
-static func last_movement_option_in_path(unit: Unit, path: CoordinateList) -> Coordinate:
-	var out: Coordinate
+static func last_movement_option_in_path(unit: Unit, path: CoordinateList) -> Vector2i:
+	var out: Vector2i
 	for coordinate in path.to_array():
 		if unit.empty_movement_options.has(coordinate):
 			out = coordinate

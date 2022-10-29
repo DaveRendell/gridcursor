@@ -7,5 +7,5 @@ class_name GridNode
 @export var x: int
 @export var y: int
 
-func coordinate() -> Coordinate:
-	return Coordinate.new(x, y)
+func coordinate() -> Vector2i:
+	return Vector2i(x, y)

@@ -17,17 +17,17 @@ func _init(width: int = 0,height: int = 0,grid_nodes: Array = [],default = null)
 		if grid_node:
 			data[grid_node.x][grid_node.y] = grid_node
 
-func at(coordinate: Coordinate):
+func at(coordinate: Vector2i):
 	return data[coordinate.x][coordinate.y]
 
-func set_value(coordinate: Coordinate, value) -> void:
+func set_value(coordinate: Vector2i, value) -> void:
 	data[coordinate.x][coordinate.y] = value
 
 func coordinates() -> Array:
 	var out = []
 	for i in data.size():
 		for j in data[0].size():
-			out.append(Coordinate.new(i, j))
+			out.append(Vector2i(i, j))
 	return out
 
 func non_empty_coordinates() -> Array:
@@ -35,7 +35,7 @@ func non_empty_coordinates() -> Array:
 	for i in data.size():
 		for j in data[0].size():
 			if data[i][j]:
-				out.append(Coordinate.new(i, j))
+				out.append(Vector2i(i, j))
 	return out
 
 func _to_string() -> String:

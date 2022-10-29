@@ -33,7 +33,7 @@ var movement_options: CoordinateList = null
 var empty_movement_options: CoordinateList = null
 var attack_options: CoordinateList = null
 
-func from_char(character: Character, team: int, coordinate: Coordinate):
+func from_char(character: Character, team: int, coordinate: Vector2i):
 	self.character = character
 	self.team = team
 	self.x = coordinate.x
@@ -141,7 +141,7 @@ func set_state_action_select(map: Map, path: CoordinateList):
 	if option == "Spells":
 		set_state_spell_select(map, path)
 
-func set_state_attack_select(map: Map, path: CoordinateList, new_location: Coordinate):
+func set_state_attack_select(map: Map, path: CoordinateList, new_location: Vector2i):
 	print("Unit state: Attack select")
 	unit_state = UnitState.ATTACK_SELECT
 	var attack_options = CoordinateList.new(valid_attacks(map, new_location).non_empty_coordinates())
@@ -280,7 +280,7 @@ func animate_movement_along_path(map: Map) -> Tween:
 	map.queue_redraw()
 	return tween
 
-func update_position(map: Map, coordinate: Coordinate):
+func update_position(map: Map, coordinate: Vector2i):
 	x = coordinate.x
 	y = coordinate.y
 	
@@ -339,7 +339,7 @@ func handle_cursor_move(map: Map):
 		map.queue_redraw()
 
 # CoordinateMap to array of sorted attack inds from position u
-func valid_attacks(map: Map, position: Coordinate) -> CoordinateMap:
+func valid_attacks(map: Map, position: Vector2i) -> CoordinateMap:
 	var out = CoordinateMap.new(map.grid_width, map.grid_height)
 	for unit_coordinate in map.node_array().non_empty_coordinates():
 		var unit: Unit = map.node_array().at(unit_coordinate)
@@ -355,8 +355,8 @@ func valid_attacks(map: Map, position: Coordinate) -> CoordinateMap:
 
 class AttackSource:
 	var attack_id: int
-	var source: Coordinate
-	func _init(attack_id: int,source: Coordinate):
+	var source: Vector2i
+	func _init(attack_id: int,source: Vector2i):
 		self.attack_id = attack_id
 		self.source = source
 
@@ -383,7 +383,7 @@ func calculate_options(map: Map) -> void:
 					empty_movement_options = empty_movement_options.append(u)
 			
 				# If U is empty, check attacks from u
-				if !map.node_array().at(u) || coordinate().equals(u):
+				if !map.node_array().at(u) || coordinate() == u:
 					var attack_targets = valid_attacks(map, u)
 					for attack_target in attack_targets.non_empty_coordinates():
 						attack_options = attack_options.append(attack_target)
@@ -411,7 +411,7 @@ func calculate_options(map: Map) -> void:
 						new_updates.append(a)
 		updates = CoordinateList.new(new_updates)
 
-func movement_cost_of_cell(map: Map, coordinate: Coordinate) -> int:
+func movement_cost_of_cell(map: Map, coordinate: Vector2i) -> int:
 	var terrain: int = map.terrain_grid.at(coordinate)
 	var node: Unit = map.node_array().at(coordinate)
 	if (node != null) and (node.team != team):
@@ -422,11 +422,11 @@ func movement_cost_of_cell(map: Map, coordinate: Coordinate) -> int:
 		return map.terrain_types[terrain]["movement"][movement_type]
 	return -1
 
-func get_path_to_coords(map: Map, coordinate: Coordinate) -> CoordinateList:	
+func get_path_to_coords(map: Map, coordinate: Vector2i) -> CoordinateList:	
 	var out = CoordinateList.new([coordinate])
 	var u = coordinate
 	var u_distance = distance_to_cell.at(coordinate)
-	while !u.equals(coordinate()):
+	while u != coordinate():
 		var adjacent_cells = map.get_adjacent_cells(u)
 		var u_cost = movement_cost_of_cell(map, u)
 		for a in adjacent_cells.to_array():

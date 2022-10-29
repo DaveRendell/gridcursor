@@ -58,7 +58,7 @@ func apply_highlights(map: Map, targets: CoordinateList) -> void:
 		map.add_highlights(calculate_aoe(map, map.cursor), aoe_colour)
 	
 
-func calculate_aoe(map: Map, target: Coordinate) -> CoordinateList:
+func calculate_aoe(map: Map, target: Vector2i) -> CoordinateList:
 	var aoe = []
 	for coordinate in map.terrain_grid.coordinates():
 		if map.distance(map.cursor, coordinate) <= aoe_radius:
