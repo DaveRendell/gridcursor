@@ -19,6 +19,7 @@ corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
+corner_detail = 2
 
 [sub_resource type="FontFile" id="2"]
 fallbacks = [ExtResource("1")]
@@ -32,6 +33,7 @@ cache/0/16/0/underline_thickness = 0.0
 cache/0/16/0/scale = 1.0
 cache/0/16/0/kerning_overrides/16/0 = Vector2(0, 0)
 cache/0/16/0/kerning_overrides/28/0 = Vector2(0, 0)
+cache/0/16/0/kerning_overrides/21/0 = Vector2(0, 0)
 cache/0/28/0/ascent = 0.0
 cache/0/28/0/descent = 0.0
 cache/0/28/0/underline_position = 0.0
@@ -39,6 +41,15 @@ cache/0/28/0/underline_thickness = 0.0
 cache/0/28/0/scale = 1.0
 cache/0/28/0/kerning_overrides/16/0 = Vector2(0, 0)
 cache/0/28/0/kerning_overrides/28/0 = Vector2(0, 0)
+cache/0/28/0/kerning_overrides/21/0 = Vector2(0, 0)
+cache/0/21/0/ascent = 0.0
+cache/0/21/0/descent = 0.0
+cache/0/21/0/underline_position = 0.0
+cache/0/21/0/underline_thickness = 0.0
+cache/0/21/0/scale = 1.0
+cache/0/21/0/kerning_overrides/16/0 = Vector2(0, 0)
+cache/0/21/0/kerning_overrides/28/0 = Vector2(0, 0)
+cache/0/21/0/kerning_overrides/21/0 = Vector2(0, 0)
 
 [resource]
 default_font = SubResource("2")

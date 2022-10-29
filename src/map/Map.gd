@@ -6,7 +6,7 @@ signal next_turn
 
 var terrain_grid: CoordinateMap = CoordinateMap.new(grid_width, grid_height, [], 0)
 var highlights: CoordinateMap = CoordinateMap.new(grid_width, grid_height, [], null)
-var path = []
+var path: Array[Vector2i] = []
 
 var terrain_types = []
 
@@ -102,6 +102,7 @@ func click_position(coordinate: Vector2i):
 			popup_menu.add_item(option, i)
 		
 		display_menu(popup_menu)
+		popup_menu.popup_hide.connect(set_state_nothing_selected)
 		
 		var id = await popup_menu.id_pressed
 		var option = options[id]
@@ -117,8 +118,8 @@ func click_position(coordinate: Vector2i):
 
 func display_menu(popup_menu: PopupMenu) -> void:
 	popup_menu.theme = theme
-	popup_menu.exclusive = true
 	popup_menu.set_focused_item(0)
+	popup_menu.popup_window = false
 	set_state_in_menu()
 	
 	$PopupLayer.add_child(popup_menu)

@@ -83,12 +83,14 @@ func set_state_selected(map: Map, initial_path: Array[Vector2i]):
 		if movement_options.has(clicked_cell):
 			# Animate movement along movement path, then move to action select
 			var path = map.path
+			if map.path.size() == 0:
+				map.path.append(coordinate())
 			map.disconnect("cursor_move",Callable(self,"handle_cursor_move"))
 			var tween = animate_movement_along_path(map)
 			await tween.finished
 			set_state_action_select(map, path)
 		if attack_options.has(clicked_cell):
-			var path: Array[Vector2i]
+			var path: Array[Vector2i] = []
 			if map.path.size() == 0:
 				map.path.append(coordinate())
 			if all_attack_sources.at(clicked_cell).has(map.path.back()):
@@ -276,7 +278,7 @@ func animate_movement_along_path(map: Map) -> Tween:
 			direction = "up"
 		tween.tween_callback(Callable(self,"set_sprite_animation").bind(direction))
 		tween.tween_property(self, "position", to, 0.15)
-	map.path = []
+	map.path = [coordinate()]
 	map.queue_redraw()
 	return tween
 
