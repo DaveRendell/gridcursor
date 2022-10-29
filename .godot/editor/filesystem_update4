@@ -4,3 +4,8 @@ res://src/map/Map.gd
 res://src/map/Unit.gd
 res://src/ui/theme.tres
 res://src/map/SquareGrid.gd
+res://src/battle/computer_player.gd
+res://src/models/spell.gd
+res://src/models/spells/teleport.gd
+res://src/map/HexGrid.gd
+res://src/models/spells/fireball.gd

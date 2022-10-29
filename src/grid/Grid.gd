@@ -15,7 +15,7 @@ var cursor: Vector2i = Vector2i(0, 0)
 var mouse_in_grid = false
 var scrolling: bool = false
 
-var clickable_cells: CoordinateList = null
+var clickable_cells: Array[Vector2i] = []
 
 signal click
 signal cursor_move
@@ -32,16 +32,16 @@ func set_state_nothing_selected() -> void:
 	state = GridState.NOTHING_SELECTED
 	
 	$Cursor.visible = true
-	clickable_cells = null
+	clickable_cells = []
 
 func set_state_in_menu() -> void:
 	print("Grid state: In Menu")
 	state = GridState.IN_MENU
 	
 	$Cursor.visible = false
-	clickable_cells = null
+	clickable_cells = []
 
-func set_state_unit_controlled(clickable_cells: CoordinateList) -> void:
+func set_state_unit_controlled(clickable_cells: Array[Vector2i]) -> void:
 	print("Grid state: Unit Controlled")
 	state = GridState.UNIT_CONTROLLED
 	

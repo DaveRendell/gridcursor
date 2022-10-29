@@ -89,7 +89,7 @@ func draw_grid():
 			hex.position = position_from_coordinates(Vector2i(i, j)) + 0.5 * grid_size * Vector2.RIGHT
 			add_child(hex)
 
-func get_adjacent_cells(coordinate: Vector2i) -> CoordinateList:
+func get_adjacent_cells(coordinate: Vector2i) -> Array[Vector2i]:
 	var cube_coords = offset_to_cube(coordinate.x, coordinate.y)
 	var unbounded_neighbours = [
 		cube_to_offset(cube_coords[0], cube_coords[1] - 1, cube_coords[2] + 1),
@@ -104,7 +104,7 @@ func get_adjacent_cells(coordinate: Vector2i) -> CoordinateList:
 		if neighbour[0] >= 0 and neighbour[0] < grid_width\
 		and neighbour[1] >= 0 and neighbour[1] < grid_height:
 			output.append(Vector2i(neighbour[0], neighbour[1]))
-	return CoordinateList.new(output)
+	return output
 
 func cell_corners(coordinate: Vector2i):
 	var start = position_from_coordinates(coordinate) + Vector2(0.5 * grid_size, 0)

@@ -30,11 +30,6 @@ _global_script_classes=[{
 "path": "res://src/battle/computer_player.gd"
 }, {
 "base": "RefCounted",
-"class": &"CoordinateList",
-"language": &"GDScript",
-"path": "res://src/coordinate/coordinate_list.gd"
-}, {
-"base": "RefCounted",
 "class": &"CoordinateMap",
 "language": &"GDScript",
 "path": "res://src/coordinate/coordinate_map.gd"
@@ -124,7 +119,6 @@ _global_script_class_icons={
 "Attack": "",
 "Character": "",
 "ComputerPlayer": "",
-"CoordinateList": "",
 "CoordinateMap": "",
 "DiceTexture": "",
 "Equipment": "",

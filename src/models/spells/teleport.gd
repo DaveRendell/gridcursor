@@ -7,18 +7,18 @@ const highlight_colour = Color.LIGHT_GREEN
 func _init():
 	super("Teleport")
 
-func battle_action(map: Map, caster: Unit, path: CoordinateList) -> void:
-	var teleport_options = []
+func battle_action(map: Map, caster: Unit, path: Array[Vector2i]) -> void:
+	var teleport_options: Array[Vector2i] = []
 	for coordinate in map.terrain_grid.coordinates():
-		if map.distance(path.last(), coordinate) <= spell_range\
+		if map.distance(path.back(), coordinate) <= spell_range\
 		and caster.movement_cost_of_cell(map, coordinate) >= 0:
 			teleport_options.append(coordinate)
 	
 	map.clear_highlights()
-	map.add_highlights(CoordinateList.new(teleport_options), highlight_colour)
+	map.add_highlights(teleport_options, highlight_colour)
 	
 
-	map.set_state_unit_controlled(CoordinateList.new(teleport_options))
+	map.set_state_unit_controlled(teleport_options)
 	var result = await map.click
 	map.set_state_in_menu()
 	

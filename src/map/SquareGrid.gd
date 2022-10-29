@@ -132,7 +132,7 @@ func draw_grid():
 		line.add_point(Vector2(width, offset))
 		add_child(line)
 
-func get_adjacent_cells(coordinate: Vector2i) -> CoordinateList:
+func get_adjacent_cells(coordinate: Vector2i) -> Array[Vector2i]:
 	var output = []
 	if (coordinate.y - 1) >= 0:
 		output.append(coordinate + Vector2i.UP)
@@ -142,7 +142,7 @@ func get_adjacent_cells(coordinate: Vector2i) -> CoordinateList:
 		output.append(coordinate + Vector2i.LEFT)
 	if (coordinate.x + 1) < grid_width:
 		output.append(coordinate + Vector2i.RIGHT)
-	return CoordinateList.new(output)
+	return output
 
 func cell_corners(coordinate: Vector2i):
 	var start = position_from_coordinates(coordinate)

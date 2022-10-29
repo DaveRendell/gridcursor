@@ -6,7 +6,7 @@ signal next_turn
 
 var terrain_grid: CoordinateMap = CoordinateMap.new(grid_width, grid_height, [], 0)
 var highlights: CoordinateMap = CoordinateMap.new(grid_width, grid_height, [], null)
-var path = CoordinateList.new()
+var path = []
 
 var terrain_types = []
 
@@ -42,13 +42,13 @@ func _draw():
 	if path.size() > 1:
 		var color = Color.CORAL
 		for i in range(1, path.size()):
-			var from = cell_centre_position(path.at(i - 1))
-			var to = cell_centre_position(path.at(i))
+			var from = cell_centre_position(path[i - 1])
+			var to = cell_centre_position(path[i])
 
 			draw_line(from,to,color,grid_size * 0.5)
 			draw_circle(from, grid_size * 0.25, color)
-		var last_point = cell_centre_position(path.last())
-		var second_last_point = cell_centre_position(path.at(-2))
+		var last_point = cell_centre_position(path.back())
+		var second_last_point = cell_centre_position(path[-2])
 		var rotation = (last_point - second_last_point).angle()
 		var arrow_head_points = [
 			last_point + grid_size * Vector2(-0.25, -0.5).rotated(rotation),
@@ -65,15 +65,15 @@ func add_highlight(coordinate: Vector2i, colour: Color):
 	highlights.set_value(coordinate, colour)
 	queue_redraw()
 
-func add_highlights(coordinates: CoordinateList, colour: Color):
+func add_highlights(coordinates: Array[Vector2i], colour: Color):
 	colour.a = 0.3
-	for coordinate in coordinates.to_array():
+	for coordinate in coordinates:
 		highlights.set_value(coordinate, colour)
 	queue_redraw()
 
-func get_adjacent_cells(coordinate: Vector2i) -> CoordinateList:
+func get_adjacent_cells(coordinate: Vector2i) -> Array[Vector2i]:
 	push_error("Implement get_adjacent_cells in inheriting scene")
-	return CoordinateList.new([])
+	return []
 
 func cell_corners(coordinate: Vector2i):
 	push_error("Implement cell_corners in inheriting scene")
