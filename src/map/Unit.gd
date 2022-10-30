@@ -11,6 +11,7 @@ const attack_option_color = Color.RED
 
 @export var team = 0
 var attack_popup = preload("res://src/battle/AttackPopup.tscn")
+var battle_menu_scene = preload("res://src/ui/BattleMenu.tscn")
 var theme = preload("res://src/ui/theme.tres")
 
 enum UnitState {
@@ -116,7 +117,7 @@ func set_state_action_select(map: Map, path: Array[Vector2i]):
 	
 	var current_attack_options = valid_attacks(map, new_location)
 	
-	var popup_menu = PopupMenu.new()
+	var popup_menu = battle_menu_scene.instantiate()
 	var options = ["Wait", "Cancel"]
 	if character.spells().size() > 0:
 		options.push_front("Spells")
@@ -146,7 +147,7 @@ func set_state_action_select(map: Map, path: Array[Vector2i]):
 func set_state_attack_select(map: Map, path: Array[Vector2i], new_location: Vector2i):
 	print("Unit state: Attack select")
 	unit_state = UnitState.ATTACK_SELECT
-	var attack_options = valid_attacks(map, new_location).non_empty_coordinates()
+	var attack_options: Array[Vector2i] = valid_attacks(map, new_location).non_empty_coordinates()
 	map.clear_highlights()
 	map.add_highlights(attack_options, attack_option_color)
 	
@@ -165,7 +166,7 @@ func set_state_attack_confirm(map: Map, path: Array[Vector2i]):
 	var attacked_node = map.node_array().at(map.cursor)
 	
 	var distance_to_target = map.distance(path.back(), map.cursor)
-	var popup_menu = PopupMenu.new()
+	var popup_menu = battle_menu_scene.instantiate()
 	for i in character.attacks().size():
 		var attack: Attack = character.attacks()[i]
 		if attack.can_attack_distance(distance_to_target):
@@ -188,7 +189,7 @@ func set_state_attack_confirm(map: Map, path: Array[Vector2i]):
 		set_state_done(map)	
 
 func set_state_spell_select(map: Map, path: Array[Vector2i]):
-	var popup_menu = PopupMenu.new()
+	var popup_menu = battle_menu_scene.instantiate()
 	for i in character.spells().size():
 		var spell = character.spells()[i]
 		popup_menu.add_item(spell.display_name, i)
@@ -322,7 +323,7 @@ func handle_cursor_move(map: Map):
 	if map.path.size() > 0:
 		var already_on_path = map.path.find(map.cursor)
 		if already_on_path >= 0:
-			map.path = map.path.slice(0, already_on_path)
+			map.path = map.path.slice(0, already_on_path + 1)
 			map.queue_redraw()
 			return
 		var path_end = map.path.back()

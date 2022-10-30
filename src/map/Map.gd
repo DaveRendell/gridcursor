@@ -19,6 +19,7 @@ var new_toast = preload("res://src/ui/Toast.tscn")
 var theme = preload("res://src/ui/theme.tres")
 var tpk_popup_scene = preload("res://src/map/TPKPopup.tscn")
 var victory_screen_scene = preload("res://src/map/VictoryScreen.tscn")
+var battle_menu_scene = preload("res://src/ui/BattleMenu.tscn")
 
 func _ready() -> void:
 	var file = FileAccess.open("res://data/terrain.json", FileAccess.READ)
@@ -94,7 +95,7 @@ func click_position(coordinate: Vector2i):
 					if node.coordinate() == coordinate:
 						return node.select(self)
 		# If no unit selected
-		var popup_menu = PopupMenu.new()
+		var popup_menu = battle_menu_scene.instantiate()
 		
 		var options = ["End turn", "Cancel"]
 		for i in options.size():
@@ -116,10 +117,8 @@ func click_position(coordinate: Vector2i):
 		if clickable_cells.has(coordinate):
 			emit_signal("click", self)
 
-func display_menu(popup_menu: PopupMenu) -> void:
-	popup_menu.theme = theme
+func display_menu(popup_menu: BattleMenu) -> void:
 	popup_menu.set_focused_item(0)
-	popup_menu.popup_window = false
 	set_state_in_menu()
 	
 	$PopupLayer.add_child(popup_menu)
@@ -127,7 +126,6 @@ func display_menu(popup_menu: PopupMenu) -> void:
 	
 	await popup_menu.id_pressed
 	popup_menu.queue_free()
-	popup_menu.hide()
 
 func draw_nodes():
 	for node in $GridNodes.get_children():

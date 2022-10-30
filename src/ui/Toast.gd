@@ -1,10 +1,13 @@
 class_name Toast
 extends MarginContainer
 
+var label_theme = preload("res://src/ui/theme.tres")
+
 func add_text(text: String, colour: Color = Color.WHITE) -> void:
 	var label = Label.new()
 	label.text = text
 	label.add_theme_color_override("font_color", colour)
+	label.theme = label_theme
 	$MarginContainer/Content.add_child(label)
 
 func add_icon(texture: Texture2D) -> void:

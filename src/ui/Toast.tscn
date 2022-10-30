@@ -1,35 +1,51 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=7 format=3 uid="uid://ba8gdye3hbwde"]
 
-[ext_resource path="res://img/ui/GUI_1x.png" type="Texture2D" id=2]
-[ext_resource path="res://img/ui/fonts/EquipmentPro.ttf" type="FontFile" id=3]
-[ext_resource path="res://src/ui/Toast.gd" type="Script" id=4]
+[ext_resource type="Texture2D" uid="uid://cdmxcv1oet22x" path="res://img/ui/GUI_1x.png" id="2"]
+[ext_resource type="FontFile" uid="uid://qa3i2e1ba41c" path="res://img/ui/fonts/EquipmentPro.ttf" id="3"]
+[ext_resource type="Script" path="res://src/ui/Toast.gd" id="4"]
 
-[sub_resource type="FontFile" id=5]
-outline_size = 1
-outline_color = Color( 0, 0, 0, 1 )
-font_data = ExtResource( 3 )
+[sub_resource type="FontFile" id="5"]
+fallbacks = [ExtResource("3")]
+face_index = null
+embolden = null
+transform = null
+cache/0/21/0/ascent = 0.0
+cache/0/21/0/descent = 0.0
+cache/0/21/0/underline_position = 0.0
+cache/0/21/0/underline_thickness = 0.0
+cache/0/21/0/scale = 1.0
+cache/0/21/0/kerning_overrides/21/0 = Vector2(0, 0)
+cache/0/21/0/kerning_overrides/16/0 = Vector2(0, 0)
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+cache/0/16/0/kerning_overrides/21/0 = Vector2(0, 0)
+cache/0/16/0/kerning_overrides/16/0 = Vector2(0, 0)
 
-[sub_resource type="Theme" id=6]
-default_font = SubResource( 5 )
-Fonts/fonts/normal = SubResource( 5 )
+[sub_resource type="Theme" id="6"]
+default_font = SubResource("5")
+Fonts/fonts/normal = SubResource("5")
 
-[sub_resource type="AtlasTexture" id=1]
-atlas = ExtResource( 2 )
-region = Rect2( 96, 0, 24, 24 )
+[sub_resource type="AtlasTexture" id="1"]
+atlas = ExtResource("2")
+region = Rect2(96, 0, 24, 24)
 
 [node name="Toast" type="MarginContainer"]
+clip_contents = true
 offset_right = 83.0
 offset_bottom = 24.0
-clip_contents = true
-mouse_filter = 2
 size_flags_horizontal = 3
-theme = SubResource( 6 )
-script = ExtResource( 4 )
+mouse_filter = 2
+theme = SubResource("6")
+script = ExtResource("4")
 
 [node name="NinePatchRect" type="NinePatchRect" parent="."]
+layout_mode = 2
 offset_right = 83.0
 offset_bottom = 24.0
-texture = SubResource( 1 )
+texture = SubResource("1")
 patch_margin_left = 8
 patch_margin_top = 8
 patch_margin_right = 8
@@ -38,14 +54,16 @@ axis_stretch_horizontal = 1
 axis_stretch_vertical = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
 offset_right = 83.0
 offset_bottom = 24.0
-custom_constants/offset_right = 4
-custom_constants/offset_top = 4
-custom_constants/offset_left = 4
-custom_constants/offset_bottom = 4
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
 
 [node name="Content" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
 offset_left = 4.0
 offset_top = 4.0
 offset_right = 79.0
