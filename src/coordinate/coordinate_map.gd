@@ -7,7 +7,7 @@ var data: Array = []
 func _init(
 	width: int = 0,
 	height: int = 0,
-	grid_nodes: Array[GridNode] = [] as Array[GridNode],
+	grid_nodes: Array = [],
 	default = null
 ):
 	data.resize(width)
@@ -17,8 +17,10 @@ func _init(
 		for j in height:
 			col[j] = default
 		data[i] = col
-	for grid_node in grid_nodes:
-		data[grid_node.x][grid_node.y] = grid_node
+	for child in grid_nodes:
+		var grid_node = child as GridNode
+		if grid_node:
+			data[grid_node.x][grid_node.y] = grid_node
 
 func at(coordinate: Vector2i):
 	return data[coordinate.x][coordinate.y]
