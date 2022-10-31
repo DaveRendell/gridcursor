@@ -1,15 +1,15 @@
 [gd_scene load_steps=22 format=3 uid="uid://d3pomc1ic6se5"]
 
-[ext_resource type="PackedScene" uid="uid://evm6hiyyus3l" path="res://src/grid/Grid.tscn" id="1"]
-[ext_resource type="Script" path="res://src/map/SquareGrid.gd" id="2"]
-[ext_resource type="Texture2D" uid="uid://ddew1f6sctng6" path="res://img/battle/GrassNDirt.png" id="3"]
-[ext_resource type="Texture2D" uid="uid://cbc7jsvlngqm5" path="res://img/battle/RocksnStumps.png" id="4"]
-[ext_resource type="Texture2D" uid="uid://c5mow25cu3vns" path="res://img/battle/Trees.png" id="5"]
-[ext_resource type="Texture2D" uid="uid://dxnqw6bi8xlef" path="res://img/battle/Cliff.png" id="6"]
-[ext_resource type="Texture2D" uid="uid://ce83u8k51bo2p" path="res://img/battle/terrain-types.png" id="7"]
+[ext_resource type="PackedScene" uid="uid://evm6hiyyus3l" path="res://src/grid/Grid.tscn" id="1_ewgcf"]
+[ext_resource type="Script" path="res://src/map/BattleMap.gd" id="2_m1shy"]
+[ext_resource type="Texture2D" uid="uid://ddew1f6sctng6" path="res://img/battle/GrassNDirt.png" id="3_cbii2"]
+[ext_resource type="Texture2D" uid="uid://dxnqw6bi8xlef" path="res://img/battle/Cliff.png" id="4_gpthc"]
+[ext_resource type="Texture2D" uid="uid://cbc7jsvlngqm5" path="res://img/battle/RocksnStumps.png" id="5_rncq0"]
+[ext_resource type="Texture2D" uid="uid://c5mow25cu3vns" path="res://img/battle/Trees.png" id="6_sw3e6"]
+[ext_resource type="Texture2D" uid="uid://ce83u8k51bo2p" path="res://img/battle/terrain-types.png" id="7_qba3t"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_aeir8"]
-texture = ExtResource("3")
+texture = ExtResource("3_cbii2")
 0:0/next_alternative_id = 8
 0:0/0 = 0
 0:0/1 = 1
@@ -852,7 +852,7 @@ texture = ExtResource("3")
 7:4/7/transpose = true
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_iceui"]
-texture = ExtResource("6")
+texture = ExtResource("4_gpthc")
 0:0/next_alternative_id = 8
 0:0/0 = 0
 0:0/1 = 1
@@ -1594,7 +1594,7 @@ sources/0 = SubResource("TileSetAtlasSource_aeir8")
 sources/1 = SubResource("TileSetAtlasSource_iceui")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_03hj0"]
-texture = ExtResource("4")
+texture = ExtResource("5_rncq0")
 0:0/next_alternative_id = 8
 0:0/0 = 0
 0:0/1 = 1
@@ -1933,7 +1933,7 @@ texture = ExtResource("4")
 3:3/7/transpose = true
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ovcle"]
-texture = ExtResource("5")
+texture = ExtResource("6_sw3e6")
 margins = Vector2i(0, 16)
 texture_region_size = Vector2i(80, 96)
 0:0/next_alternative_id = 8
@@ -1959,7 +1959,7 @@ texture_region_size = Vector2i(80, 96)
 0:0/7/transpose = true
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1hm4w"]
-texture = ExtResource("5")
+texture = ExtResource("6_sw3e6")
 margins = Vector2i(80, 0)
 texture_region_size = Vector2i(80, 112)
 0:0/next_alternative_id = 8
@@ -1985,7 +1985,7 @@ texture_region_size = Vector2i(80, 112)
 0:0/7/transpose = true
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_02a00"]
-texture = ExtResource("5")
+texture = ExtResource("6_sw3e6")
 margins = Vector2i(160, 32)
 texture_region_size = Vector2i(48, 80)
 0:0/next_alternative_id = 8
@@ -2011,7 +2011,7 @@ texture_region_size = Vector2i(48, 80)
 0:0/7/transpose = true
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fqish"]
-texture = ExtResource("3")
+texture = ExtResource("3_cbii2")
 0:0/next_alternative_id = 8
 0:0/0 = 0
 0:0/1 = 1
@@ -2854,7 +2854,7 @@ texture = ExtResource("3")
 7:4/7/transpose = true
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_e220x"]
-texture = ExtResource("6")
+texture = ExtResource("4_gpthc")
 0:0/next_alternative_id = 8
 0:0/0 = 0
 0:0/1 = 1
@@ -3600,7 +3600,7 @@ sources/4 = SubResource("TileSetAtlasSource_fqish")
 sources/5 = SubResource("TileSetAtlasSource_e220x")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_kmyf7"]
-texture = ExtResource("7")
+texture = ExtResource("7_qba3t")
 0:0/next_alternative_id = 8
 0:0/0 = 0
 0:0/1 = 1
@@ -3624,7 +3624,7 @@ texture = ExtResource("7")
 0:0/7/transpose = true
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_d0euj"]
-texture = ExtResource("7")
+texture = ExtResource("7_qba3t")
 margins = Vector2i(16, 0)
 0:0/next_alternative_id = 8
 0:0/0 = 0
@@ -3649,7 +3649,7 @@ margins = Vector2i(16, 0)
 0:0/7/transpose = true
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0wvan"]
-texture = ExtResource("7")
+texture = ExtResource("7_qba3t")
 margins = Vector2i(32, 0)
 0:0/next_alternative_id = 8
 0:0/0 = 0
@@ -3678,11 +3678,8 @@ sources/0 = SubResource("TileSetAtlasSource_kmyf7")
 sources/1 = SubResource("TileSetAtlasSource_d0euj")
 sources/2 = SubResource("TileSetAtlasSource_0wvan")
 
-[node name="SquareGrid" instance=ExtResource("1")]
-script = ExtResource("2")
-grid_size = null
-grid_width = null
-grid_height = null
+[node name="BattleMap" instance=ExtResource("1_ewgcf")]
+script = ExtResource("2_m1shy")
 
 [node name="PopupLayer" type="CanvasLayer" parent="." index="0"]
 

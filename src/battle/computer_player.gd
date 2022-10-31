@@ -31,8 +31,7 @@ static func execute_unit_turn(unit: Unit, map: Map, unit_turn: UnitTurnComplete)
 		var attack_option = unit.attack_options.front()
 		var target = map.units.at(attack_option)
 		var attack_source = unit.default_attack_sources.at(attack_option)
-		print(unit.character.attacks())
-		print(attack_source)
+
 		var attack = unit.character.attacks()[attack_source.attack_id]
 		
 		map.path = unit.get_path_to_coords(map, attack_source.source)
@@ -86,7 +85,6 @@ static func paths_to_enemies(unit: Unit, map: Map) -> Array:
 			var closest_distance = INF
 			for cell in adjacent_cells:
 				var distance_to_cell = unit.distance_to_cell.at(cell)
-				print(unit.distance_to_cell)
 				if closest_distance != null:
 					if (distance_to_cell and distance_to_cell < closest_distance):
 						closest_cell = cell

@@ -7,3 +7,7 @@ res://src/map/Map.tscn
 res://src/map/SquareGrid.tscn
 res://img/battle/effects/Explosion.tscn
 res://src/map/Unit.tscn
+res://src/battle/computer_player.gd
+res://src/map/BattleMap.tscn
+res://src/battle/Battle.gd
+res://src/map/BattleMap.gd
