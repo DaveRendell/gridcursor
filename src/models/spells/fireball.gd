@@ -35,11 +35,11 @@ func battle_action(map: Map, caster: Unit, path: Array[Vector2i]) -> void:
 		
 		var aoe = calculate_aoe(map, target)
 		var hit_units = []
-		for coordinate in map.node_array().non_empty_coordinates():
+		for coordinate in map.units.non_empty_coordinates():
 			if aoe.has(coordinate):
-				var unit = map.node_array().at(coordinate)
+				var unit = map.units.at(coordinate)
 				if !unit.character.is_down():
-					hit_units.append(map.node_array().at(coordinate))
+					hit_units.append(map.units.at(coordinate))
 		for unit in hit_units:
 			unit.take_damage(3, map)
 		

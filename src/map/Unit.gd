@@ -163,7 +163,7 @@ func set_state_attack_select(map: Map, path: Array[Vector2i], new_location: Vect
 func set_state_attack_confirm(map: Map, path: Array[Vector2i]):
 	print("Unit state: Attack confirm")
 	unit_state = UnitState.ATTACK_CONFIRM
-	var attacked_node = map.node_array().at(map.cursor)
+	var attacked_node = map.units.at(map.cursor)
 	
 	var distance_to_target = map.geometry.distance(path.back(), map.cursor)
 	var popup_menu = battle_menu_scene.instantiate()
@@ -287,6 +287,7 @@ func update_position(map: Map, coordinate: Vector2i):
 	x = coordinate.x
 	y = coordinate.y
 	
+	map.update_units()
 	map.draw_nodes()
 	map.clear_highlights()
 	map.disconnect("cursor_move",Callable(self,"handle_cursor_move"))
@@ -328,7 +329,7 @@ func handle_cursor_move(map: Map):
 			return
 		var path_end = map.path.back()
 		var adjacent_cells = map.geometry.adjacent_cells(path_end)
-		var c_node = map.node_array().at(map.cursor)
+		var c_node = map.units.at(map.cursor)
 		var enemy_in_cell = (c_node != null) and (c_node.team != team)
 		if adjacent_cells.has(map.cursor) and !enemy_in_cell:
 			var manual_path: Array[Vector2i] = map.path + [map.cursor]
@@ -344,8 +345,8 @@ func handle_cursor_move(map: Map):
 # CoordinateMap to array of sorted attack inds from position u
 func valid_attacks(map: Map, position: Vector2i) -> CoordinateMap:
 	var out = CoordinateMap.new(map.grid_width, map.grid_height)
-	for unit_coordinate in map.node_array().non_empty_coordinates():
-		var unit: Unit = map.node_array().at(unit_coordinate)
+	for unit_coordinate in map.units.non_empty_coordinates():
+		var unit: Unit = map.units.at(unit_coordinate)
 		if unit.team != team and !unit.character.is_down():
 			var attacks_in_range = []
 			for i in character.attacks().size():
@@ -382,11 +383,11 @@ func calculate_options(map: Map) -> void:
 			# Add to movement options if valid
 			if u_distance <= movement:
 				movement_options = movement_options + [u]
-				if !map.node_array().at(u):
+				if !map.units.at(u):
 					empty_movement_options = empty_movement_options + [u]
 			
 				# If U is empty, check attacks from u
-				if !map.node_array().at(u) || coordinate() == u:
+				if !map.units.at(u) || coordinate() == u:
 					var attack_targets = valid_attacks(map, u)
 					for attack_target in attack_targets.non_empty_coordinates():
 						attack_options.append(attack_target)
@@ -416,7 +417,7 @@ func calculate_options(map: Map) -> void:
 
 func movement_cost_of_cell(map: Map, coordinate: Vector2i) -> int:
 	var terrain: int = map.terrain_grid.at(coordinate)
-	var node: Unit = map.node_array().at(coordinate)
+	var node: Unit = map.units.at(coordinate)
 	if (node != null) and (node.team != team):
 		return -1
 	if terrain == -1:
@@ -433,7 +434,7 @@ func get_path_to_coords(map: Map, coordinate: Vector2i) -> Array[Vector2i]:
 		var adjacent_cells = map.geometry.adjacent_cells(u)
 		var u_cost = movement_cost_of_cell(map, u)
 		for a in adjacent_cells:
-			var a_node = map.node_array().at(a)
+			var a_node = map.units.at(a)
 			if (a_node == null) or (a_node.team == team):
 				var a_distance = distance_to_cell.at(a)
 				if a_distance == u_distance - u_cost:

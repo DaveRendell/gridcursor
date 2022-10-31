@@ -5,7 +5,8 @@ class_name Map
 signal next_turn
 
 var terrain_grid: CoordinateMap = CoordinateMap.new(grid_width, grid_height, [], 0)
-var highlights: CoordinateMap = CoordinateMap.new(grid_width, grid_height, [], null)
+var units: CoordinateMap = CoordinateMap.new(grid_width, grid_height)
+var highlights: CoordinateMap = CoordinateMap.new(grid_width, grid_height)
 var path: Array[Vector2i] = []
 
 var terrain_types = []
@@ -86,12 +87,12 @@ func add_highlights(coordinates: Array[Vector2i], colour: Color):
 		highlights.set_value(coordinate, colour)
 	queue_redraw()
 
-func node_array() -> CoordinateMap:
-	return CoordinateMap.new(grid_width, grid_height, $GridNodes.get_children(), null)
-
 func clear_highlights():
 	highlights = CoordinateMap.new(grid_width, grid_height, [], null)
 	queue_redraw()
+
+func update_units() -> void:
+	units = CoordinateMap.new(grid_width, grid_height, $GridNodes.get_children(), null)
 
 func click_position(coordinate: Vector2i):
 	if state == GridState.NOTHING_SELECTED:

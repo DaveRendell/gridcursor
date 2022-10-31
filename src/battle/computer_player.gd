@@ -15,8 +15,8 @@ static func execute_turn(map: Map) -> void:
 
 static func get_units(map: Map) -> Array:
 	var units = []
-	for cell in map.node_array().non_empty_coordinates():
-		var unit = map.node_array().at(cell) as Unit
+	for cell in map.units.non_empty_coordinates():
+		var unit = map.units.at(cell) as Unit
 		if unit.team == map.current_turn:
 			units.append(unit)
 	return units
@@ -29,7 +29,7 @@ static func execute_unit_turn(unit: Unit, map: Map, unit_turn: UnitTurnComplete)
 		# For now, arbitrarily pick first result in list
 		# TODO: Decide what the "best" attack to make is
 		var attack_option = unit.attack_options.front()
-		var target = map.node_array().at(attack_option)
+		var target = map.units.at(attack_option)
 		var attack_source = unit.default_attack_sources.at(attack_option)
 		print(unit.character.attacks())
 		print(attack_source)
@@ -78,8 +78,8 @@ static func last_movement_option_in_path(unit: Unit, path: Array[Vector2i]) -> V
 
 static func paths_to_enemies(unit: Unit, map: Map) -> Array:
 	var out = []
-	for coordinate in map.node_array().non_empty_coordinates():
-		var enemy = map.node_array().at(coordinate) as Unit
+	for coordinate in map.units.non_empty_coordinates():
+		var enemy = map.units.at(coordinate) as Unit
 		if enemy and enemy.team != unit.team and !enemy.character.is_down():
 			var adjacent_cells = map.geometry.adjacent_cells(coordinate)
 			var closest_cell

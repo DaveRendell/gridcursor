@@ -3680,6 +3680,9 @@ sources/2 = SubResource("TileSetAtlasSource_0wvan")
 
 [node name="SquareGrid" instance=ExtResource("1")]
 script = ExtResource("2")
+grid_size = null
+grid_width = null
+grid_height = null
 
 [node name="PopupLayer" type="CanvasLayer" parent="." index="0"]
 

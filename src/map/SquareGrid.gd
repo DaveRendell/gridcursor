@@ -64,6 +64,7 @@ func _ready():
 	add_blob(14, 15)
 	add_blob(11, 14)
 	
+	update_units()
 	draw_nodes()
 
 func add_blob(x: int, y: int):
