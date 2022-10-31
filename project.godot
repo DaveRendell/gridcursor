@@ -54,6 +54,11 @@ _global_script_classes=[{
 "language": &"GDScript",
 "path": "res://src/models/spells/fireball.gd"
 }, {
+"base": "RefCounted",
+"class": &"Geometry",
+"language": &"GDScript",
+"path": "res://src/grid/geometry.gd"
+}, {
 "base": "Node2D",
 "class": &"Grid",
 "language": &"GDScript",
@@ -94,6 +99,11 @@ _global_script_classes=[{
 "language": &"GDScript",
 "path": "res://src/models/spell.gd"
 }, {
+"base": "Geometry",
+"class": &"SquareGeometry",
+"language": &"GDScript",
+"path": "res://src/grid/square_geometry.gd"
+}, {
 "base": "Equipment",
 "class": &"Staff",
 "language": &"GDScript",
@@ -129,6 +139,7 @@ _global_script_class_icons={
 "DiceTexture": "",
 "Equipment": "",
 "Fireball": "",
+"Geometry": "",
 "Grid": "",
 "GridNode": "",
 "Item": "",
@@ -137,6 +148,7 @@ _global_script_class_icons={
 "PunyCharacterSprite": "",
 "Shield": "",
 "Spell": "",
+"SquareGeometry": "",
 "Staff": "",
 "Teleport": "",
 "Toast": "",

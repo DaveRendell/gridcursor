@@ -10,6 +10,8 @@ class_name Grid
 @export var grid_width: int = 20
 @export var grid_height: int = 20
 
+var geometry: Geometry
+
 # Cursor properties
 var cursor: Vector2i = Vector2i(0, 0)
 var mouse_in_grid = false
