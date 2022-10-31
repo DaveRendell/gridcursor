@@ -11,3 +11,5 @@ res://src/battle/computer_player.gd
 res://src/map/BattleMap.tscn
 res://src/battle/Battle.gd
 res://src/map/BattleMap.gd
+res://src/map/Map.gd
+res://src/coordinate/coordinate_map.gd

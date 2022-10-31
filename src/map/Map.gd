@@ -1,8 +1,22 @@
-extends "res://src/grid/Grid.gd"
-class_name Map
+class_name Map extends Node2D
 # A grid that represents a map, with player interactable objects checked it.
 
+signal click
+signal cursor_move
 signal next_turn
+
+@export var grid_size: int = 16
+@export var grid_width: int = 20
+@export var grid_height: int = 20
+
+var geometry: Geometry
+
+# Cursor properties
+var cursor: Vector2i = Vector2i(0, 0)
+var mouse_in_grid = false
+var scrolling: bool = false
+
+var clickable_cells: Array[Vector2i] = []
 
 var terrain_grid: CoordinateMap = CoordinateMap.new(grid_width, grid_height, [], 0)
 var units: CoordinateMap = CoordinateMap.new(grid_width, grid_height)
@@ -15,6 +29,13 @@ var teams = 2
 var current_turn = 0
 
 var zoom_level = 1.0
+
+enum GridState {
+	NOTHING_SELECTED, # Cursor active, select units checked click
+	IN_MENU, # Hide cursor, accept no input
+	UNIT_CONTROLLED # Input passed to selected unit, limited options for selection
+}
+var state = GridState.NOTHING_SELECTED
 
 var new_toast = preload("res://src/ui/Toast.tscn")
 var theme = preload("res://src/ui/theme.tres")
@@ -54,6 +75,90 @@ func _draw():
 			last_point + grid_size * Vector2(-0.25, 0.5).rotated(rotation),
 		]
 		draw_colored_polygon(arrow_head_points, color)
+
+func set_state_nothing_selected() -> void:
+	print("Grid state: Nothing Selected")
+	state = GridState.NOTHING_SELECTED
+	
+	$Cursor.visible = true
+	clickable_cells = []
+
+func set_state_in_menu() -> void:
+	print("Grid state: In Menu")
+	state = GridState.IN_MENU
+	
+	$Cursor.visible = false
+	clickable_cells = []
+
+func set_state_unit_controlled(clickable_cells: Array[Vector2i]) -> void:
+	print("Grid state: Unit Controlled")
+	state = GridState.UNIT_CONTROLLED
+	
+	$Cursor.visible = true
+	self.clickable_cells = clickable_cells
+
+func set_position_to_mouse_cursor() -> void:
+	var mouse_relative_position = get_global_mouse_position() - global_position
+	var coordinate = geometry.cell_containing_position(mouse_relative_position)
+	if not cursor == coordinate:
+		cursor = coordinate.clamp(Vector2i.ZERO, Vector2i(grid_width, grid_height))
+		if state == GridState.UNIT_CONTROLLED:
+			emit_signal("cursor_move", self)
+		$Cursor.position = geometry.cell_centre_position(cursor)
+
+func move_cursor(dx: int, dy: int):
+	cursor = cursor + Vector2i(dx, dy)
+	if state == GridState.UNIT_CONTROLLED:
+		emit_signal("cursor_move", self)
+	$Cursor.position = geometry.cell_centre_position(cursor)
+
+func _input(event):
+	if state == GridState.NOTHING_SELECTED or state == GridState.UNIT_CONTROLLED:
+		if event.is_action_pressed("ui_up") and cursor.y > 0:
+			move_cursor(0, -1)
+			$Cursor/ScrollStartTimer.start()
+		if event.is_action_pressed("ui_down") and cursor.y < grid_height - 1:
+			move_cursor(0, 1)
+			$Cursor/ScrollStartTimer.start()
+		if event.is_action_pressed("ui_left") and cursor.x > 0:
+			move_cursor(-1, 0)
+			$Cursor/ScrollStartTimer.start()
+		if event.is_action_pressed("ui_right") and cursor.x < grid_width - 1:
+			move_cursor(1, 0)
+			$Cursor/ScrollStartTimer.start()
+		
+		if event.is_action_released("ui_up") \
+		or event.is_action_released("ui_down")\
+		or event.is_action_released("ui_left")\
+		or event.is_action_released("ui_right"):
+			$Cursor/ScrollStartTimer.stop()
+			$Cursor/ScrollTickTimer.stop()
+			scrolling = false
+		
+		if event is InputEventMouseMotion and mouse_in_grid:
+			set_position_to_mouse_cursor()
+			
+		if event.is_action_pressed("ui_accept"):
+			click_position(cursor)
+			
+		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and !event.is_pressed():
+			set_position_to_mouse_cursor()
+			click_position(cursor)
+		
+		if event.is_action_pressed("ui_cancel")\
+		|| (event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and !event.is_pressed()):
+			emit_signal("click", "cancel")
+
+
+func scroll_cursor():
+	if Input.is_action_pressed("ui_up") and cursor.y > 0:
+		move_cursor(0, -1)
+	if Input.is_action_pressed("ui_down") and cursor.y < grid_height - 1:
+		move_cursor(0, 1)
+	if Input.is_action_pressed("ui_left") and cursor.x > 0:
+		move_cursor(-1, 0)
+	if Input.is_action_pressed("ui_right") and cursor.x < grid_width - 1:
+		move_cursor(1, 0)
 
 func setup_camera():
 	var map_size = geometry.map_dimensions()
@@ -188,3 +293,21 @@ func check_win_condition():
 		victory_popup.popup_centered()
 		
 		print("A winner is you")
+
+# Signals
+func _on_Background_mouse_entered():
+	mouse_in_grid = true
+
+
+func _on_Background_mouse_exited():
+	mouse_in_grid = false
+
+
+func _on_ScrollStartTimer_timeout():
+	scrolling = true
+	$Cursor/ScrollTickTimer.start()
+	scroll_cursor()
+
+
+func _on_ScrollTickTimer_timeout():
+	scroll_cursor()
