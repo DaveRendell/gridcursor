@@ -22,7 +22,7 @@ static func get_units(map: Map) -> Array:
 	return units
 
 static func execute_unit_turn(unit: Unit, map: Map, unit_turn: UnitTurnComplete) -> void:
-	map.get_node("Cursor").position = map.position_from_coordinates(unit.coordinate())
+	map.get_node("Cursor").position = map.geometry.cell_centre_position(unit.coordinate())
 	unit.calculate_options(map)
 	
 	if unit.attack_options.size() > 0:
@@ -81,7 +81,7 @@ static func paths_to_enemies(unit: Unit, map: Map) -> Array:
 	for coordinate in map.node_array().non_empty_coordinates():
 		var enemy = map.node_array().at(coordinate) as Unit
 		if enemy and enemy.team != unit.team and !enemy.character.is_down():
-			var adjacent_cells = map.get_adjacent_cells(coordinate)
+			var adjacent_cells = map.geometry.adjacent_cells(coordinate)
 			var closest_cell
 			var closest_distance = INF
 			for cell in adjacent_cells:

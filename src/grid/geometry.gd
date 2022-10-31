@@ -20,3 +20,7 @@ func adjacent_cells(coordinate: Vector2i) -> Array[Vector2i]:
 func cell_corners(coordinate: Vector2i) -> Array[Vector2]:
 	push_error("Not implemented")
 	return []
+
+func map_dimensions() -> Vector2:
+	push_error("Not implemented")
+	return Vector2.ZERO

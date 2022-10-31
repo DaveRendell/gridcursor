@@ -50,36 +50,20 @@ func set_state_unit_controlled(clickable_cells: Array[Vector2i]) -> void:
 	$Cursor.visible = true
 	self.clickable_cells = clickable_cells
 
-# Returns the relative position of an object at the given grid coordinates
-# Should be overwritten to match the coordinate system of this grid
-func position_from_coordinates(coordinate: Vector2i) -> Vector2:
-	push_error("Implement position_from_coordinates in inheriting scene")
-	return Vector2.ZERO
-
-func cell_centre_position(coordinate: Vector2i) -> Vector2:
-	push_error("Implement cell_centre_position in inheriting scene")
-	return Vector2.ZERO
-
-# Takes a relative position and returns the 2D grid coordinates in an array
-# Should be overwritten to match the coordinate system of this grid
-func coordinates_from_position(p: Vector2) -> Vector2i:
-	push_error("Implement coordinates_from_position in inheriting scene")
-	return Vector2i(0, 0)
-
 func set_position_to_mouse_cursor() -> void:
 	var mouse_relative_position = get_global_mouse_position() - global_position
-	var coordinate = coordinates_from_position(mouse_relative_position)
+	var coordinate = geometry.cell_containing_position(mouse_relative_position)
 	if not cursor == coordinate:
 		cursor = coordinate.clamp(Vector2i.ZERO, Vector2i(grid_width, grid_height))
 		if state == GridState.UNIT_CONTROLLED:
 			emit_signal("cursor_move", self)
-		$Cursor.position = position_from_coordinates(cursor)
+		$Cursor.position = geometry.cell_centre_position(cursor)
 
 func move_cursor(dx: int, dy: int):
 	cursor = cursor + Vector2i(dx, dy)
 	if state == GridState.UNIT_CONTROLLED:
 		emit_signal("cursor_move", self)
-	$Cursor.position = position_from_coordinates(cursor)
+	$Cursor.position = geometry.cell_centre_position(cursor)
 
 func _input(event):
 	if state == GridState.NOTHING_SELECTED or state == GridState.UNIT_CONTROLLED:

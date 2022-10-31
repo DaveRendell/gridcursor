@@ -1,6 +1,6 @@
 [gd_scene load_steps=22 format=3 uid="uid://d3pomc1ic6se5"]
 
-[ext_resource type="PackedScene" path="res://src/grid/Grid.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://evm6hiyyus3l" path="res://src/grid/Grid.tscn" id="1"]
 [ext_resource type="Script" path="res://src/map/SquareGrid.gd" id="2"]
 [ext_resource type="Texture2D" uid="uid://ddew1f6sctng6" path="res://img/battle/GrassNDirt.png" id="3"]
 [ext_resource type="Texture2D" uid="uid://cbc7jsvlngqm5" path="res://img/battle/RocksnStumps.png" id="4"]

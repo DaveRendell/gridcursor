@@ -25,14 +25,17 @@ func adjacent_cells(coordinate: Vector2i) -> Array[Vector2i]:
 		Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT, Vector2i.UP
 	]
 	return directions\
-		.map(func(direction): coordinate + direction)\
-		.filter(func(cell): cell.x >= 0 and cell.x < grid_width)\
-		.filter(func(cell): cell.y >= 0 and cell.y < grid_height)
+		.map(func(direction): return coordinate + direction)\
+		.filter(func(cell): return cell.x >= 0 and cell.x < grid_width)\
+		.filter(func(cell): return cell.y >= 0 and cell.y < grid_height)
 
 func cell_corners(coordinate: Vector2i) -> Array[Vector2]:
 	var corner_coordinates = [
 		Vector2i(0, 0), Vector2i(1, 0), Vector2i(1, 1), Vector2i(0, 1)
 	]
 	return corner_coordinates\
-		.map(func(corner): coordinate + corner)\
-		.map(func(corner_coordinate): grid_size * Vector2(corner_coordinate))
+		.map(func(corner): return coordinate + corner)\
+		.map(func(corner_coordinate): return grid_size * Vector2(corner_coordinate))
+
+func map_dimensions() -> Vector2:
+	return Vector2(grid_size * grid_width, grid_size * grid_height)

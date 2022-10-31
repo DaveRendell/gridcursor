@@ -1,31 +1,10 @@
 extends "res://src/map/Map.gd"
 
-var width = grid_width * grid_size
-var height = grid_height * grid_size
-
 var new_unit = preload("res://src/map/Unit.tscn")
 
 func _ready():
+	geometry = SquareGeometry.new(grid_size, grid_width, grid_height)
 	super()
-	var view_size = get_viewport().size
-	var width = grid_size * grid_width
-	var height = grid_size * grid_height
-	var h_margin = max(0, (view_size.x / 3 - width) / 2)
-	var v_margin = max(0, (view_size.y / 3 - height) / 2)
-	var camera = $Cursor/Camera
-	camera.zoom = Vector2(zoom_level, zoom_level)
-	camera.limit_left = -h_margin
-	camera.limit_right = width + h_margin
-	camera.limit_top = -v_margin
-	camera.limit_bottom = height + v_margin
-	
-	var h_drag_margin = 1 - (12 * zoom_level * grid_size / view_size.x)
-	var v_drag_margin = 1 - (12 * zoom_level * grid_size / view_size.y)
-	camera.drag_left_margin = h_drag_margin
-	camera.drag_right_margin = h_drag_margin
-	camera.drag_top_margin = v_drag_margin
-	camera.drag_bottom_margin = v_drag_margin
-	camera.position = Vector2(grid_size / 2, grid_size / 2)
 	
 	for coordinate in terrain_grid.coordinates():
 		var cell = $Tiles/TerrainTypes.get_cell_source_id(0, Vector2i(coordinate.x, coordinate.y))
@@ -95,21 +74,10 @@ func add_blob(x: int, y: int):
 	blob1_unit.from_char(blob1, 1, Vector2i(x, y))
 	$GridNodes.add_child(blob1_unit)
 
-func position_from_coordinates(coordinate: Vector2i) -> Vector2:
-	return Vector2(coordinate.x * grid_size, coordinate.y * grid_size)
-
-func cell_centre_position(coordinate: Vector2i) -> Vector2:
-	return position_from_coordinates(coordinate) + Vector2(0.5 * grid_size, 0.5 * grid_size)
-
-func coordinates_from_position(p: Vector2) -> Vector2i:
-	return Vector2i(p.x / grid_size, p.y / grid_size)
-
-func distance(coordinate_1: Vector2i, coordinate_2: Vector2i) -> int:
-	return int(abs(coordinate_1.x - coordinate_2.x) + abs(coordinate_1.y - coordinate_2.y))
-
 func draw_grid():
 	# Set background dimensions
-	$Background.size = Vector2(width, height)
+	var map_size = geometry.map_dimensions()
+	$Background.size = map_size
 	
 	# Draw vertical lines
 	for i in (grid_width - 1):
@@ -119,7 +87,7 @@ func draw_grid():
 		line.default_color = Color.DARK_SLATE_GRAY
 		line.default_color.a = 0.2
 		line.add_point(Vector2(offset, 0))
-		line.add_point(Vector2(offset, height))
+		line.add_point(Vector2(offset, map_size.y))
 		add_child(line)
 	# Draw horizontal lines
 	for i in (grid_height - 1):
@@ -129,26 +97,5 @@ func draw_grid():
 		line.default_color = Color.DARK_SLATE_GRAY
 		line.default_color.a = 0.2
 		line.add_point(Vector2(0, offset))
-		line.add_point(Vector2(width, offset))
+		line.add_point(Vector2(map_size.x, offset))
 		add_child(line)
-
-func get_adjacent_cells(coordinate: Vector2i) -> Array[Vector2i]:
-	var output = []
-	if (coordinate.y - 1) >= 0:
-		output.append(coordinate + Vector2i.UP)
-	if (coordinate.y + 1) < grid_height:
-		output.append(coordinate + Vector2i.DOWN)
-	if (coordinate.x - 1) >= 0:
-		output.append(coordinate + Vector2i.LEFT)
-	if (coordinate.x + 1) < grid_width:
-		output.append(coordinate + Vector2i.RIGHT)
-	return output
-
-func cell_corners(coordinate: Vector2i):
-	var start = position_from_coordinates(coordinate)
-	return PackedVector2Array([
-		start,
-		start + Vector2(grid_size, 0),
-		start + Vector2(grid_size, grid_size),
-		start + Vector2(0, grid_size)
-	])

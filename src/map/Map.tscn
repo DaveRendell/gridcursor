@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://tletdquhrnvm"]
 
 [ext_resource type="Script" path="res://src/map/Map.gd" id="1"]
-[ext_resource type="PackedScene" path="res://src/grid/Grid.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://evm6hiyyus3l" path="res://src/grid/Grid.tscn" id="2"]
 
 [node name="Map" instance=ExtResource("2")]
 script = ExtResource("1")

@@ -38,7 +38,6 @@ static func character_sprite(sprite_sheet: Texture2D) -> AnimatedSprite2D:
 	add_spin_animation(frames, sprite_sheet)
 
 	sprite.frames = frames
-	sprite.position = Vector2(8, 8)
 	sprite.play()
 	return sprite
 
@@ -61,7 +60,6 @@ static func slime_sprite(sprite_sheet: Texture2D) -> AnimatedSprite2D:
 	add_animation(frames, sprite_sheet, "knocked_down", 0, [9, 10, 11, 12, 13], 10.0)
 
 	sprite.frames = frames
-	sprite.position = Vector2(7, 8)
 	sprite.play()
 	return sprite
 

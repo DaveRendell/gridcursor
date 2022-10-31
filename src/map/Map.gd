@@ -26,12 +26,8 @@ func _ready() -> void:
 	var test_json_conv = JSON.new()
 	test_json_conv.parse(file.get_as_text())
 	terrain_types = test_json_conv.get_data()
-	terrain_grid.set_value(Vector2i(5, 5), 2)
-	terrain_grid.set_value(Vector2i(5, 6), 2)
-	terrain_grid.set_value(Vector2i(6, 6), 2)
-	terrain_grid.set_value(Vector2i(7, 7), 3)
-	terrain_grid.set_value(Vector2i(7, 8), 3)
 	
+	setup_camera()
 	draw_nodes()
 	draw_grid()
 
@@ -39,17 +35,17 @@ func _draw():
 	for coordinate in highlights.coordinates():
 		var colour = highlights.at(coordinate)
 		if colour:
-			draw_colored_polygon(cell_corners(coordinate), colour)
+			draw_colored_polygon(geometry.cell_corners(coordinate), colour)
 	if path.size() > 1:
 		var color = Color.CORAL
 		for i in range(1, path.size()):
-			var from = cell_centre_position(path[i - 1])
-			var to = cell_centre_position(path[i])
+			var from = geometry.cell_centre_position(path[i - 1])
+			var to = geometry.cell_centre_position(path[i])
 
 			draw_line(from,to,color,grid_size * 0.5)
 			draw_circle(from, grid_size * 0.25, color)
-		var last_point = cell_centre_position(path.back())
-		var second_last_point = cell_centre_position(path[-2])
+		var last_point = geometry.cell_centre_position(path.back())
+		var second_last_point = geometry.cell_centre_position(path[-2])
 		var rotation = (last_point - second_last_point).angle()
 		var arrow_head_points = [
 			last_point + grid_size * Vector2(-0.25, -0.5).rotated(rotation),
@@ -58,9 +54,27 @@ func _draw():
 		]
 		draw_colored_polygon(arrow_head_points, color)
 
-func distance(coordinate_1: Vector2i, coordinate_2: Vector2i) -> int:
-	push_error("Implement distance in inheriting class")
-	return 0
+func setup_camera():
+	var map_size = geometry.map_dimensions()
+	var view_size = get_viewport().size
+	var width = grid_size * grid_width
+	var height = grid_size * grid_height
+	var h_margin = max(0, (view_size.x / 3 - map_size.x) / 2)
+	var v_margin = max(0, (view_size.y / 3 - map_size.y) / 2)
+	var camera = $Cursor/Camera
+	camera.zoom = Vector2(zoom_level, zoom_level)
+	camera.limit_left = -h_margin
+	camera.limit_right = width + h_margin
+	camera.limit_top = -v_margin
+	camera.limit_bottom = height + v_margin
+	
+	var h_drag_margin = 1 - (12 * zoom_level * grid_size / view_size.x)
+	var v_drag_margin = 1 - (12 * zoom_level * grid_size / view_size.y)
+	camera.drag_left_margin = h_drag_margin
+	camera.drag_right_margin = h_drag_margin
+	camera.drag_top_margin = v_drag_margin
+	camera.drag_bottom_margin = v_drag_margin
+	camera.position = Vector2(grid_size / 2, grid_size / 2)
 
 func add_highlight(coordinate: Vector2i, colour: Color):
 	highlights.set_value(coordinate, colour)
@@ -71,13 +85,6 @@ func add_highlights(coordinates: Array[Vector2i], colour: Color):
 	for coordinate in coordinates:
 		highlights.set_value(coordinate, colour)
 	queue_redraw()
-
-func get_adjacent_cells(coordinate: Vector2i) -> Array[Vector2i]:
-	push_error("Implement get_adjacent_cells in inheriting scene")
-	return []
-
-func cell_corners(coordinate: Vector2i):
-	push_error("Implement cell_corners in inheriting scene")
 
 func node_array() -> CoordinateMap:
 	return CoordinateMap.new(grid_width, grid_height, $GridNodes.get_children(), null)
@@ -130,7 +137,7 @@ func display_menu(popup_menu: BattleMenu) -> void:
 func draw_nodes():
 	for node in $GridNodes.get_children():
 		var grid_node = (node as GridNode)
-		node.position = position_from_coordinates(grid_node.coordinate())
+		node.position = geometry.cell_centre_position(grid_node.coordinate())
 
 # Draw the grid for this coordinate system
 func draw_grid():

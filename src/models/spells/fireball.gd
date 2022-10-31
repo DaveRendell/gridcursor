@@ -44,7 +44,7 @@ func battle_action(map: Map, caster: Unit, path: Array[Vector2i]) -> void:
 			unit.take_damage(3, map)
 		
 		var explosion = explosion_scene.instantiate()
-		explosion.position = map.cell_centre_position(target)
+		explosion.position = map.geometry.cell_centre_position(target)
 		map.add_child(explosion)
 		await explosion.animation_finished
 		explosion.queue_free()
@@ -61,6 +61,6 @@ func apply_highlights(map: Map, targets: Array[Vector2i]) -> void:
 func calculate_aoe(map: Map, target: Vector2i) -> Array[Vector2i]:
 	var aoe = []
 	for coordinate in map.terrain_grid.coordinates():
-		if map.distance(map.cursor, coordinate) <= aoe_radius:
+		if map.geometry.distance(map.cursor, coordinate) <= aoe_radius:
 			aoe.append(coordinate)
 	return aoe

@@ -10,7 +10,7 @@ func _init():
 func battle_action(map: Map, caster: Unit, path: Array[Vector2i]) -> void:
 	var teleport_options: Array[Vector2i] = []
 	for coordinate in map.terrain_grid.coordinates():
-		if map.distance(path.back(), coordinate) <= spell_range\
+		if map.geometry.distance(path.back(), coordinate) <= spell_range\
 		and caster.movement_cost_of_cell(map, coordinate) >= 0:
 			teleport_options.append(coordinate)
 	
@@ -31,7 +31,7 @@ func battle_action(map: Map, caster: Unit, path: Array[Vector2i]) -> void:
 		var animation = caster.get_tree().create_tween()
 		var small_size = 4.0 / map.grid_size
 		var high_point = Vector2(0, -100 * map.grid_size)
-		var destination = map.position_from_coordinates(destination_coordinates)
+		var destination = map.geometry.cell_centre_position(destination_coordinates)
 		map.set_state_in_menu()
 		
 		caster.sprite.animation = "spin"

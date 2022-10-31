@@ -133,7 +133,7 @@ func set_state_action_select(map: Map, path: Array[Vector2i]):
 	var option = options[id]
 	
 	if option == "Cancel":
-		position = map.position_from_coordinates(path.front())
+		position = map.geometry.cell_centre_position(path.front())
 		await get_tree().process_frame
 		set_state_selected(map, path)
 	if option == "Wait":
@@ -165,7 +165,7 @@ func set_state_attack_confirm(map: Map, path: Array[Vector2i]):
 	unit_state = UnitState.ATTACK_CONFIRM
 	var attacked_node = map.node_array().at(map.cursor)
 	
-	var distance_to_target = map.distance(path.back(), map.cursor)
+	var distance_to_target = map.geometry.distance(path.back(), map.cursor)
 	var popup_menu = battle_menu_scene.instantiate()
 	for i in character.attacks().size():
 		var attack: Attack = character.attacks()[i]
@@ -178,7 +178,7 @@ func set_state_attack_confirm(map: Map, path: Array[Vector2i]):
 
 	if id == character.attacks().size():
 		# Cancel selected
-		position = map.position_from_coordinates(path.front())
+		position = map.geometry.cell_centre_position(path.front())
 		await get_tree().process_frame
 		set_state_selected(map, path)
 	else:
@@ -265,8 +265,8 @@ func animate_movement_along_path(map: Map) -> Tween:
 	if map.path.size() <= 1:
 		tween.tween_interval(0)
 	for i in range(1, map.path.size()):
-		var from = map.position_from_coordinates(map.path[i - 1])
-		var to = map.position_from_coordinates(map.path[i])
+		var from = map.geometry.cell_centre_position(map.path[i - 1])
+		var to = map.geometry.cell_centre_position(map.path[i])
 		var direction: String
 		if from.y == to.y:
 			if from.x < to.x:
@@ -327,7 +327,7 @@ func handle_cursor_move(map: Map):
 			map.queue_redraw()
 			return
 		var path_end = map.path.back()
-		var adjacent_cells = map.get_adjacent_cells(path_end)
+		var adjacent_cells = map.geometry.adjacent_cells(path_end)
 		var c_node = map.node_array().at(map.cursor)
 		var enemy_in_cell = (c_node != null) and (c_node.team != team)
 		if adjacent_cells.has(map.cursor) and !enemy_in_cell:
@@ -350,7 +350,7 @@ func valid_attacks(map: Map, position: Vector2i) -> CoordinateMap:
 			var attacks_in_range = []
 			for i in character.attacks().size():
 				var attack = character.attacks()[i]
-				if attack.can_attack_distance(map.distance(position, unit_coordinate)):
+				if attack.can_attack_distance(map.geometry.distance(position, unit_coordinate)):
 					attacks_in_range.append(i)
 			if attacks_in_range.size() > 0:
 				out.set_value(unit_coordinate, attacks_in_range)
@@ -404,7 +404,7 @@ func calculate_options(map: Map) -> void:
 								default_attack_sources.set_value(attack_target, AttackSource.new(best_attack, u))
 
 			# Calculate adjacent movment options
-			var adjacent_cells = map.get_adjacent_cells(u)
+			var adjacent_cells = map.geometry.adjacent_cells(u)
 			for a in adjacent_cells:
 				var a_cost = movement_cost_of_cell(map, a)
 				if a_cost >= 0:
@@ -430,7 +430,7 @@ func get_path_to_coords(map: Map, coordinate: Vector2i) -> Array[Vector2i]:
 	var u = coordinate
 	var u_distance = distance_to_cell.at(coordinate)
 	while u != coordinate():
-		var adjacent_cells = map.get_adjacent_cells(u)
+		var adjacent_cells = map.geometry.adjacent_cells(u)
 		var u_cost = movement_cost_of_cell(map, u)
 		for a in adjacent_cells:
 			var a_node = map.node_array().at(a)
