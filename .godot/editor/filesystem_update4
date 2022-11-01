@@ -6,6 +6,11 @@ res://img/battle/effects/Explosion.tscn
 res://src/map/Map.tscn
 res://src/map/Unit.tscn
 res://src/map/BattleMap.tscn
+res://src/battle/Battle.gd
+res://src/map/BattleMap.gd
+res://src/grid/GridNode.gd
 res://src/coordinate/coordinate_map.gd
 res://src/map/Map.gd
-res://src/map/BattleMap_old.tscn
+res://src/map/Unit.gd
+res://src/models/spells/fireball.gd
+res://src/battle/computer_player.gd

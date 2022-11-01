@@ -83,7 +83,7 @@ func set_state_selected(map: Map, initial_path: Array[Vector2i]):
 		var clicked_cell = map.cursor
 		if movement_options.has(clicked_cell):
 			# Animate movement along movement path, then move to action select
-			var path = map.path
+			var path = map.path.duplicate()
 			if map.path.size() == 0:
 				map.path.append(coordinate())
 			map.disconnect("cursor_move",Callable(self,"handle_cursor_move"))
@@ -95,10 +95,10 @@ func set_state_selected(map: Map, initial_path: Array[Vector2i]):
 			if map.path.size() == 0:
 				map.path.append(coordinate())
 			if all_attack_sources.at(clicked_cell).has(map.path.back()):
-				path = map.path
+				path = map.path.duplicate()
 			else:
 				path = get_path_to_coords(map, default_attack_sources.at(clicked_cell))
-			map.path = path
+			map.path = path.duplicate()
 			map.disconnect("cursor_move",Callable(self,"handle_cursor_move"))
 			var tween = animate_movement_along_path(map)
 			await tween.finished
@@ -351,8 +351,10 @@ func valid_attacks(map: Map, position: Vector2i) -> CoordinateMap:
 			var attacks_in_range = []
 			for i in character.attacks().size():
 				var attack = character.attacks()[i]
-				if attack.can_attack_distance(map.geometry.distance(position, unit_coordinate)):
-					attacks_in_range.append(i)
+				for cell in cells(position):
+					if attack.can_attack_distance(map.geometry.distance(cell, unit_coordinate)):
+						attacks_in_range.append(i)
+						break
 			if attacks_in_range.size() > 0:
 				out.set_value(unit_coordinate, attacks_in_range)
 	return out
@@ -383,7 +385,7 @@ func calculate_options(map: Map) -> void:
 			# Add to movement options if valid
 			if u_distance <= movement:
 				movement_options = movement_options + [u]
-				if !map.units.at(u):
+				if cells(u).all(func(cell): !map.units.at(cell)):
 					empty_movement_options = empty_movement_options + [u]
 			
 				# If U is empty, check attacks from u
@@ -416,15 +418,27 @@ func calculate_options(map: Map) -> void:
 		updates = new_updates
 
 func movement_cost_of_cell(map: Map, coordinate: Vector2i) -> int:
-	var terrain: int = map.terrain_grid.at(coordinate)
-	var node: Unit = map.units.at(coordinate)
-	if (node != null) and (node.team != team):
-		return -1
-	if terrain == -1:
-		return 1
-	if map.terrain_types[terrain]["movement"].has(movement_type):
-		return map.terrain_types[terrain]["movement"][movement_type]
-	return -1
+	var highest_cost = -1
+	for i in width:
+		for j in height:
+			var cell = coordinate + Vector2i(i, j)
+			if cell.clamp(Vector2i.ZERO, Vector2i(map.grid_width - 1, map.grid_height - 1)) != cell:
+				# If part of the unit would move off the map, cannot move here
+				return -1
+			var terrain: int = map.terrain_grid.at(cell)
+			var node: Unit = map.units.at(cell)
+			if (node != null) and (node.team != team):
+				# If any cell is enemy occupied, cannot move here
+				return -1
+			elif terrain == -1:
+				highest_cost = maxi(highest_cost, 1)
+			elif map.terrain_types[terrain]["movement"].has(movement_type):
+				var cost =  map.terrain_types[terrain]["movement"][movement_type]
+				highest_cost = maxi(highest_cost, cost)
+			else:
+				# If any cell is impassable, cannot move here
+				return -1
+	return highest_cost
 
 func get_path_to_coords(map: Map, coordinate: Vector2i) -> Array[Vector2i]:	
 	var out = [coordinate]

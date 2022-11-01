@@ -84,6 +84,21 @@ func add_blob(x: int, y: int):
 	$GridNodes.add_child(blob_unit)
 	update_units()
 
+func add_big_blob(x: int, y: int):
+	var slime_sprite_sheet = preload("res://img/characters/Slime.png")
+	var slime_sprite = PunyCharacterSprite.slime_sprite(slime_sprite_sheet)
+	slime_sprite.scale = Vector2(2, 2)
+	slime_sprite.offset = Vector2(3, 4)
+	var blob = Mob.new("Big Blobber", slime_sprite, 10, 0, 0, 0, Attack.new("Slime", 1, 1, [0], 4))
+	var blob_unit = new_unit.instantiate()
+	
+	blob_unit.width = 2
+	blob_unit.height = 2
+	
+	blob_unit.from_char(blob, 1, Vector2i(x, y))
+	$GridNodes.add_child(blob_unit)
+	update_units()
+
 func draw_grid():
 	# Set background dimensions
 	var map_size = geometry.map_dimensions()

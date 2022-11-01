@@ -168,7 +168,7 @@ func click_position(coordinate: Vector2i):
 		for child in $GridNodes.get_children():
 				var node = child as GridNode
 				if node and node.has_method("select"):
-					if node.coordinate() == coordinate:
+					if node.cells().has(coordinate):
 						return node.select(self)
 		# If no unit selected
 		click_empty_cell()

@@ -15,7 +15,7 @@ func _init():
 func battle_action(map: Map, caster: Unit, path: Array[Vector2i]) -> void:
 	var possible_targets: Array[Vector2i] = []
 	for coordinate in map.terrain_grid.coordinates():
-		if map.distance(path.back(), coordinate) <= spell_range:
+		if map.geometry.distance(path.back(), coordinate) <= spell_range:
 			possible_targets.append(coordinate)
 	var targets = possible_targets
 	apply_highlights(map, targets)

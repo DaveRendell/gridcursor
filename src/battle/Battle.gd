@@ -55,6 +55,8 @@ func _ready():
 	map.add_blob(13, 7)
 	map.add_blob(14, 15)
 	map.add_blob(11, 14)
+	
+	map.add_big_blob(7, 12)
 	###
 	
 	add_child(map)

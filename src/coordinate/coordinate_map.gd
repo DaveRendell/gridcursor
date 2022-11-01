@@ -2,6 +2,8 @@ class_name CoordinateMap
 # Custom collection for storing a layer of objects checked a grid, e.g. terrain types
 # or units checked a map
 
+var width: int
+var height: int
 var data: Array = []
 
 func _init(
@@ -20,7 +22,8 @@ func _init(
 	for child in grid_nodes:
 		var grid_node = child as GridNode
 		if grid_node:
-			data[grid_node.x][grid_node.y] = grid_node
+			for cell in grid_node.cells():
+				data[cell.x][cell.y] = grid_node
 
 func at(coordinate: Vector2i):
 	return data[coordinate.x][coordinate.y]
