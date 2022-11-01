@@ -384,9 +384,12 @@ func calculate_options(map: Map) -> void:
 			
 			# Add to movement options if valid
 			if u_distance <= movement:
-				movement_options = movement_options + [u]
-				if cells(u).all(func(cell): !map.units.at(cell)):
-					empty_movement_options = empty_movement_options + [u]
+				movement_options.append(u)
+				var space_free = true
+				for cell in cells(u):
+					space_free = space_free and map.units.at(u) == null
+				if space_free:
+					empty_movement_options.append(u)
 			
 				# If U is empty, check attacks from u
 				if !map.units.at(u) || coordinate() == u:

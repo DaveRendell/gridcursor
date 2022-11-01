@@ -89,7 +89,7 @@ static func paths_to_enemies(unit: Unit, map: Map) -> Array:
 					if (distance_to_cell and distance_to_cell < closest_distance):
 						closest_cell = cell
 						closest_distance = distance_to_cell
-			if closest_cell:
+			if not closest_cell == null:
 				out.append(unit.get_path_to_coords(map, closest_cell))
 				
 	return out

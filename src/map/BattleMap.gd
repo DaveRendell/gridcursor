@@ -94,6 +94,8 @@ func add_big_blob(x: int, y: int):
 	
 	blob_unit.width = 2
 	blob_unit.height = 2
+	blob_unit.get_node("HPBar").scale = Vector2(2, 2)
+	blob_unit.get_node("HPBar").offset = Vector2(4, 4)
 	
 	blob_unit.from_char(blob, 1, Vector2i(x, y))
 	$GridNodes.add_child(blob_unit)

@@ -2,15 +2,9 @@ res://src/battle/Battle.tscn
 res://src/ui/theme.tres
 res://src/ui/Toast.tscn
 res://src/ui/BattleMenu.tscn
-res://img/battle/effects/Explosion.tscn
 res://src/map/Map.tscn
 res://src/map/Unit.tscn
 res://src/map/BattleMap.tscn
-res://src/battle/Battle.gd
-res://src/map/BattleMap.gd
-res://src/grid/GridNode.gd
-res://src/coordinate/coordinate_map.gd
-res://src/map/Map.gd
-res://src/map/Unit.gd
-res://src/models/spells/fireball.gd
 res://src/battle/computer_player.gd
+res://src/map/BattleMap.gd
+res://src/map/Unit.gd
