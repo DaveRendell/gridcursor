@@ -101,6 +101,11 @@ func add_big_blob(x: int, y: int):
 	$GridNodes.add_child(blob_unit)
 	update_units()
 
+func add_party(coordinate: Vector2i, party: Party) -> void:
+	for position in party.formation.non_empty_coordinates():
+		var character = party.formation.at(position) as Character
+		add_character(character, coordinate + position)
+
 func draw_grid():
 	# Set background dimensions
 	var map_size = geometry.map_dimensions()

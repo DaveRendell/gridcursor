@@ -90,6 +90,11 @@ _global_script_classes=[{
 "path": "res://src/models/mob.gd"
 }, {
 "base": "RefCounted",
+"class": &"Party",
+"language": &"GDScript",
+"path": "res://src/models/party.gd"
+}, {
+"base": "RefCounted",
 "class": &"PunyCharacterSprite",
 "language": &"GDScript",
 "path": "res://src/models/puny_characters_sprite.gd"
@@ -151,6 +156,7 @@ _global_script_class_icons={
 "Map": "",
 "MapMarker": "",
 "Mob": "",
+"Party": "",
 "PunyCharacterSprite": "",
 "Shield": "",
 "Spell": "",

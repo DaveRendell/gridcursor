@@ -17,3 +17,5 @@ res://src/map/MapMarker.tscn
 res://src/map/MapMarker.gd
 res://src/coordinate/coordinate_map.gd
 res://src/ui/EphemeralLabel.tscn
+res://src/battle/BattleMap.gd
+res://src/models/party.gd
