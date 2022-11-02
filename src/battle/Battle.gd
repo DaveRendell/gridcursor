@@ -2,7 +2,7 @@ extends Node2D
 
 var teams = 2
 
-var map_scene = preload("res://src/map/BattleMap.tscn")
+var map_scene = preload("res://src/battle/BattleMap.tscn")
 var map: BattleMap
 
 func _ready():

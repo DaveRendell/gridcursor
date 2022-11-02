@@ -9,7 +9,7 @@ var data: Array = []
 func _init(
 	width: int = 0,
 	height: int = 0,
-	grid_nodes: Array = [],
+	map_markers: Array = [],
 	default = null
 ):
 	data.resize(width)
@@ -19,8 +19,8 @@ func _init(
 		for j in height:
 			col[j] = default
 		data[i] = col
-	for child in grid_nodes:
-		var grid_node = child as GridNode
+	for child in map_markers:
+		var grid_node = child as MapMarker
 		if grid_node:
 			for cell in grid_node.cells():
 				data[cell.x][cell.y] = grid_node

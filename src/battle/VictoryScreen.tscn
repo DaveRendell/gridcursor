@@ -1,13 +1,13 @@
 [gd_scene load_steps=2 format=3 uid="uid://b40b08fwcgbay"]
 
-[ext_resource type="Theme" uid="uid://cq6hal2383lbi" path="res://src/ui/theme.tres" id="1"]
+[ext_resource type="Theme" uid="uid://cq6hal2383lbi" path="res://src/ui/theme.tres" id="1_t40e1"]
 
 [node name="PopupPanel" type="PopupPanel"]
 size = Vector2i(100, 109)
 visible = true
 content_scale_size = Vector2i(3, 3)
 content_scale_mode = 1
-theme = ExtResource("1")
+theme = ExtResource("1_t40e1")
 
 [node name="Rows" type="VBoxContainer" parent="."]
 offset_left = 8.0

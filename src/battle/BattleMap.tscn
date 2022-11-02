@@ -1,15 +1,15 @@
-[gd_scene load_steps=22 format=3 uid="uid://biffsqf8cftt1"]
+[gd_scene load_steps=22 format=3 uid="uid://dfugg8ntgoc7u"]
 
-[ext_resource type="PackedScene" uid="uid://tletdquhrnvm" path="res://src/map/Map.tscn" id="1_7uvac"]
-[ext_resource type="Script" path="res://src/map/BattleMap.gd" id="2_m1shy"]
-[ext_resource type="Texture2D" uid="uid://ddew1f6sctng6" path="res://img/battle/GrassNDirt.png" id="3_cbii2"]
-[ext_resource type="Texture2D" uid="uid://dxnqw6bi8xlef" path="res://img/battle/Cliff.png" id="4_gpthc"]
-[ext_resource type="Texture2D" uid="uid://cbc7jsvlngqm5" path="res://img/battle/RocksnStumps.png" id="5_rncq0"]
-[ext_resource type="Texture2D" uid="uid://c5mow25cu3vns" path="res://img/battle/Trees.png" id="6_sw3e6"]
-[ext_resource type="Texture2D" uid="uid://ce83u8k51bo2p" path="res://img/battle/terrain-types.png" id="7_qba3t"]
+[ext_resource type="PackedScene" uid="uid://tletdquhrnvm" path="res://src/map/Map.tscn" id="1_qxfn3"]
+[ext_resource type="Script" path="res://src/battle/BattleMap.gd" id="2_q5q2p"]
+[ext_resource type="Texture2D" uid="uid://ddew1f6sctng6" path="res://img/battle/GrassNDirt.png" id="3_dmjq1"]
+[ext_resource type="Texture2D" uid="uid://dxnqw6bi8xlef" path="res://img/battle/Cliff.png" id="4_eu8a5"]
+[ext_resource type="Texture2D" uid="uid://cbc7jsvlngqm5" path="res://img/battle/RocksnStumps.png" id="5_4yd8k"]
+[ext_resource type="Texture2D" uid="uid://c5mow25cu3vns" path="res://img/battle/Trees.png" id="6_gh1sv"]
+[ext_resource type="Texture2D" uid="uid://ce83u8k51bo2p" path="res://img/battle/terrain-types.png" id="7_kmjur"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_aeir8"]
-texture = ExtResource("3_cbii2")
+texture = ExtResource("3_dmjq1")
 0:0/next_alternative_id = 8
 0:0/0 = 0
 0:0/1 = 1
@@ -852,7 +852,7 @@ texture = ExtResource("3_cbii2")
 7:4/7/transpose = true
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_iceui"]
-texture = ExtResource("4_gpthc")
+texture = ExtResource("4_eu8a5")
 0:0/next_alternative_id = 8
 0:0/0 = 0
 0:0/1 = 1
@@ -1594,7 +1594,7 @@ sources/0 = SubResource("TileSetAtlasSource_aeir8")
 sources/1 = SubResource("TileSetAtlasSource_iceui")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_03hj0"]
-texture = ExtResource("5_rncq0")
+texture = ExtResource("5_4yd8k")
 0:0/next_alternative_id = 8
 0:0/0 = 0
 0:0/1 = 1
@@ -1933,7 +1933,7 @@ texture = ExtResource("5_rncq0")
 3:3/7/transpose = true
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ovcle"]
-texture = ExtResource("6_sw3e6")
+texture = ExtResource("6_gh1sv")
 margins = Vector2i(0, 16)
 texture_region_size = Vector2i(80, 96)
 0:0/next_alternative_id = 8
@@ -1959,7 +1959,7 @@ texture_region_size = Vector2i(80, 96)
 0:0/7/transpose = true
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1hm4w"]
-texture = ExtResource("6_sw3e6")
+texture = ExtResource("6_gh1sv")
 margins = Vector2i(80, 0)
 texture_region_size = Vector2i(80, 112)
 0:0/next_alternative_id = 8
@@ -1985,7 +1985,7 @@ texture_region_size = Vector2i(80, 112)
 0:0/7/transpose = true
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_02a00"]
-texture = ExtResource("6_sw3e6")
+texture = ExtResource("6_gh1sv")
 margins = Vector2i(160, 32)
 texture_region_size = Vector2i(48, 80)
 0:0/next_alternative_id = 8
@@ -2011,7 +2011,7 @@ texture_region_size = Vector2i(48, 80)
 0:0/7/transpose = true
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fqish"]
-texture = ExtResource("3_cbii2")
+texture = ExtResource("3_dmjq1")
 0:0/next_alternative_id = 8
 0:0/0 = 0
 0:0/1 = 1
@@ -2854,7 +2854,7 @@ texture = ExtResource("3_cbii2")
 7:4/7/transpose = true
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_e220x"]
-texture = ExtResource("4_gpthc")
+texture = ExtResource("4_eu8a5")
 0:0/next_alternative_id = 8
 0:0/0 = 0
 0:0/1 = 1
@@ -3600,7 +3600,7 @@ sources/4 = SubResource("TileSetAtlasSource_fqish")
 sources/5 = SubResource("TileSetAtlasSource_e220x")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_kmyf7"]
-texture = ExtResource("7_qba3t")
+texture = ExtResource("7_kmjur")
 0:0/next_alternative_id = 8
 0:0/0 = 0
 0:0/1 = 1
@@ -3624,7 +3624,7 @@ texture = ExtResource("7_qba3t")
 0:0/7/transpose = true
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_d0euj"]
-texture = ExtResource("7_qba3t")
+texture = ExtResource("7_kmjur")
 margins = Vector2i(16, 0)
 0:0/next_alternative_id = 8
 0:0/0 = 0
@@ -3649,7 +3649,7 @@ margins = Vector2i(16, 0)
 0:0/7/transpose = true
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0wvan"]
-texture = ExtResource("7_qba3t")
+texture = ExtResource("7_kmjur")
 margins = Vector2i(32, 0)
 0:0/next_alternative_id = 8
 0:0/0 = 0
@@ -3678,8 +3678,8 @@ sources/0 = SubResource("TileSetAtlasSource_kmyf7")
 sources/1 = SubResource("TileSetAtlasSource_d0euj")
 sources/2 = SubResource("TileSetAtlasSource_0wvan")
 
-[node name="BattleMap" instance=ExtResource("1_7uvac")]
-script = ExtResource("2_m1shy")
+[node name="BattleMap" instance=ExtResource("1_qxfn3")]
+script = ExtResource("2_q5q2p")
 
 [node name="Tiles" type="Node2D" parent="." index="2"]
 show_behind_parent = true

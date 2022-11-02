@@ -1,6 +1,6 @@
 class_name BattleMap extends "res://src/map/Map.gd"
 
-var new_unit = preload("res://src/map/Unit.tscn")
+var new_unit = preload("res://src/battle/Unit.tscn")
 
 signal next_turn
 

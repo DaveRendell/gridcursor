@@ -1,7 +1,7 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=3 format=3]
 
-[ext_resource path="res://src/ui/theme.tres" type="Theme" id=1]
-[ext_resource path="res://src/map/TPKPopup.gd" type="Script" id=2]
+[ext_resource type="Theme" uid="uid://cq6hal2383lbi" path="res://src/ui/theme.tres" id="1"]
+[ext_resource type="Script" path="res://src/battle/TPKPopup.gd" id="2"]
 
 [node name="TPKPopup" type="Popup"]
 offset_right = 320.0

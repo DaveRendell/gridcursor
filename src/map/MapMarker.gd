@@ -1,6 +1,6 @@
 extends Node2D
 
-class_name GridNode
+class_name MapMarker
 # Represents an object checked a `Grid`
 
 # Position checked grid

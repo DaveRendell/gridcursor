@@ -1,10 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://cc8btuffnjsd2"]
+[gd_scene load_steps=5 format=3 uid="uid://cccpsrji3g3uo"]
 
-[ext_resource type="FontFile" uid="uid://qa3i2e1ba41c" path="res://img/ui/fonts/EquipmentPro.ttf" id="1"]
-[ext_resource type="Script" path="res://src/battle/EphemeralLabel.gd" id="2"]
+[ext_resource type="FontFile" uid="uid://qa3i2e1ba41c" path="res://img/ui/fonts/EquipmentPro.ttf" id="1_63684"]
+[ext_resource type="Script" path="res://src/ui/EphemeralLabel.gd" id="2_403x3"]
 
 [sub_resource type="FontFile" id="1"]
-fallbacks = [ExtResource("1")]
+fallbacks = [ExtResource("1_63684")]
 face_index = null
 embolden = null
 transform = null
@@ -20,10 +20,12 @@ default_font = SubResource("1")
 Fonts/fonts/normal = SubResource("1")
 
 [node name="EphemeralLabel" type="Label"]
-offset_right = 40.0
-offset_bottom = 14.0
+offset_left = -8.0
+offset_top = -8.0
+offset_right = 32.0
+offset_bottom = 11.0
 theme = SubResource("2")
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
 text = "Text"
-script = ExtResource("2")
+script = ExtResource("2_403x3")

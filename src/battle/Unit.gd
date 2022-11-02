@@ -1,5 +1,4 @@
-extends "res://src/grid/GridNode.gd"
-class_name Unit
+class_name Unit extends MapMarker
 
 var character: Character
 
@@ -10,9 +9,7 @@ const attack_option_color = Color.RED
 @export var movement_type = "foot"
 
 @export var team = 0
-var attack_popup = preload("res://src/battle/AttackPopup.tscn")
 var battle_menu_scene = preload("res://src/ui/BattleMenu.tscn")
-var theme = preload("res://src/ui/theme.tres")
 
 enum UnitState {
 	UNSELECTED,
@@ -253,7 +250,7 @@ func perform_attack(map: Map, target: Unit, attack: Attack) -> void:
 	else:
 		target.display_label("miss")
 
-var ephemeral_label_scene = preload("res://src/battle/EphemeralLabel.tscn")
+var ephemeral_label_scene = preload("res://src/ui/EphemeralLabel.tscn")
 func display_label(text: String, colour: Color = Color.WHITE):
 	var label = ephemeral_label_scene.instantiate()
 	label.text = text

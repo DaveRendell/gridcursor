@@ -28,8 +28,8 @@ var state = GridState.NOTHING_SELECTED
 
 var new_toast = preload("res://src/ui/Toast.tscn")
 var theme = preload("res://src/ui/theme.tres")
-var tpk_popup_scene = preload("res://src/map/TPKPopup.tscn")
-var victory_screen_scene = preload("res://src/map/VictoryScreen.tscn")
+var tpk_popup_scene = preload("res://src/battle/TPKPopup.tscn")
+var victory_screen_scene = preload("res://src/battle/VictoryScreen.tscn")
 var battle_menu_scene = preload("res://src/ui/BattleMenu.tscn")
 
 func _ready() -> void:
@@ -166,7 +166,7 @@ func click_position(coordinate: Vector2i):
 	if state == GridState.NOTHING_SELECTED:
 		print("Clicked grid position %s" % [coordinate])
 		for child in $GridNodes.get_children():
-				var node = child as GridNode
+				var node = child as MapMarker
 				if node and node.has_method("select"):
 					if node.cells().has(coordinate):
 						return node.select(self)
@@ -192,8 +192,8 @@ func display_menu(popup_menu: BattleMenu) -> void:
 
 func draw_nodes():
 	for node in $GridNodes.get_children():
-		var grid_node = (node as GridNode)
-		node.position = geometry.cell_centre_position(grid_node.coordinate())
+		var map_marker = (node as MapMarker)
+		node.position = geometry.cell_centre_position(map_marker.coordinate())
 
 # Draw the grid for this coordinate system
 func draw_grid():
