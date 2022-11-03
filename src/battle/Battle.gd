@@ -2,7 +2,7 @@ extends Node2D
 
 var teams = 2
 
-var map_scene = preload("res://src/battle/BattleMap.tscn")
+var map_scene = preload("res://src/battle/battlemaps/ForestBlobAttack.tscn")
 var map: BattleMap
 
 var party: Party
@@ -13,7 +13,6 @@ func _ready():
 func setup_map() -> void:
 	map = map_scene.instantiate()
 	party = Party.new()
-	var party_spawn_location = Vector2i(13, 9)
 	var mobs = CoordinateMap.new(map.grid_width, map.grid_height)
 	
 	mobs.set_value(Vector2i(11, 10), Blobber.new())
@@ -25,7 +24,7 @@ func setup_map() -> void:
 	mobs.set_value(Vector2i(14, 15), Blobber.new())
 	mobs.set_value(Vector2i(11, 14), Blobber.new())
 	
-	map.add_party(party_spawn_location, party)
+	map.add_party(party)
 	map.add_mobs(mobs)
 	map.add_big_blob(7, 12)
 	###

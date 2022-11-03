@@ -45,10 +45,11 @@ func set_terrain_types() -> void:
 	var test_json_conv = JSON.new()
 	test_json_conv.parse(file.get_as_text())
 	terrain_types = test_json_conv.get_data()
+	var location = $LocationData.get_child(0) as Location
 	
 	for coordinate in terrain_grid.coordinates():
-		var cell = $Tiles/TerrainTypes.get_cell_source_id(0, Vector2i(coordinate.x, coordinate.y))
-		terrain_grid.set_value(coordinate, cell)
+		var terrain_id = location.get_terrain_id_at(coordinate)
+		terrain_grid.set_value(coordinate, terrain_id)
 
 func click_empty_cell():
 	var popup_menu = battle_menu_scene.instantiate()
@@ -102,7 +103,9 @@ func add_big_blob(x: int, y: int):
 	$GridNodes.add_child(blob_unit)
 	update_units()
 
-func add_party(coordinate: Vector2i, party: Party) -> void:
+func add_party(party: Party) -> void:
+	var coordinate = Vector2i($PartySpawn.position / grid_size)
+	$PartySpawn.visible = false
 	for position in party.formation.non_empty_coordinates():
 		var character = party.formation.at(position) as Character
 		add_character(character, coordinate + position, E.Team.PLAYERS)

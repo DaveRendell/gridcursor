@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://db1a8x3rmoasq"]
+
+[ext_resource type="Script" path="res://src/battle/MobMarker.gd" id="1_tih6g"]
+
+[node name="MobMarker" type="AnimatedSprite2D"]
+script = ExtResource("1_tih6g")
