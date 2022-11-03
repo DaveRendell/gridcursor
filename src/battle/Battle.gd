@@ -4,23 +4,29 @@ var teams = 2
 
 var map_scene = preload("res://src/battle/BattleMap.tscn")
 var map: BattleMap
-var party_spawn_location = Vector2i(13, 9)
+
 var party: Party
 
 func _ready():
+	setup_map()
+
+func setup_map() -> void:
 	map = map_scene.instantiate()
 	party = Party.new()
+	var party_spawn_location = Vector2i(13, 9)
+	var mobs = CoordinateMap.new(map.grid_width, map.grid_height)
+	
+	mobs.set_value(Vector2i(11, 10), Blobber.new())
+	mobs.set_value(Vector2i(9, 8), Blobber.new())
+	mobs.set_value(Vector2i(9, 11), Blobber.new())
+	mobs.set_value(Vector2i(7, 9), Blobber.new())
+	mobs.set_value(Vector2i(16, 6), Blobber.new())
+	mobs.set_value(Vector2i(13, 7), Blobber.new())
+	mobs.set_value(Vector2i(14, 15), Blobber.new())
+	mobs.set_value(Vector2i(11, 14), Blobber.new())
 	
 	map.add_party(party_spawn_location, party)
-	map.add_blob(11, 10)
-	map.add_blob(9, 8)
-	map.add_blob(9, 11)
-	map.add_blob(7, 9)
-	map.add_blob(16, 6)
-	map.add_blob(13, 7)
-	map.add_blob(14, 15)
-	map.add_blob(11, 14)
-	
+	map.add_mobs(mobs)
 	map.add_big_blob(7, 12)
 	###
 	

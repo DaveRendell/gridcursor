@@ -69,19 +69,20 @@ func click_empty_cell():
 	if option == "Cancel":
 		set_state_nothing_selected()
 
-func add_character(character: Character, coordinate: Vector2i) -> void:
+func add_character(character: Character, coordinate: Vector2i, team: E.Team) -> void:
 	var unit = new_unit.instantiate()
-	unit.from_char(character, 0, coordinate)
+	unit.from_char(character, team, coordinate)
 	$GridNodes.add_child(unit)
 	update_units()
 
+func add_mobs(mobs: CoordinateMap) -> void:
+	for coordinate in mobs.non_empty_coordinates():
+		var mob = mobs.at(coordinate) as Character
+		add_character(mob, coordinate, E.Team.MONSTERS)
+
 func add_blob(x: int, y: int):
-	var slime_sprite_sheet = preload("res://img/characters/Slime.png")
-	var slime_sprite = PunyCharacterSprite.slime_sprite(slime_sprite_sheet)
-	var blob = Mob.new("Blobber", slime_sprite, 10, 0, 0, 0, Attack.new("Slime", 1, 1, [0], 4))
-	var blob_unit = new_unit.instantiate()
-	blob_unit.from_char(blob, 1, Vector2i(x, y))
-	$GridNodes.add_child(blob_unit)
+	var blobber = Blobber.new()
+	add_character(blobber, Vector2i(x, y), E.Team.MONSTERS)
 	update_units()
 
 func add_big_blob(x: int, y: int):
@@ -97,14 +98,14 @@ func add_big_blob(x: int, y: int):
 	blob_unit.get_node("HPBar").scale = Vector2(2, 2)
 	blob_unit.get_node("HPBar").offset = Vector2(4, 4)
 	
-	blob_unit.from_char(blob, 1, Vector2i(x, y))
+	blob_unit.from_char(blob, E.Team.MONSTERS, Vector2i(x, y))
 	$GridNodes.add_child(blob_unit)
 	update_units()
 
 func add_party(coordinate: Vector2i, party: Party) -> void:
 	for position in party.formation.non_empty_coordinates():
 		var character = party.formation.at(position) as Character
-		add_character(character, coordinate + position)
+		add_character(character, coordinate + position, E.Team.PLAYERS)
 
 func draw_grid():
 	# Set background dimensions
