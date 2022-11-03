@@ -18,6 +18,7 @@ func _ready():
 	super()
 	
 	set_terrain_types()
+	place_mobs()
 	draw_nodes()
 
 func _draw():
@@ -76,15 +77,14 @@ func add_character(character: Character, coordinate: Vector2i, team: E.Team) -> 
 	$GridNodes.add_child(unit)
 	update_units()
 
-func add_mobs(mobs: CoordinateMap) -> void:
-	for coordinate in mobs.non_empty_coordinates():
-		var mob = mobs.at(coordinate) as Character
-		add_character(mob, coordinate, E.Team.MONSTERS)
-
-func add_blob(x: int, y: int):
-	var blobber = Blobber.new()
-	add_character(blobber, Vector2i(x, y), E.Team.MONSTERS)
-	update_units()
+func place_mobs() -> void:
+	for child in $MobMarkers.get_children():
+		var mob_marker = child as MobMarker
+		if mob_marker:
+			var coordinate = Vector2i(mob_marker.position / grid_size)
+			var mob = mob_marker.character_script.new()
+			add_character(mob, coordinate, E.Team.MONSTERS)
+			mob_marker.queue_free()
 
 func add_big_blob(x: int, y: int):
 	var slime_sprite_sheet = preload("res://img/characters/Slime.png")

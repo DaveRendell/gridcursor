@@ -15,17 +15,9 @@ func setup_map() -> void:
 	party = Party.new()
 	var mobs = CoordinateMap.new(map.grid_width, map.grid_height)
 	
-	mobs.set_value(Vector2i(11, 10), Blobber.new())
-	mobs.set_value(Vector2i(9, 8), Blobber.new())
-	mobs.set_value(Vector2i(9, 11), Blobber.new())
-	mobs.set_value(Vector2i(7, 9), Blobber.new())
-	mobs.set_value(Vector2i(16, 6), Blobber.new())
-	mobs.set_value(Vector2i(13, 7), Blobber.new())
-	mobs.set_value(Vector2i(14, 15), Blobber.new())
-	mobs.set_value(Vector2i(11, 14), Blobber.new())
+
 	
 	map.add_party(party)
-	map.add_mobs(mobs)
 	map.add_big_blob(7, 12)
 	###
 	

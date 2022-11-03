@@ -104,6 +104,11 @@ _global_script_classes=[{
 "language": &"GDScript",
 "path": "res://src/models/mob.gd"
 }, {
+"base": "AnimatedSprite2D",
+"class": &"MobMarker",
+"language": &"GDScript",
+"path": "res://src/battle/MobMarker.gd"
+}, {
 "base": "RefCounted",
 "class": &"Party",
 "language": &"GDScript",
@@ -174,6 +179,7 @@ _global_script_class_icons={
 "Map": "",
 "MapMarker": "",
 "Mob": "",
+"MobMarker": "",
 "Party": "",
 "PunyCharacterSprite": "",
 "Shield": "",
