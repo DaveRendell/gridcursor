@@ -12,3 +12,8 @@ res://src/battle/locations/ForesetMound.tscn
 res://src/battle/locations/ForestMound.tscn
 res://src/battle/battlemaps/ForestBlobAttack.tscn
 res://src/battle/Unit.gd
+res://src/models/character.gd
+res://src/models/mobs/big_blobber.gd
+res://src/map/MapMarker.gd
+res://src/map/Map.gd
+res://src/battle/Unit.tscn

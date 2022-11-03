@@ -15,9 +15,9 @@ static func execute_turn(map: Map) -> void:
 
 static func get_units(map: Map) -> Array:
 	var units = []
-	for cell in map.units.non_empty_coordinates():
-		var unit = map.units.at(cell) as Unit
-		if unit.team == map.current_turn:
+	for child in map.get_node("GridNodes").get_children():
+		var unit = child as Unit
+		if unit and unit.team == map.current_turn:
 			units.append(unit)
 	return units
 

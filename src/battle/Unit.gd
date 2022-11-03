@@ -36,7 +36,13 @@ func from_char(character: Character, team: int, coordinate: Vector2i):
 	self.team = team
 	self.x = coordinate.x
 	self.y = coordinate.y
+	self.width = character.width
+	self.height = character.height
 	sprite = character.sprite
+	
+	$HPBar.scale = Vector2(width, height)
+	$HPBar.offset = (width - 1) * Vector2(4, 4)
+	
 	add_child(sprite)
 
 func select(map: Map):
@@ -162,11 +168,17 @@ func set_state_attack_confirm(map: Map, path: Array[Vector2i]):
 	unit_state = UnitState.ATTACK_CONFIRM
 	var attacked_node = map.units.at(map.cursor)
 	
-	var distance_to_target = map.geometry.distance(path.back(), map.cursor)
+	
 	var popup_menu = battle_menu_scene.instantiate()
 	for i in character.attacks().size():
 		var attack: Attack = character.attacks()[i]
-		if attack.can_attack_distance(distance_to_target):
+		var can_attack = false
+		for cell in cells(path.back()):
+			var distance_to_target = map.geometry.distance(cell, map.cursor)
+			if attack.can_attack_distance(distance_to_target):
+				can_attack = true
+				break
+		if can_attack:
 			popup_menu.add_item(attack.name, i)
 	popup_menu.add_item("Cancel")
 	
@@ -247,6 +259,8 @@ func perform_attack(map: Map, target: Unit, attack: Attack) -> void:
 	
 	if roll >= def:
 		target.take_damage(attack.damage, map)
+		await get_tree().process_frame
+		map.update_units()
 	else:
 		target.display_label("miss")
 
@@ -384,12 +398,13 @@ func calculate_options(map: Map) -> void:
 				movement_options.append(u)
 				var space_free = true
 				for cell in cells(u):
-					space_free = space_free and map.units.at(u) == null
+					if map.units.at(cell) != null:
+						space_free = false
 				if space_free:
 					empty_movement_options.append(u)
 			
 				# If U is empty, check attacks from u
-				if !map.units.at(u) || coordinate() == u:
+				if empty_movement_options.has(u):
 					var attack_targets = valid_attacks(map, u)
 					for attack_target in attack_targets.non_empty_coordinates():
 						attack_options.append(attack_target)
@@ -485,10 +500,11 @@ func take_damage(damage: int, map: Map) -> void:
 		map.check_win_condition()
 		if character.die_when_downed:
 			queue_free()
+			tree_exited.connect(map.update_units)
 		else:
 			$HPBar.visible = false
 			sprite.stop()
 			sprite.frame = 1
 	else:
 		sprite.animation = "default"
-	
+

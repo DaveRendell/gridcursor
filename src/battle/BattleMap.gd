@@ -86,23 +86,6 @@ func place_mobs() -> void:
 			add_character(mob, coordinate, E.Team.MONSTERS)
 			mob_marker.queue_free()
 
-func add_big_blob(x: int, y: int):
-	var slime_sprite_sheet = preload("res://img/characters/Slime.png")
-	var slime_sprite = PunyCharacterSprite.slime_sprite(slime_sprite_sheet)
-	slime_sprite.scale = Vector2(2, 2)
-	slime_sprite.offset = Vector2(3, 4)
-	var blob = Mob.new("Big Blobber", slime_sprite, 10, 0, 0, 0, Attack.new("Slime", 1, 1, [0], 4))
-	var blob_unit = new_unit.instantiate()
-	
-	blob_unit.width = 2
-	blob_unit.height = 2
-	blob_unit.get_node("HPBar").scale = Vector2(2, 2)
-	blob_unit.get_node("HPBar").offset = Vector2(4, 4)
-	
-	blob_unit.from_char(blob, E.Team.MONSTERS, Vector2i(x, y))
-	$GridNodes.add_child(blob_unit)
-	update_units()
-
 func add_party(party: Party) -> void:
 	var coordinate = Vector2i($PartySpawn.position / grid_size)
 	$PartySpawn.visible = false

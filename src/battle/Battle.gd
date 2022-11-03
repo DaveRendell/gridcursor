@@ -18,8 +18,6 @@ func setup_map() -> void:
 
 	
 	map.add_party(party)
-	map.add_big_blob(7, 12)
-	###
 	
 	add_child(map)
 	map.connect("next_turn",Callable(self,"next_turn"))

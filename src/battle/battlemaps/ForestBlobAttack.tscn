@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://dmmpxxwwlju6y"]
+[gd_scene load_steps=11 format=3 uid="uid://dmmpxxwwlju6y"]
 
 [ext_resource type="PackedScene" uid="uid://dfugg8ntgoc7u" path="res://src/battle/BattleMap.tscn" id="1_gyele"]
 [ext_resource type="PackedScene" uid="uid://bbse4saxpmd3s" path="res://src/battle/locations/ForestMound.tscn" id="2_i2m54"]
 [ext_resource type="PackedScene" uid="uid://db1a8x3rmoasq" path="res://src/battle/MobMarker.tscn" id="3_t84co"]
 [ext_resource type="Texture2D" uid="uid://bclcy0l81l01c" path="res://img/characters/Slime.png" id="4_vtlg6"]
 [ext_resource type="Script" path="res://src/models/mobs/blobber.gd" id="5_jnpd4"]
+[ext_resource type="Script" path="res://src/models/mobs/big_blobber.gd" id="6_amw2l"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_q2rhs"]
 atlas = ExtResource("4_vtlg6")
@@ -18,30 +19,34 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_3kw16"]
+atlas = ExtResource("4_vtlg6")
+region = Rect2(9, 8, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_wwndp"]
+animations = [{
+"frames": [SubResource("AtlasTexture_3kw16")],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
 [node name="BattleMap" instance=ExtResource("1_gyele")]
 
 [node name="Location" parent="LocationData" index="0" instance=ExtResource("2_i2m54")]
 
 [node name="Blobber" parent="MobMarkers" index="0" instance=ExtResource("3_t84co")]
-position = Vector2(96, 64)
+position = Vector2(160, 192)
 frames = SubResource("SpriteFrames_41b00")
 centered = false
 character_script = ExtResource("5_jnpd4")
 
-[node name="Blobber2" parent="MobMarkers" index="1" instance=ExtResource("3_t84co")]
-position = Vector2(128, 64)
-frames = SubResource("SpriteFrames_41b00")
+[node name="BigBlobber" parent="MobMarkers" index="1" instance=ExtResource("3_t84co")]
+position = Vector2(128, 208)
+scale = Vector2(2, 2)
+frames = SubResource("SpriteFrames_wwndp")
 centered = false
-character_script = ExtResource("5_jnpd4")
+character_script = ExtResource("6_amw2l")
 
-[node name="Blobber3" parent="MobMarkers" index="2" instance=ExtResource("3_t84co")]
-position = Vector2(128, 32)
-frames = SubResource("SpriteFrames_41b00")
-centered = false
-character_script = ExtResource("5_jnpd4")
-
-[node name="Blobber4" parent="MobMarkers" index="3" instance=ExtResource("3_t84co")]
-position = Vector2(160, 32)
-frames = SubResource("SpriteFrames_41b00")
-centered = false
-character_script = ExtResource("5_jnpd4")
+[node name="Camera" parent="Cursor" index="0"]
+position_smoothing_enabled = true

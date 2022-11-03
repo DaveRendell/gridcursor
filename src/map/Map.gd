@@ -140,8 +140,8 @@ func setup_camera():
 	camera.limit_top = -v_margin
 	camera.limit_bottom = height + v_margin
 	
-	var h_drag_margin = 1 - (12 * grid_size / view_size.x)
-	var v_drag_margin = 1 - (12 * grid_size / view_size.y)
+	var h_drag_margin = 1 - (12.0 * grid_size / view_size.x)
+	var v_drag_margin = 1 - (12.0 * grid_size / view_size.y)
 	camera.drag_left_margin = h_drag_margin
 	camera.drag_right_margin = h_drag_margin
 	camera.drag_top_margin = v_drag_margin

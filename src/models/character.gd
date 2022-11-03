@@ -3,6 +3,9 @@ class_name Character
 var display_name: String
 var sprite: AnimatedSprite2D
 
+var width = 1
+var height = 1
+
 # Might, Precision, Knowledge, Wit
 var stats = [0, 0, 0, 0]
 
