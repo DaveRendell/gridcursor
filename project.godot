@@ -201,7 +201,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Cursor"
-run/main_scene="res://src/battle/Battle.tscn"
+run/main_scene="res://src/overworld/Overworld.tscn"
 config/features=PackedStringArray("4.0")
 config/icon="res://icon.png"
 

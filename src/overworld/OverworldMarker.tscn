@@ -1,0 +1,79 @@
+[gd_scene load_steps=17 format=3 uid="uid://dahqyptdu4nef"]
+
+[ext_resource type="Texture2D" uid="uid://cbjmhi6xue403" path="res://img/overworld/marker_down.png" id="1_4uejs"]
+[ext_resource type="Texture2D" uid="uid://bjoa0qh1xai6s" path="res://img/overworld/marker_left.png" id="2_2iwkp"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k12oa"]
+atlas = ExtResource("1_4uejs")
+region = Rect2(0, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2egep"]
+atlas = ExtResource("1_4uejs")
+region = Rect2(0, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lgwdw"]
+atlas = ExtResource("1_4uejs")
+region = Rect2(8, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rlwd2"]
+atlas = ExtResource("1_4uejs")
+region = Rect2(16, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p7fnj"]
+atlas = ExtResource("1_4uejs")
+region = Rect2(24, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8tc8e"]
+atlas = ExtResource("1_4uejs")
+region = Rect2(32, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i2ho2"]
+atlas = ExtResource("1_4uejs")
+region = Rect2(40, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4bqn3"]
+atlas = ExtResource("2_2iwkp")
+region = Rect2(0, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2ujyu"]
+atlas = ExtResource("2_2iwkp")
+region = Rect2(8, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tblar"]
+atlas = ExtResource("2_2iwkp")
+region = Rect2(16, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ttdbi"]
+atlas = ExtResource("2_2iwkp")
+region = Rect2(24, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_couws"]
+atlas = ExtResource("2_2iwkp")
+region = Rect2(32, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uf106"]
+atlas = ExtResource("2_2iwkp")
+region = Rect2(40, 0, 8, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_p7qq1"]
+animations = [{
+"frames": [SubResource("AtlasTexture_k12oa")],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [SubResource("AtlasTexture_2egep"), SubResource("AtlasTexture_lgwdw"), SubResource("AtlasTexture_rlwd2"), SubResource("AtlasTexture_p7fnj"), SubResource("AtlasTexture_8tc8e"), SubResource("AtlasTexture_i2ho2")],
+"loop": true,
+"name": &"down",
+"speed": 5.0
+}, {
+"frames": [SubResource("AtlasTexture_4bqn3"), SubResource("AtlasTexture_2ujyu"), SubResource("AtlasTexture_tblar"), SubResource("AtlasTexture_ttdbi"), SubResource("AtlasTexture_couws"), SubResource("AtlasTexture_uf106")],
+"loop": true,
+"name": &"left",
+"speed": 5.0
+}]
+
+[node name="OverworldMarker" type="AnimatedSprite2D"]
+frames = SubResource("SpriteFrames_p7qq1")
+animation = &"down"
+playing = true

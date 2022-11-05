@@ -64,7 +64,7 @@ func cell_corners(coordinate: Vector2i) -> Array[Vector2]:
 	]
 
 func map_dimensions() -> Vector2:
-	return Vector2(grid_size * grid_width, hex_size * (0.5 + grid_height))
+	return Vector2(grid_size * (grid_width + 1), 2 * hex_size * (grid_height))
 
 # https://www.redblobgames.com/grids/hexagons/
 func cube_to_offset(q, r, s):

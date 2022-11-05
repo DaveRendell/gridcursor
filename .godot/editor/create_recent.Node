@@ -1,8 +1,9 @@
+TileMap
+AnimatedSprite2D
 Node2D
 BattleMap (BattleMap.gd)
 Node
 ColorRect
-AnimatedSprite2D
 MapMarker (MapMarker.gd)
 Map (Map.gd)
 Label
