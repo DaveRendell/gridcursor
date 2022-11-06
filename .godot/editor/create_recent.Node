@@ -1,8 +1,8 @@
+Node2D
+Node
 AnimatedSprite2D
 TileMap
-Node2D
 BattleMap (BattleMap.gd)
-Node
 ColorRect
 MapMarker (MapMarker.gd)
 Map (Map.gd)

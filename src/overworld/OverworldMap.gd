@@ -36,4 +36,7 @@ func add_party(party: Party, coordinate: Vector2i) -> void:
 	party_marker.x = coordinate.x
 	party_marker.y = coordinate.y
 	$GridNodes.add_child(party_marker)
+	update_parties()
 	
+func update_parties():
+	parties = CoordinateMap.new(grid_width, grid_height, $GridNodes.get_children(), null)

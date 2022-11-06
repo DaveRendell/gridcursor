@@ -1,23 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://bsd1ko5xfdlxg"]
+[gd_scene load_steps=3 format=3 uid="uid://bsd1ko5xfdlxg"]
 
 [ext_resource type="PackedScene" uid="uid://bfcuo72lbke5e" path="res://src/map/MapMarker.tscn" id="1_pkqa7"]
 [ext_resource type="Script" path="res://src/overworld/party_marker.gd" id="2_g6mb8"]
-[ext_resource type="Texture2D" uid="uid://cbjmhi6xue403" path="res://img/overworld/marker_down.png" id="3_ifw0f"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_y1owi"]
-atlas = ExtResource("3_ifw0f")
-region = Rect2(0, 0, 8, 8)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_ot7rb"]
-animations = [{
-"frames": [SubResource("AtlasTexture_y1owi")],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
 
 [node name="PartyMarker" instance=ExtResource("1_pkqa7")]
 script = ExtResource("2_g6mb8")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." index="0"]
-frames = SubResource("SpriteFrames_ot7rb")
+[node name="Sprites" type="Node2D" parent="." index="0"]

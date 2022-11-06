@@ -56,6 +56,7 @@ func set_state_unselected(map: Map):
 	modulate = Color(1, 1, 1, 1)
 	map.clear_highlights()
 	map.path = [coordinate()]
+	
 
 func set_state_selected(map: Map, initial_path: Array[Vector2i]):
 	print("Unit state: Selected")
