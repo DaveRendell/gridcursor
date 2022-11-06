@@ -4,15 +4,15 @@
 [ext_resource type="Script" path="res://src/overworld/OverworldMap.gd" id="2_off4c"]
 [ext_resource type="Texture2D" uid="uid://ca6hofbq3eh2g" path="res://img/overworld/hex_template.png" id="3_kh7dy"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vck3e"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_aicf5"]
 texture = ExtResource("3_kh7dy")
 texture_region_size = Vector2i(32, 48)
 0:0/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_4yscl"]
 tile_shape = 3
-tile_size = Vector2i(32, 37)
-sources/5 = SubResource("TileSetAtlasSource_vck3e")
+tile_size = Vector2i(32, 36)
+sources/0 = SubResource("TileSetAtlasSource_aicf5")
 
 [node name="Map" instance=ExtResource("1_jg85r")]
 script = ExtResource("2_off4c")
@@ -23,4 +23,4 @@ show_behind_parent = true
 [node name="TileMap" type="TileMap" parent="." index="2"]
 tile_set = SubResource("TileSet_4yscl")
 format = 2
-layer_0/tile_data = PackedInt32Array(0, 5, 0, 65536, 5, 0, 131072, 5, 0, 131073, 5, 0, 65537, 5, 0, 1, 5, 0, 2, 5, 0, 3, 5, 0, 65538, 5, 0, 131075, 5, 0, 131074, 5, 0, 65539, 5, 0, 4, 5, 0, 65540, 5, 0, 131076, 5, 0, 196608, 5, 0, 262144, 5, 0, 262145, 5, 0, 196609, 5, 0, 196610, 5, 0, 262146, 5, 0, 262147, 5, 0, 196611, 5, 0, 262148, 5, 0, 196612, 5, 0, 327680, 5, 0, 393216, 5, 0, 5, 5, 0, 6, 5, 0, 65541, 5, 0, 65542, 5, 0, 131078, 5, 0, 131077, 5, 0, 196613, 5, 0, 196614, 5, 0, 262150, 5, 0, 262149, 5, 0, 327685, 5, 0, 327686, 5, 0, 393222, 5, 0, 393221, 5, 0, 327684, 5, 0, 327683, 5, 0, 393220, 5, 0, 393219, 5, 0, 327682, 5, 0, 393218, 5, 0, 327681, 5, 0, 393217, 5, 0)
+layer_0/tile_data = PackedInt32Array(0, 0, 0, 65536, 0, 0, 2, 0, 0, 131072, 0, 0, 196608, 0, 0, 262144, 0, 0, 327680, 0, 0, 393216, 0, 0, 65538, 0, 0, 131074, 0, 0, 196610, 0, 0, 262146, 0, 0, 327682, 0, 0, 393218, 0, 0)

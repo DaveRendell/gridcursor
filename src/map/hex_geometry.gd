@@ -12,7 +12,7 @@ func _init(_grid_size: int, _grid_width: int, _grid_height: int):
 	self.grid_size = _grid_size
 	self.grid_width = _grid_width
 	self.grid_height = _grid_height
-	hex_size = roundi(float(grid_size) / sqrt(3))
+	hex_size = float(grid_size) / sqrt(3)
 
 func cell_centre_position(coordinate: Vector2i) -> Vector2:
 	var out = Vector2(coordinate.x * grid_size, coordinate.y * 1.5 * hex_size)

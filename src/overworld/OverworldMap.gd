@@ -1,7 +1,7 @@
 extends Map
 
 func _ready():
-	grid_size = 28
+	grid_size = 32
 	geometry = HexGeometry.new(grid_size, grid_width, grid_height)
 	super()
 
