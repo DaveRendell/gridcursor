@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bg3bh60crj031"
-path="res://.godot/imported/grass_hex.png-e42a11c0c598d159c381da35c3592470.ctex"
+uid="uid://ca6hofbq3eh2g"
+path="res://.godot/imported/hex_template.png-b55c34f8a2eb5a7854ff7bf48233d3ca.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://img/overworld/grass_hex.png"
-dest_files=["res://.godot/imported/grass_hex.png-e42a11c0c598d159c381da35c3592470.ctex"]
+source_file="res://img/overworld/hex_template.png"
+dest_files=["res://.godot/imported/hex_template.png-b55c34f8a2eb5a7854ff7bf48233d3ca.ctex"]
 
 [params]
 
