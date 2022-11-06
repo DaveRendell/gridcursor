@@ -9,3 +9,7 @@ res://src/battle/Location.tscn
 res://src/map/Map.tscn
 res://src/overworld/OverworldMap.gd
 res://src/map/hex_geometry.gd
+res://src/map/MapMarker.gd
+res://src/overworld/Overworld.gd
+res://src/overworld/party_marker.gd
+res://src/overworld/party_marker.tscn

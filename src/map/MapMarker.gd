@@ -19,4 +19,3 @@ func cells(at: Vector2i = Vector2i(x, y)) -> Array[Vector2i]:
 		for j in height:
 			out.append(Vector2i(at.x + i, at.y + j))
 	return out
-	
