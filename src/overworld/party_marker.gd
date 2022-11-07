@@ -35,8 +35,9 @@ func set_state_selected(map: Map) -> void:
 		map.clear_highlights()
 		await animate_movement_to_cell(map, clicked_cell)
 		update_position(map, clicked_cell)
-		check_for_encounters(map, clicked_cell)
+		
 		set_state_unselected(map)
+		await map.check_for_encounters(party, clicked_cell)
 		
 func update_position(map: Map, cell: Vector2i):
 	x = cell.x
@@ -60,20 +61,6 @@ func animate_movement_to_cell(map: Map, cell: Vector2i):
 	
 	tween.tween_property(self, "position", map.geometry.cell_centre_position(cell), 1)
 	await tween.finished
-
-func check_for_encounters(map: Map, cell: Vector2i) -> void:
-	var rng = RandomNumberGenerator.new()
-	rng.randomize()
-	var rolls = []
-	var number_of_encounter_dice = 3
-	for i in number_of_encounter_dice:
-		rolls.append(rng.randi_range(1, 6))
-	print("Random encounter rolls: %s" % str(rolls))
-	
-	if rolls.any(func(result): return result == 6):
-		print("Random encounter happens")
-	else:
-		print("No encounter happens")
 
 func from_party(party: Party) -> void:
 	self.party = party

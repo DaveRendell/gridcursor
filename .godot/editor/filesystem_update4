@@ -10,3 +10,7 @@ res://src/overworld/Overworld.tscn
 res://src/overworld/OverworldMap.tscn
 res://src/battle/Location.tscn
 res://src/map/Map.tscn
+res://src/overworld/Encounter.gd
+res://src/overworld/Encounter.tscn
+res://src/overworld/OverworldMap.gd
+res://src/ui/BattleMenu.tscn

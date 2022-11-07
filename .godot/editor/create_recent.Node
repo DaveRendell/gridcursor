@@ -1,3 +1,7 @@
+VBoxContainer
+Button
+Label
+PopupPanel
 Node2D
 Node
 AnimatedSprite2D
@@ -6,6 +10,5 @@ BattleMap (BattleMap.gd)
 ColorRect
 MapMarker (MapMarker.gd)
 Map (Map.gd)
-Label
 PopupMenu
 Camera2D

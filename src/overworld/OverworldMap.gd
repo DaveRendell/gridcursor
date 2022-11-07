@@ -1,5 +1,7 @@
 extends Map
 
+var encounter_scene = preload("res://src/overworld/EncounterPopup.tscn")
+
 var parties: CoordinateMap
 
 func _ready():
@@ -37,6 +39,27 @@ func add_party(party: Party, coordinate: Vector2i) -> void:
 	party_marker.y = coordinate.y
 	$GridNodes.add_child(party_marker)
 	update_parties()
+	
+func check_for_encounters(party: Party, cell: Vector2i) -> void:
+	var rng = RandomNumberGenerator.new()
+	rng.randomize()
+	var rolls = []
+	var number_of_encounter_dice = 3
+	for i in number_of_encounter_dice:
+		rolls.append(rng.randi_range(1, 6))
+	print("Random encounter rolls: %s" % str(rolls))
+	
+	if rolls.any(func(result): return result == 6):
+		print("Random encounter happens")
+		var encounter_popup = encounter_scene.instantiate()
+		$PopupLayer.add_child(encounter_popup)
+		
+		encounter_popup.popup_centered()
+		set_state_in_menu()
+		await encounter_popup.popup_hide
+		set_state_nothing_selected()
+	else:
+		print("No encounter happens")
 	
 func update_parties():
 	parties = CoordinateMap.new(grid_width, grid_height, $GridNodes.get_children(), null)
