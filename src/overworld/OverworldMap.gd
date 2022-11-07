@@ -1,4 +1,4 @@
-extends Map
+class_name OverworldMap extends Map
 
 var encounter_scene = preload("res://src/overworld/EncounterPopup.tscn")
 
@@ -52,6 +52,11 @@ func check_for_encounters(party: Party, cell: Vector2i) -> void:
 	if rolls.any(func(result): return result == 6):
 		print("Random encounter happens")
 		var encounter_popup = encounter_scene.instantiate()
+		
+		var forest_blob_attack = preload("res://src/models/encounters/encounter_instances/forest_blob_attack.gd")
+		var encounter = forest_blob_attack.encounter()
+		encounter_popup.set_encounter(encounter)
+		
 		$PopupLayer.add_child(encounter_popup)
 		
 		encounter_popup.popup_centered()
