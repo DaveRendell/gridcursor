@@ -1,6 +1,6 @@
 class_name OverworldMap extends Map
 
-var encounter_scene = preload("res://src/overworld/EncounterPopup.tscn")
+var encounter_scene = preload("res://src/overworld/EncounterDisplay.tscn")
 
 var parties: CoordinateMap
 
@@ -49,19 +49,18 @@ func check_for_encounters(party: Party, cell: Vector2i) -> void:
 		rolls.append(rng.randi_range(1, 6))
 	print("Random encounter rolls: %s" % str(rolls))
 	
-	if rolls.any(func(result): return result == 6):
+	if true:#rolls.any(func(result): return result == 6):
 		print("Random encounter happens")
-		var encounter_popup = encounter_scene.instantiate()
+		var encounter_display = encounter_scene.instantiate()
 		
 		var forest_blob_attack = preload("res://src/models/encounters/encounter_instances/forest_blob_attack.gd")
 		var encounter = forest_blob_attack.encounter()
-		encounter_popup.set_encounter(encounter)
+		encounter_display.set_encounter(encounter)
 		
-		$PopupLayer.add_child(encounter_popup)
-		
-		encounter_popup.popup_centered()
+		$PopupLayer.add_child(encounter_display)
+
 		set_state_in_menu()
-		await encounter_popup.popup_hide
+		await encounter.end_encounter
 		set_state_nothing_selected()
 	else:
 		print("No encounter happens")

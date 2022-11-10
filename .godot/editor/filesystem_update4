@@ -1,9 +1,10 @@
-res://src/overworld/Overworld.tscn
 res://src/ui/theme.tres
 res://src/overworld/party_marker_frames.tres
-res://src/models/encounters/option_types/end_encounter_option.gd
-res://src/models/encounters/encounter_instances/forest_blob_attack.gd
-res://src/overworld/EncounterPopup.tscn
 res://src/overworld/EncounterPopup.gd
-res://src/overworld/OverworldMap.gd
+res://src/overworld/EncounterDisplay.tscn
+res://src/overworld/EncounterDisplay.gd
+res://src/models/encounters/encounter_stage.gd
 res://src/models/encounters/encounter_text_stage.gd
+res://src/overworld/Overworld.tscn
+res://src/overworld/EncounterPopup.tscn
+res://src/overworld/OverworldMap.gd

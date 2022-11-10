@@ -4,16 +4,49 @@
 [ext_resource type="Script" path="res://src/overworld/EncounterPopup.gd" id="2_heysb"]
 
 [node name="Encounter" type="PopupPanel"]
-size = Vector2i(256, 196)
+size = Vector2i(376, 256)
 visible = true
 always_on_top = true
 theme = ExtResource("1_lhqhk")
 script = ExtResource("2_heysb")
 
-[node name="Contents" type="VBoxContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="."]
+custom_minimum_size = Vector2i(240, 180)
 offset_left = 8.0
 offset_top = 8.0
-offset_right = 248.0
-offset_bottom = 188.0
+offset_right = 368.0
+offset_bottom = 248.0
+size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_right = 6
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer"]
+layout_mode = 2
+offset_left = 6.0
+offset_right = 354.0
+offset_bottom = 240.0
+follow_focus = true
+horizontal_scroll_mode = 0
+
+[node name="Contents" type="VBoxContainer" parent="MarginContainer/ScrollContainer"]
+layout_mode = 2
+offset_right = 348.0
+offset_bottom = 85.0
+size_flags_horizontal = 3
 alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/ScrollContainer/Contents"]
+layout_mode = 2
+offset_right = 348.0
+offset_bottom = 57.0
+text = "Test test test Test test testTest test testTest test testTest test testTest test testTest test testTest test testTest test test"
+autowrap_mode = 3
+
+[node name="Button" type="Button" parent="MarginContainer/ScrollContainer/Contents"]
+layout_mode = 2
+offset_top = 61.0
+offset_right = 348.0
+offset_bottom = 85.0
+text = "Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test "
+text_overrun_behavior = 4

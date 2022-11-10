@@ -1,9 +1,10 @@
-ScrollContainer
-VBoxContainer
+Node2D
 Button
 Label
+ScrollContainer
+MarginContainer
+VBoxContainer
 PopupPanel
-Node2D
 Node
 AnimatedSprite2D
 TileMap

@@ -1,40 +1,31 @@
 extends PopupPanel
 
-var encounter: Encounter
-
 func _ready():
 	popup_window = false
+	exclusive = true
+	transient = false
+	popup_centered()
+	$MarginContainer/ScrollContainer/Contents/Button.grab_focus()
 
-func set_encounter(_encounter: Encounter) -> void:
-	encounter = _encounter
-	set_contents_from_encounter()
-	encounter.stage_changed.connect(set_contents_from_encounter)
-	encounter.end_encounter.connect(end)
-
-func set_contents_from_encounter() -> void:
-	for child in $Contents.get_children():
-		child.queue_free()
-		PopupPanel
+func set_encounter_stage(encounter: Encounter) -> void:
+	var stage = encounter.get_current_stage()
+	$MarginContainer/ScrollContainer/Contents/Label.text = stage.description
 	
-	var stage: EncounterStage = encounter.get_current_stage()
-	var text_stage = stage as EncounterTextStage
-	if text_stage:
-		add_text_stage_contents(text_stage)
+	# Can't get the focus to work unless I handle the first button like this, very annoying
+	var first_option = stage.options.front()
+	var first_button: Button = $MarginContainer/ScrollContainer/Contents/Button
+	first_button.text = first_option.text
+	first_button.pressed.connect(func(): first_option.select(encounter))
+	first_button.grab_focus()
+	
+	for i in range(1, stage.options.size()):
+		var option = stage.options[i]
+		var button = first_button.duplicate()
+		button.text = option.text
+		button.pressed.connect(func(): option.select(encounter))
+		$MarginContainer/ScrollContainer/Contents.add_child(button)
 	
 	child_controls_changed()
 
-func end() -> void:
-	hide()
-	queue_free()
 
-func add_text_stage_contents(stage: EncounterTextStage) -> void:
-	var label = Label.new()
-	label.text = stage.description
-	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	$Contents.add_child(label)
-	
-	for option in stage.options:
-		var button = Button.new()
-		button.text = option.text
-		button.pressed.connect(func(): option.select(encounter))
-		$Contents.add_child(button)
+
