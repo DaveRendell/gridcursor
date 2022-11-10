@@ -1,10 +1,6 @@
+res://src/overworld/EncounterPopup.tscn
 res://src/ui/theme.tres
 res://src/overworld/party_marker_frames.tres
-res://src/overworld/EncounterPopup.gd
-res://src/overworld/EncounterDisplay.tscn
-res://src/overworld/EncounterDisplay.gd
-res://src/models/encounters/encounter_stage.gd
-res://src/models/encounters/encounter_text_stage.gd
 res://src/overworld/Overworld.tscn
-res://src/overworld/EncounterPopup.tscn
-res://src/overworld/OverworldMap.gd
+res://src/overworld/EncounterDisplay.tscn
+res://src/overworld/EncounterPopup.gd
