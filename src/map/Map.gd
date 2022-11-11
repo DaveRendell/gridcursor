@@ -78,6 +78,7 @@ func move_cursor(dx: int, dy: int):
 	if state == GridState.UNIT_CONTROLLED:
 		emit_signal("cursor_move", self)
 	$Cursor.position = geometry.cell_centre_position(cursor)
+	print($Cursor/Camera.position)
 
 func _input(event):
 	if state == GridState.NOTHING_SELECTED or state == GridState.UNIT_CONTROLLED:
@@ -134,7 +135,7 @@ func setup_camera():
 	var height = grid_size * grid_height
 	var h_margin = max(0, (view_size.x / 3 - map_size.x) / 2)
 	var v_margin = max(0, (view_size.y / 3 - map_size.y) / 2)
-	var camera = $Cursor/Camera
+	var camera: Camera2D = $Cursor/Camera
 	camera.limit_left = -h_margin
 	camera.limit_right = width + h_margin
 	camera.limit_top = -v_margin
@@ -146,8 +147,7 @@ func setup_camera():
 	camera.drag_right_margin = h_drag_margin
 	camera.drag_top_margin = v_drag_margin
 	camera.drag_bottom_margin = v_drag_margin
-	camera.position = Vector2(grid_size / 2, grid_size / 2)
-
+	camera.current = true
 func add_highlight(coordinate: Vector2i, colour: Color):
 	highlights.set_value(coordinate, colour)
 	queue_redraw()

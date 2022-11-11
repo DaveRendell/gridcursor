@@ -5,18 +5,12 @@ var teams = 2
 var map_scene = preload("res://src/battle/battlemaps/ForestBlobAttack.tscn")
 var map: BattleMap
 
-var party: Party
-
 func _ready():
-	setup_map()
+	setup_map(map_scene, Party.new())
 
-func setup_map() -> void:
+func setup_map(map_scene: PackedScene, party: Party) -> void:
 	map = map_scene.instantiate()
-	party = Party.new()
 	var mobs = CoordinateMap.new(map.grid_width, map.grid_height)
-	
-
-	
 	map.add_party(party)
 	
 	add_child(map)

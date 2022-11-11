@@ -13,5 +13,6 @@ func update_display():
 		child.queue_free()
 	
 	var stage = encounter.get_current_stage()
+	var viewport_rect = get_viewport_rect()
 	var rendered_stage = stage.render(encounter)
 	add_child(rendered_stage)

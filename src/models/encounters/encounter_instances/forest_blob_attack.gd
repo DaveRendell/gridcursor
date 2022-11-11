@@ -1,3 +1,5 @@
+const BATTLE_MAP = preload("res://src/battle/battlemaps/ForestBlobAttack.tscn")
+
 static func encounter() -> Encounter:
 	return Encounter.new({
 		"start": EncounterTextStage.new(
@@ -7,12 +9,7 @@ static func encounter() -> Encounter:
 				ChangeStageOption.new("Flee before they spot you", "flee")
 			] as Array[EncounterOption]
 		),
-		"fight": EncounterTextStage.new(
-			"QQ Fight the blobs",
-			[
-				ChangeStageOption.new("Wow, you won", "post_victory")
-			] as Array[EncounterOption]
-		),
+		"fight": EncounterBattleStage.new(BATTLE_MAP, "post_victory"),
 		"post_victory": EncounterTextStage.new(
 			"Blobbers defeated, you continue on your quest",
 			[

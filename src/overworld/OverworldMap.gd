@@ -55,6 +55,7 @@ func check_for_encounters(party: Party, cell: Vector2i) -> void:
 		
 		var forest_blob_attack = preload("res://src/models/encounters/encounter_instances/forest_blob_attack.gd")
 		var encounter = forest_blob_attack.encounter()
+		encounter.party = party
 		encounter_display.set_encounter(encounter)
 		
 		$PopupLayer.add_child(encounter_display)
