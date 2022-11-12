@@ -11,15 +11,14 @@ func _init(_battle_map_scene: PackedScene, _victory_stage: String):
 
 func render(encounter: Encounter):
 	var container = SubViewportContainer.new()
-	var battle_viewport = Viewport.new()
+	var battle_viewport = SubViewport.new()
 	var battle_scene = BATTLE_SCENE.instantiate()
 	battle_viewport.add_child(battle_scene)
 	container.add_child(battle_viewport)
 	
-	
-	
-	battle_viewport.size = DisplayServer.window_get_size()
-	container.size = DisplayServer.window_get_size()
+	battle_viewport.size = DisplayServer.window_get_size() / 3
+	container.size = DisplayServer.window_get_size() / 3
+	container.stretch = true
 	battle_scene.setup_map(battle_map_scene, encounter.party)
 	
 	

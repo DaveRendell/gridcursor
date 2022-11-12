@@ -6,7 +6,8 @@ var map_scene = preload("res://src/battle/battlemaps/ForestBlobAttack.tscn")
 var map: BattleMap
 
 func _ready():
-	setup_map(map_scene, Party.new())
+	#setup_map(map_scene, Party.new())
+	pass
 
 func setup_map(map_scene: PackedScene, party: Party) -> void:
 	map = map_scene.instantiate()

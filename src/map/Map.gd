@@ -48,6 +48,7 @@ func set_state_nothing_selected() -> void:
 	state = GridState.NOTHING_SELECTED
 	
 	$Cursor.visible = true
+	$Cursor/Camera.current = true
 	clickable_cells = []
 
 func set_state_in_menu() -> void:
@@ -55,6 +56,7 @@ func set_state_in_menu() -> void:
 	state = GridState.IN_MENU
 	
 	$Cursor.visible = false
+	$Cursor/Camera.current = false
 	clickable_cells = []
 
 func set_state_unit_controlled(clickable_cells: Array[Vector2i]) -> void:
@@ -62,6 +64,7 @@ func set_state_unit_controlled(clickable_cells: Array[Vector2i]) -> void:
 	state = GridState.UNIT_CONTROLLED
 	
 	$Cursor.visible = true
+	$Cursor/Camera.current = true
 	self.clickable_cells = clickable_cells
 
 func set_position_to_mouse_cursor() -> void:
@@ -131,23 +134,23 @@ func scroll_cursor():
 func setup_camera():
 	var map_size = geometry.map_dimensions()
 	var view_size = get_viewport().size
-	var width = grid_size * grid_width
-	var height = grid_size * grid_height
-	var h_margin = max(0, (view_size.x / 3 - map_size.x) / 2)
-	var v_margin = max(0, (view_size.y / 3 - map_size.y) / 2)
+	var transform = get_viewport().get_final_transform()
+	var h_margin = max(0, (view_size.x / transform.x.x - map_size.x) / 2)
+	var v_margin = max(0, (view_size.y / transform.y.y - map_size.y) / 2)
 	var camera: Camera2D = $Cursor/Camera
 	camera.limit_left = -h_margin
-	camera.limit_right = width + h_margin
+	camera.limit_right = map_size.x + h_margin
 	camera.limit_top = -v_margin
-	camera.limit_bottom = height + v_margin
+	camera.limit_bottom = map_size.y + v_margin
 	
-	var h_drag_margin = 1 - (12.0 * grid_size / view_size.x)
-	var v_drag_margin = 1 - (12.0 * grid_size / view_size.y)
+	var h_drag_margin = 1 - (4.0 * transform.x.x * grid_size / view_size.x)
+	var v_drag_margin = 1 - (4.0 * transform.y.y * grid_size / view_size.y)
 	camera.drag_left_margin = h_drag_margin
 	camera.drag_right_margin = h_drag_margin
 	camera.drag_top_margin = v_drag_margin
 	camera.drag_bottom_margin = v_drag_margin
 	camera.current = true
+	
 func add_highlight(coordinate: Vector2i, colour: Color):
 	highlights.set_value(coordinate, colour)
 	queue_redraw()
