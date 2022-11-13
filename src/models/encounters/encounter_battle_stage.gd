@@ -16,8 +16,8 @@ func render(encounter: Encounter):
 	battle_viewport.add_child(battle_scene)
 	container.add_child(battle_viewport)
 	
-	battle_viewport.size = DisplayServer.window_get_size() / 3
-	container.size = DisplayServer.window_get_size() / 3
+	battle_viewport.size = DisplayServer.window_get_size() / 2
+	container.size = DisplayServer.window_get_size() / 2
 	container.stretch = true
 	battle_scene.setup_map(battle_map_scene, encounter.party)
 	

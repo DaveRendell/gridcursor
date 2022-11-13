@@ -61,6 +61,7 @@ static func slime_sprite(sprite_sheet: Texture2D) -> AnimatedSprite2D:
 
 	sprite.frames = frames
 	sprite.play()
+	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	return sprite
 
 static func add_animation(
