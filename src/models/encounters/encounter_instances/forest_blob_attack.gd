@@ -9,9 +9,18 @@ static func encounter() -> Encounter:
 				ChangeStageOption.new("Flee before they spot you", "flee")
 			] as Array[EncounterOption]
 		),
-		"fight": EncounterBattleStage.new(BATTLE_MAP, "post_victory"),
+		"fight": EncounterBattleStage.new(BATTLE_MAP, {
+			E.BattleResult.VICTORY: "post_victory",
+			E.BattleResult.TPK: "post_loss",
+		}),
 		"post_victory": EncounterTextStage.new(
 			"Blobbers defeated, you continue on your quest",
+			[
+				EndEncounterOption.new("Continue")
+			] as Array[EncounterOption]
+		),
+		"post_loss": EncounterTextStage.new(
+			"Oh no, you're a scrub.",
 			[
 				EndEncounterOption.new("Continue")
 			] as Array[EncounterOption]

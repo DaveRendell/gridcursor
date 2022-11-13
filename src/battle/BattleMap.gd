@@ -3,6 +3,7 @@ class_name BattleMap extends "res://src/map/Map.gd"
 var new_unit = preload("res://src/battle/Unit.tscn")
 
 signal next_turn
+signal battle_finished(result: E.BattleResult)
 
 var terrain_grid: CoordinateMap = CoordinateMap.new(grid_width, grid_height, [], 0)
 var units: CoordinateMap = CoordinateMap.new(grid_width, grid_height)
@@ -131,21 +132,12 @@ func check_win_condition():
 				player_unit_count += 1
 			else:
 				enemy_unit_count += 1
+	
 	if player_unit_count == 0:
 		set_state_in_menu()
-		var tween = create_tween()
-		tween.tween_property(self, "modulate", Color.BLACK, 1.0)
-		await tween.finished
-
-		var tpk_popup = tpk_popup_scene.instantiate()
-		$PopupLayer.add_child(tpk_popup)
-		tpk_popup.popup_centered()
-		
-		print("TPK")
-	elif enemy_unit_count == 0:
+		await get_tree().create_timer(1.0).timeout
+		battle_finished.emit(E.BattleResult.TPK)
+	if enemy_unit_count == 0:
 		set_state_in_menu()
-		var victory_popup = victory_screen_scene.instantiate()
-		$PopupLayer.add_child(victory_popup)
-		victory_popup.popup_centered()
-		
-		print("A winner is you")
+		await get_tree().create_timer(1.0).timeout
+		battle_finished.emit(E.BattleResult.VICTORY)

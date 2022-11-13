@@ -1,13 +1,10 @@
-res://src/overworld/Overworld.tscn
+res://src/overworld/OverworldMap.tscn
 res://src/ui/theme.tres
 res://src/overworld/party_marker_frames.tres
 res://src/battle/computer_player.gd
+res://src/overworld/Overworld.tscn
 res://src/overworld/EncounterPopup.tscn
 res://src/overworld/EncounterDisplay.tscn
 res://src/battle/Battle.tscn
 res://src/battle/BattleMap.tscn
 res://src/map/Map.tscn
-res://src/overworld/OverworldMap.tscn
-res://src/map/Map.gd
-res://src/battle/Battle.gd
-res://src/models/encounters/encounter_battle_stage.gd

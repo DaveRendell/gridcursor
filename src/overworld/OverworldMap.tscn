@@ -1,18 +1,31 @@
-[gd_scene load_steps=6 format=3 uid="uid://cp183y0wsd47l"]
+[gd_scene load_steps=8 format=3 uid="uid://cp183y0wsd47l"]
 
 [ext_resource type="PackedScene" uid="uid://tletdquhrnvm" path="res://src/map/Map.tscn" id="1_jg85r"]
 [ext_resource type="Script" path="res://src/overworld/OverworldMap.gd" id="2_off4c"]
 [ext_resource type="Texture2D" uid="uid://ca6hofbq3eh2g" path="res://img/overworld/hex_template.png" id="3_kh7dy"]
+[ext_resource type="Texture2D" uid="uid://csfidl4ip8pje" path="res://img/overworld/hex_terrain.png" id="4_bw7y7"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_aicf5"]
 texture = ExtResource("3_kh7dy")
 texture_region_size = Vector2i(32, 48)
 0:0/0 = 0
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nol76"]
+texture = ExtResource("4_bw7y7")
+texture_region_size = Vector2i(32, 48)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+
 [sub_resource type="TileSet" id="TileSet_4yscl"]
 tile_shape = 3
 tile_size = Vector2i(32, 36)
 sources/0 = SubResource("TileSetAtlasSource_aicf5")
+sources/1 = SubResource("TileSetAtlasSource_nol76")
 
 [node name="Map" instance=ExtResource("1_jg85r")]
 script = ExtResource("2_off4c")
@@ -24,4 +37,4 @@ show_behind_parent = true
 show_behind_parent = true
 tile_set = SubResource("TileSet_4yscl")
 format = 2
-layer_0/tile_data = PackedInt32Array(0, 0, 0, 65536, 0, 0, 2, 0, 0, 131072, 0, 0, 196608, 0, 0, 262144, 0, 0, 327680, 0, 0, 393216, 0, 0, 65538, 0, 0, 131074, 0, 0, 196610, 0, 0, 262146, 0, 0, 327682, 0, 0, 393218, 0, 0, 1, 0, 0, 3, 0, 0, 4, 0, 0, 5, 0, 0, 6, 0, 0, 65537, 0, 0, 65539, 0, 0, 65540, 0, 0, 65541, 0, 0, 65542, 0, 0, 131078, 0, 0, 196614, 0, 0, 262150, 0, 0, 327686, 0, 0, 393222, 0, 0, 393217, 0, 0, 393219, 0, 0, 393220, 0, 0, 393221, 0, 0, 327685, 0, 0, 196613, 0, 0, 131077, 0, 0, 196612, 0, 0, 262149, 0, 0, 327684, 0, 0, 327683, 0, 0, 262147, 0, 0, 196611, 0, 0, 262148, 0, 0, 131075, 0, 0, 131076, 0, 0, 131073, 0, 0, 196609, 0, 0, 262145, 0, 0, 327681, 0, 0)
+layer_0/tile_data = PackedInt32Array(0, 65537, 0, 65536, 65537, 0, 2, 65537, 0, 131072, 65537, 0, 196608, 65537, 0, 262144, 65537, 0, 327680, 393217, 0, 393216, 393217, 0, 65538, 65537, 0, 131074, 65537, 0, 196610, 65537, 0, 262146, 65537, 0, 327682, 65537, 0, 393218, 393217, 0, 1, 65537, 0, 3, 65537, 0, 4, 65537, 0, 5, 65537, 0, 6, 65537, 0, 65537, 65537, 0, 65539, 65537, 0, 65540, 65537, 0, 65541, 65537, 0, 65542, 65537, 0, 131078, 196609, 0, 196614, 196609, 0, 262150, 262145, 0, 327686, 262145, 0, 393222, 262145, 0, 393217, 393217, 0, 393219, 393217, 0, 393220, 65537, 0, 393221, 65537, 0, 327685, 196609, 0, 196613, 262145, 0, 131077, 262145, 0, 196612, 196609, 0, 262149, 262145, 0, 327684, 131073, 0, 327683, 65537, 0, 262147, 131073, 0, 196611, 131073, 0, 262148, 131073, 0, 131075, 65537, 0, 131076, 131073, 0, 131073, 327681, 0, 196609, 65537, 0, 262145, 65537, 0, 327681, 393217, 0)

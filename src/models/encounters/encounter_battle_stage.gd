@@ -3,11 +3,11 @@ class_name EncounterBattleStage extends EncounterStage
 const BATTLE_SCENE = preload("res://src/battle/Battle.tscn")
 
 var battle_map_scene: PackedScene
-var victory_stage: String
+var next_stages: Dictionary
 
-func _init(_battle_map_scene: PackedScene, _victory_stage: String):
+func _init(_battle_map_scene: PackedScene, _next_stages: Dictionary):
 	battle_map_scene = _battle_map_scene
-	victory_stage = _victory_stage
+	next_stages = _next_stages
 
 func render(encounter: Encounter):
 	var container = SubViewportContainer.new()
@@ -21,7 +21,8 @@ func render(encounter: Encounter):
 	container.stretch = true
 	battle_scene.setup_map(battle_map_scene, encounter.party)
 	
-	
-	# TODO connect to battle victory signal, change stage
+	# TODO handle loss
+	battle_scene.map.battle_finished.connect(func(battle_result):
+		encounter.set_stage(next_stages[battle_result]))
 	
 	return container
