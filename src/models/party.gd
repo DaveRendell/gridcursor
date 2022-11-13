@@ -5,6 +5,8 @@ const FORMATION_DIMENSIONS = Vector2i(3, 3)
 var characters: Array[Character]
 var formation: CoordinateMap
 
+var marches_remaining: int = 4
+
 func _init():
 	# Hardcoded for now
 	var blue_soldier_sprite_sheet = preload("res://img/characters/Soldier-Blue.png")

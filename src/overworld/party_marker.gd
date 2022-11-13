@@ -24,8 +24,13 @@ func set_state_selected(map: Map) -> void:
 	print("Party state: Selected")
 	state = PartyMarkerState.SELECTED
 	var adjacent_cells = map.geometry.adjacent_cells(coordinate())
-	map.add_highlights(adjacent_cells, Color.LIGHT_BLUE)
-	map.set_state_unit_controlled(adjacent_cells)
+	var valid_movement_cells = adjacent_cells.filter(func(cell):
+		var terrain = map.terrain.at(cell)
+		var movement_cost = terrain.foot_movement_cost
+		return movement_cost >=0 and movement_cost <= party.marches_remaining)
+	
+	map.add_highlights(valid_movement_cells, Color.LIGHT_BLUE)
+	map.set_state_unit_controlled(valid_movement_cells)
 	var result = await map.click
 	
 	if typeof(result) == TYPE_STRING and result == "cancel":
@@ -34,10 +39,16 @@ func set_state_selected(map: Map) -> void:
 		var clicked_cell = map.cursor
 		map.clear_highlights()
 		await animate_movement_to_cell(map, clicked_cell)
+		var terrain = map.terrain.at(clicked_cell)
+		party.marches_remaining -= terrain.foot_movement_cost
 		update_position(map, clicked_cell)
 		
 		set_state_unselected(map)
 		await map.check_for_encounters(party, clicked_cell)
+		
+		if party.marches_remaining <= 0:
+			await map.nighttime_encounter(party, clicked_cell)
+			party.marches_remaining = 4
 		
 func update_position(map: Map, cell: Vector2i):
 	x = cell.x

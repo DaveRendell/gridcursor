@@ -3,6 +3,7 @@ class_name OverworldMap extends Map
 var encounter_scene = preload("res://src/overworld/EncounterDisplay.tscn")
 
 var parties: CoordinateMap
+var terrain: CoordinateMap
 
 func _ready():
 	grid_size = 32
@@ -12,6 +13,7 @@ func _ready():
 	super()
 	
 	parties = CoordinateMap.new(grid_width, grid_height)
+	setup_terrain()
 
 func draw_grid():
 	# Set background dimensions
@@ -39,7 +41,15 @@ func add_party(party: Party, coordinate: Vector2i) -> void:
 	party_marker.y = coordinate.y
 	$GridNodes.add_child(party_marker)
 	update_parties()
-	
+
+func setup_terrain():
+	terrain = CoordinateMap.new(grid_width, grid_height)
+	for i in grid_width:
+		for j in grid_height:
+			var terrain_id = $TileMap.get_cell_atlas_coords(0, Vector2i(i, j)).x
+			terrain.set_value(Vector2i(i, j), OverworldTerrain.get_terrain(terrain_id))
+
+
 func check_for_encounters(party: Party, cell: Vector2i) -> void:
 	var rng = RandomNumberGenerator.new()
 	rng.randomize()
@@ -49,22 +59,28 @@ func check_for_encounters(party: Party, cell: Vector2i) -> void:
 		rolls.append(rng.randi_range(1, 6))
 	print("Random encounter rolls: %s" % str(rolls))
 	
-	if true:#rolls.any(func(result): return result == 6):
+	if rolls.any(func(result): return result == 6):
 		print("Random encounter happens")
-		var encounter_display = encounter_scene.instantiate()
-		
 		var forest_blob_attack = preload("res://src/models/encounters/encounter_instances/forest_blob_attack.gd")
-		var encounter = forest_blob_attack.encounter()
-		encounter.party = party
-		encounter_display.set_encounter(encounter)
-		
-		$PopupLayer.add_child(encounter_display)
-
-		set_state_in_menu()
-		await encounter.end_encounter
-		set_state_nothing_selected()
+		await run_encounter(party, forest_blob_attack.encounter())
 	else:
 		print("No encounter happens")
+
+func nighttime_encounter(party: Party, cell: Vector2i) -> void:
+	print("Random encounter happens")
+	var night_encounter = preload("res://src/models/encounters/encounter_instances/night_encounter.gd")
+	await run_encounter(party, night_encounter.encounter())
+
+func run_encounter(party: Party, encounter: Encounter) -> void:
+	var encounter_display = encounter_scene.instantiate()
+	encounter.party = party
+	encounter_display.set_encounter(encounter)
 	
+	$PopupLayer.add_child(encounter_display)
+
+	set_state_in_menu()
+	await encounter.end_encounter
+	set_state_nothing_selected()
+
 func update_parties():
 	parties = CoordinateMap.new(grid_width, grid_height, $GridNodes.get_children(), null)
