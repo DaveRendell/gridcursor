@@ -1,5 +1,8 @@
 extends Window
 
+const FAIL_COLOUR = Color.LIGHT_CORAL
+const SUCCESS_COLOR = Color.LIGHT_GREEN
+
 func _ready():
 	popup_window = false
 	exclusive = true
@@ -9,7 +12,20 @@ func _ready():
 
 func set_encounter_stage(encounter: Encounter) -> void:
 	var stage = encounter.get_current_stage()
-	$Panel/ScrollContainer/Contents/Label.text = stage.description
+	if stage.roll_result:
+		var roll_result = stage.roll_result
+		var roll_label = $Panel/ScrollContainer/Contents/RollResult as Label
+		if roll_result.success:
+			roll_label.text = "Success"
+			roll_label.add_theme_color_override("font_color", SUCCESS_COLOR)
+		else:
+			roll_label.text = "Failure"
+			roll_label.add_theme_color_override("font_color", FAIL_COLOUR)
+		# TODO: Add party roll results here
+	else:
+		$Panel/ScrollContainer/Contents/RollResult.queue_free()
+	
+	$Panel/ScrollContainer/Contents/Description.text = stage.description
 	
 	# Can't get the focus to work unless I handle the first button like this, very annoying
 	var first_option = stage.options.front()

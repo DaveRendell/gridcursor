@@ -32,19 +32,26 @@ horizontal_scroll_mode = 0
 
 [node name="Contents" type="VBoxContainer" parent="Panel/ScrollContainer"]
 offset_right = 344.0
-offset_bottom = 85.0
+offset_bottom = 108.0
 size_flags_horizontal = 3
 alignment = 1
 
-[node name="Label" type="Label" parent="Panel/ScrollContainer/Contents"]
+[node name="RollResult" type="Label" parent="Panel/ScrollContainer/Contents"]
 offset_right = 344.0
-offset_bottom = 57.0
+offset_bottom = 19.0
+theme_override_colors/font_color = Color(1, 0.513726, 0.423529, 1)
+text = "Failure: rolled a 5"
+
+[node name="Description" type="Label" parent="Panel/ScrollContainer/Contents"]
+offset_top = 23.0
+offset_right = 344.0
+offset_bottom = 80.0
 text = "Test test test Test test testTest test testTest test testTest test testTest test testTest test testTest test testTest test test"
 autowrap_mode = 3
 
 [node name="Button" type="Button" parent="Panel/ScrollContainer/Contents"]
-offset_top = 61.0
+offset_top = 84.0
 offset_right = 344.0
-offset_bottom = 85.0
+offset_bottom = 108.0
 text = "Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test "
 text_overrun_behavior = 4

@@ -16,3 +16,6 @@ res://src/battle/Unit.gd
 res://src/battle/BattleMap.gd
 res://src/models/puny_characters_sprite.gd
 res://src/overworld/OverworldMap.gd
+res://src/overworld/EncounterPopup.gd
+res://src/models/encounters/encounter_stage.gd
+res://src/models/encounters/option_types/change_stage_option.gd
