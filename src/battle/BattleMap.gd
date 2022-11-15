@@ -54,7 +54,7 @@ func set_terrain_types() -> void:
 		terrain_grid.set_value(coordinate, terrain_id)
 
 func click_empty_cell():
-	var popup_menu = battle_menu_scene.instantiate()
+	var popup_menu = simple_menu_scene.instantiate()
 		
 	var options = ["End turn", "Cancel"]
 	for i in options.size():

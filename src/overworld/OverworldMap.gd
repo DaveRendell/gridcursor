@@ -1,6 +1,7 @@
 class_name OverworldMap extends Map
 
 var encounter_scene = preload("res://src/overworld/EncounterDisplay.tscn")
+var party_marker_scene = preload("res://src/overworld/party_marker.tscn")
 
 var parties: CoordinateMap
 var terrain: CoordinateMap
@@ -34,7 +35,7 @@ func draw_grid():
 			add_child(line)
 			
 func add_party(party: Party, coordinate: Vector2i) -> void:
-	var party_marker_scene = preload("res://src/overworld/party_marker.tscn")
+	var party_marker_scene = load("res://src/overworld/party_marker.tscn")
 	var party_marker = party_marker_scene.instantiate()
 	party_marker.from_party(party)
 	party_marker.x = coordinate.x

@@ -9,7 +9,7 @@ const attack_option_color = Color.RED
 @export var movement_type = "foot"
 
 @export var team = 0
-var battle_menu_scene = preload("res://src/ui/BattleMenu.tscn")
+var simple_menu_scene = preload("res://src/ui/SimpleMenu.tscn")
 
 enum UnitState {
 	UNSELECTED,
@@ -121,7 +121,7 @@ func set_state_action_select(map: Map, path: Array[Vector2i]):
 	
 	var current_attack_options = valid_attacks(map, new_location)
 	
-	var popup_menu = battle_menu_scene.instantiate()
+	var popup_menu = simple_menu_scene.instantiate()
 	var options = ["Wait", "Cancel"]
 	if character.spells().size() > 0:
 		options.push_front("Spells")
@@ -170,7 +170,7 @@ func set_state_attack_confirm(map: Map, path: Array[Vector2i]):
 	var attacked_node = map.units.at(map.cursor)
 	
 	
-	var popup_menu = battle_menu_scene.instantiate()
+	var popup_menu = simple_menu_scene.instantiate()
 	for i in character.attacks().size():
 		var attack: Attack = character.attacks()[i]
 		var can_attack = false
@@ -199,7 +199,7 @@ func set_state_attack_confirm(map: Map, path: Array[Vector2i]):
 		set_state_done(map)	
 
 func set_state_spell_select(map: Map, path: Array[Vector2i]):
-	var popup_menu = battle_menu_scene.instantiate()
+	var popup_menu = simple_menu_scene.instantiate()
 	for i in character.spells().size():
 		var spell = character.spells()[i]
 		popup_menu.add_item(spell.display_name, i)

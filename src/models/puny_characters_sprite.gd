@@ -2,7 +2,6 @@ class_name PunyCharacterSprite
 
 # https://godotengine.org/qa/134445/how-to-add-frames-from-a-sprite-sheet-in-code
 static func character_sprite(sprite_sheet: Texture2D) -> AnimatedSprite2D:
-	sprite_sheet
 	var sprite = AnimatedSprite2D.new()
 	var frames = SpriteFrames.new()
 	

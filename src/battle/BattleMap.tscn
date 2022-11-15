@@ -5,6 +5,9 @@
 
 [node name="BattleMap" instance=ExtResource("1_qxfn3")]
 script = ExtResource("2_q5q2p")
+grid_size = null
+grid_width = null
+grid_height = null
 
 [node name="LocationData" type="Node2D" parent="." index="2"]
 show_behind_parent = true

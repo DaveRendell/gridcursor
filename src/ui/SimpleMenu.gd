@@ -1,4 +1,4 @@
-class_name BattleMenu extends PopupMenu
+class_name SimpleMenu extends PopupMenu
 
 
 func _ready():

@@ -28,9 +28,7 @@ var state = GridState.NOTHING_SELECTED
 
 var new_toast = preload("res://src/ui/Toast.tscn")
 var theme = preload("res://src/ui/theme.tres")
-var tpk_popup_scene = preload("res://src/battle/TPKPopup.tscn")
-var victory_screen_scene = preload("res://src/battle/VictoryScreen.tscn")
-var battle_menu_scene = preload("res://src/ui/BattleMenu.tscn")
+var simple_menu_scene = preload("res://src/ui/SimpleMenu.tscn")
 
 func _ready() -> void:
 	setup_camera()
@@ -183,7 +181,7 @@ func click_position(coordinate: Vector2i):
 func click_empty_cell():
 	pass
 
-func display_menu(popup_menu: BattleMenu) -> void:
+func display_menu(popup_menu: SimpleMenu) -> void:
 	popup_menu.set_focused_item(0)
 	set_state_in_menu()
 	

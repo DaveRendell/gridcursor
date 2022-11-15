@@ -8,10 +8,11 @@ res://src/battle/Battle.tscn
 res://src/battle/BattleMap.tscn
 res://src/map/Map.tscn
 res://src/overworld/OverworldMap.tscn
-res://src/models/encounters/encounter_battle_stage.gd
-res://src/models/puny_characters_sprite.gd
-res://src/models/encounters/encounter_instances/night_encounter.gd
-res://src/models/party.gd
 res://src/overworld/party_marker.gd
+res://src/overworld/party_marker.tscn
+res://src/map/Map.gd
+res://src/ui/SimpleMenu.gd
+res://src/battle/Unit.gd
+res://src/battle/BattleMap.gd
+res://src/models/puny_characters_sprite.gd
 res://src/overworld/OverworldMap.gd
-res://src/overworld/overworld_terrain.gd

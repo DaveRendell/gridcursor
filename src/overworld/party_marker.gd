@@ -1,5 +1,7 @@
 extends MapMarker
 
+var simple_menu_scene = preload("res://src/ui/SimpleMenu.tscn")
+
 var party: Party
 
 enum PartyMarkerState {
@@ -27,7 +29,9 @@ func set_state_selected(map: Map) -> void:
 	var valid_movement_cells = adjacent_cells.filter(func(cell):
 		var terrain = map.terrain.at(cell)
 		var movement_cost = terrain.foot_movement_cost
-		return movement_cost >=0 and movement_cost <= party.marches_remaining)
+		return movement_cost >= 0 and movement_cost <= party.marches_remaining)
+	
+	valid_movement_cells.append(coordinate())
 	
 	map.add_highlights(valid_movement_cells, Color.LIGHT_BLUE)
 	map.set_state_unit_controlled(valid_movement_cells)
@@ -35,6 +39,23 @@ func set_state_selected(map: Map) -> void:
 	
 	if typeof(result) == TYPE_STRING and result == "cancel":
 		set_state_unselected(map)
+	elif map.cursor == coordinate():
+		var popup_menu = simple_menu_scene.instantiate()
+		var options = ["Set-up camp", "Cancel"]
+		
+		for i in options.size():
+			popup_menu.add_item(options[i], i)
+		
+		map.display_menu(popup_menu)
+
+		var id = await popup_menu.id_pressed
+		var option = options[id]
+		
+		if option == "Cancel":
+			set_state_selected(map)
+		elif option == "Set-up camp":
+			await night(map)
+			set_state_unselected(map)
 	else:
 		var clicked_cell = map.cursor
 		map.clear_highlights()
@@ -47,9 +68,12 @@ func set_state_selected(map: Map) -> void:
 		await map.check_for_encounters(party, clicked_cell)
 		
 		if party.marches_remaining <= 0:
-			await map.nighttime_encounter(party, clicked_cell)
-			party.marches_remaining = 4
-		
+			night(map)
+
+func night(map: Map):
+	await map.nighttime_encounter(party, coordinate())
+	party.marches_remaining = 4
+
 func update_position(map: Map, cell: Vector2i):
 	x = cell.x
 	y = cell.y
