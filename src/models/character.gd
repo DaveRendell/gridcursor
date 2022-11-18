@@ -82,6 +82,14 @@ func spells() -> Array:
 			spells.append_array(item.get_spells())
 	return spells
 
+func roll_skill(stat: E.Stat, skills: Array[String] = [] as Array[String]) -> RollResult:
+	var rng = RandomNumberGenerator.new()
+	rng.randomize()
+	var d1 = rng.randi_range(1, 6)
+	var d2 = rng.randi_range(1, 6)
+	
+	return RollResult.new([d1, d2], stats[stat])
+
 func take_damage(damage: int) -> void:
 	hp = max(0, hp - damage)
 

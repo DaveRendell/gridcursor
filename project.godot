@@ -164,6 +164,11 @@ _global_script_classes=[{
 "language": &"GDScript",
 "path": "res://src/models/puny_characters_sprite.gd"
 }, {
+"base": "RefCounted",
+"class": &"RollResult",
+"language": &"GDScript",
+"path": "res://src/models/roll_result.gd"
+}, {
 "base": "Equipment",
 "class": &"Shield",
 "language": &"GDScript",
@@ -241,6 +246,7 @@ _global_script_class_icons={
 "OverworldTerrain": "",
 "Party": "",
 "PunyCharacterSprite": "",
+"RollResult": "",
 "Shield": "",
 "SimpleMenu": "",
 "Spell": "",
