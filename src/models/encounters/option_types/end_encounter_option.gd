@@ -1,4 +1,4 @@
-class_name EndEncounterOption extends EncounterOption
+class_name EndEncounterOption extends SingleRouteOption
 
 func _init(_text: String):
 	text = _text

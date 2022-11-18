@@ -8,12 +8,13 @@ func _ready():
 	exclusive = true
 	transient = false
 	popup_centered()
-	$Panel/ScrollContainer/Contents/Button.grab_focus()
+	
+	#$Panel/ScrollContainer/Contents/Button.grab_focus()
 
 func set_encounter_stage(encounter: Encounter) -> void:
 	var stage = encounter.get_current_stage()
-	if stage.roll_result:
-		var roll_result = stage.roll_result
+	if stage.roll_results:
+		var roll_result = stage.roll_results
 		var roll_label = $Panel/ScrollContainer/Contents/RollResult as Label
 		if roll_result.success:
 			roll_label.text = "Success"
@@ -34,12 +35,13 @@ func set_encounter_stage(encounter: Encounter) -> void:
 	first_button.pressed.connect(func(): first_option.select(encounter))
 	first_button.grab_focus()
 	
-	for i in range(1, stage.options.size()):
+	for i in range(0, stage.options.size()):
 		var option = stage.options[i]
-		var button = first_button.duplicate()
-		button.text = option.text
-		button.pressed.connect(func(): option.select(encounter))
+		var focus = i == 0
+		var button = option.render(encounter, focus)
 		$Panel/ScrollContainer/Contents.add_child(button)
+	
+	$Panel/ScrollContainer/Contents/Button.queue_free()
 	
 	child_controls_changed()
 
