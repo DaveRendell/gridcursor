@@ -23,11 +23,3 @@ func select(encounter: Encounter) -> void:
 	next_stage.roll_success = success
 	next_stage.roll_target = roll_target
 	encounter.set_stage(next_stage_id)
-
-func render(encounter: Encounter, focus: bool = false) -> Node:
-	var button = Button.new()
-	button.text = text
-	button.pressed.connect(func(): select(encounter))
-	if focus:
-		button.ready.connect(func(): button.grab_focus())
-	return button

@@ -9,7 +9,7 @@ static func encounter() -> Encounter:
 				ChangeStageOption.new("Flee before they spot you", "flee"),
 				AllMustPassRollOption.new(
 					"Hide (all must pass stealth check)",
-					E.Stat.PRECISION, ["stealth"], "stealth_success", "stealh_failure", 8),
+					E.Stat.PRECISION, ["stealth"], "stealth_success", "stealth_failure", 8),
 			] as Array[EncounterOption]
 		),
 		"fight": EncounterBattleStage.new(BATTLE_MAP, {
@@ -40,7 +40,7 @@ static func encounter() -> Encounter:
 				EndEncounterOption.new("Continue")
 			]
 		),
-		"stealh_failure": EncounterTextStage.new(
+		"stealth_failure": EncounterTextStage.new(
 			"As you scramble to find a hiding place, the squelching masses launch their attack",
 			[
 				ChangeStageOption.new("Fight!", "fight")

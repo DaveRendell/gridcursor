@@ -12,3 +12,5 @@ res://src/battle/computer_player.gd
 res://src/models/character.gd
 res://src/models/encounters/encounter_instances/forest_blob_attack.gd
 res://src/models/encounters/option_types/change_stage_option.gd
+res://src/models/encounters/option_types/pick_one_roll_option.gd
+res://src/overworld/party_marker_frames.tres
