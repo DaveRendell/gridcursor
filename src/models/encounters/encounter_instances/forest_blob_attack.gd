@@ -10,6 +10,9 @@ static func encounter() -> Encounter:
 				AllMustPassRollOption.new(
 					"Hide (all must pass stealth check)",
 					E.Stat.PRECISION, ["stealth"], "stealth_success", "stealth_failure", 8),
+				PickOneRollOption.new(
+					"Treat with the blobs (Pick a character to roll diplomacy)",
+					E.Stat.WIT, ["diplomacy"], "treat_success", "treat_failure", 10),
 			] as Array[EncounterOption]
 		),
 		"fight": EncounterBattleStage.new(BATTLE_MAP, {
@@ -46,4 +49,16 @@ static func encounter() -> Encounter:
 				ChangeStageOption.new("Fight!", "fight")
 			]
 		),
+		"treat_success": EncounterTextStage.new(
+			"After explaining the situation to the blobbers you part amicably",
+			[
+				EndEncounterOption.new("Continue")
+			]
+		),
+		"treat_failure": EncounterTextStage.new(
+			"The blobbers seem enraged at your attempts at diplomacy and move into attack",
+			[
+				ChangeStageOption.new("Fight!", "fight")
+			]
+		)
 	})	

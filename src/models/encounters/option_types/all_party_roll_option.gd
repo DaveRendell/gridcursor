@@ -13,7 +13,7 @@ func _init(
 func is_success(roll_results) -> bool:
 	return true
 
-func select(encounter: Encounter) -> void:
+func select(encounter: Encounter, node: Node) -> void:
 	var roll_results = encounter.party.characters.map(func(character):
 		return character.roll_skill(stat, skills))
 	var success = is_success(roll_results)

@@ -19,8 +19,10 @@ func set_encounter_stage(encounter: Encounter) -> void:
 		else:
 			roll_label.text = "Failure"
 			roll_label.add_theme_color_override("font_color", FAIL_COLOUR)
-		for i in stage.roll_results.size():
-			var roll_result = stage.roll_results[i]
+		var non_empty_roll_results = stage.roll_results.filter(func(r): return r != null)
+		for i in non_empty_roll_results.size():
+			var roll_result = non_empty_roll_results[i]
+			#if roll_result:
 			var character = encounter.party.characters[i]
 			var label = Label.new()
 			var result_text = "Success" if roll_result.total() >= stage.roll_target else "Failure"
@@ -33,19 +35,11 @@ func set_encounter_stage(encounter: Encounter) -> void:
 	else:
 		$Panel/ScrollContainer/Contents/RollResult.queue_free()
 	
-	$Panel/ScrollContainer/Contents/Description.text = stage.description
-	
-	# Can't get the focus to work unless I handle the first button like this, very annoying
-	var first_option = stage.options.front()
-	var first_button: Button = $Panel/ScrollContainer/Contents/Button
-	first_button.text = first_option.text
-	first_button.pressed.connect(func(): first_option.select(encounter))
-	first_button.grab_focus()
-	
+	$Panel/ScrollContainer/Contents/Description.text = stage.description	
 	for i in range(0, stage.options.size()):
 		var option = stage.options[i]
 		var focus = i == 0
-		var button = option.render(encounter, focus)
+		var button = option.render(encounter, self, focus)
 		$Panel/ScrollContainer/Contents.add_child(button)
 	
 	$Panel/ScrollContainer/Contents/Button.queue_free()

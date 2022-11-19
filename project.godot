@@ -49,7 +49,7 @@ _global_script_classes=[{
 "language": &"GDScript",
 "path": "res://src/models/mobs/blobber.gd"
 }, {
-"base": "SingleRouteOption",
+"base": "EncounterOption",
 "class": &"ChangeStageOption",
 "language": &"GDScript",
 "path": "res://src/models/encounters/option_types/change_stage_option.gd"
@@ -104,7 +104,7 @@ _global_script_classes=[{
 "language": &"GDScript",
 "path": "res://src/models/encounters/encounter_text_stage.gd"
 }, {
-"base": "SingleRouteOption",
+"base": "EncounterOption",
 "class": &"EndEncounterOption",
 "language": &"GDScript",
 "path": "res://src/models/encounters/option_types/end_encounter_option.gd"
@@ -204,11 +204,6 @@ _global_script_classes=[{
 "language": &"GDScript",
 "path": "res://src/ui/SimpleMenu.gd"
 }, {
-"base": "EncounterOption",
-"class": &"SingleRouteOption",
-"language": &"GDScript",
-"path": "res://src/models/encounters/option_types/single_route_option.gd"
-}, {
 "base": "RefCounted",
 "class": &"Spell",
 "language": &"GDScript",
@@ -284,7 +279,6 @@ _global_script_class_icons={
 "RollResult": "",
 "Shield": "",
 "SimpleMenu": "",
-"SingleRouteOption": "",
 "Spell": "",
 "SquareGeometry": "",
 "Staff": "",
