@@ -3,7 +3,7 @@ class_name RollResult
 var rolls: Array[int]
 var modifier: int
 
-func _init(_rolls: Array[int], _modifier: int):
+func _init(_rolls: Array, _modifier: int):
 	rolls = _rolls
 	modifier = _modifier
 	
@@ -25,3 +25,4 @@ func _to_string():
 	out += modifier
 	out += " = "
 	out += total()
+	return out

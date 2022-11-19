@@ -88,7 +88,9 @@ func roll_skill(stat: E.Stat, skills: Array[String] = [] as Array[String]) -> Ro
 	var d1 = rng.randi_range(1, 6)
 	var d2 = rng.randi_range(1, 6)
 	
-	return RollResult.new([d1, d2], stats[stat])
+	var result = RollResult.new([d1, d2], stats[stat])
+	print(display_name + " rolled " + str(result.total()))
+	return result
 
 func take_damage(damage: int) -> void:
 	hp = max(0, hp - damage)

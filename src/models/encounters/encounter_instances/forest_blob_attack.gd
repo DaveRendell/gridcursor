@@ -6,7 +6,10 @@ static func encounter() -> Encounter:
 			"You are trekking through the forest, when you hear the terrible squelching of approaching blobbers",
 			[
 				ChangeStageOption.new("Attack them while their guard is down!", "fight"),
-				ChangeStageOption.new("Flee before they spot you", "flee")
+				ChangeStageOption.new("Flee before they spot you", "flee"),
+				AllMustPassRollOption.new(
+					"Hide (all must pass stealth check)",
+					E.Stat.PRECISION, ["stealth"], "stealth_success", "stealh_failure", 6),
 			] as Array[EncounterOption]
 		),
 		"fight": EncounterBattleStage.new(BATTLE_MAP, {
@@ -30,5 +33,17 @@ static func encounter() -> Encounter:
 			[
 				EndEncounterOption.new("There is a quiet courage in a prudent retreat!")
 			] as Array[EncounterOption]
-		)
+		),
+		"stealth_success": EncounterTextStage.new(
+			"You hide in the underbrush, and the blobbers squelch by without noticing you",
+			[
+				EndEncounterOption.new("Continue")
+			]
+		),
+		"stealh_failure": EncounterTextStage.new(
+			"As you scramble to find a hiding place, the squelching masses launch their attack",
+			[
+				ChangeStageOption.new("Fight!", "fight")
+			]
+		),
 	})	

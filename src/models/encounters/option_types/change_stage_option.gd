@@ -7,7 +7,5 @@ func _init(_text: String, _stage: String):
 	stage = _stage
 
 func select(encounter: Encounter) -> void:
-	var next_stage = encounter.stages[stage] as EncounterStage # QQ, just for testing
-	next_stage.roll_results = {} # QQ, just for testing
 	encounter.set_stage(stage)
 

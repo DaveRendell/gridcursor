@@ -11,7 +11,7 @@ func _ready():
 
 func set_encounter_stage(encounter: Encounter) -> void:
 	var stage = encounter.get_current_stage()
-	if stage.roll_success is not null:
+	if stage.roll_results:
 		var roll_result = stage.roll_results
 		var roll_label = $Panel/ScrollContainer/Contents/RollResult as Label
 		if stage.roll_success:
