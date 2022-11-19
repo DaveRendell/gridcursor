@@ -9,6 +9,21 @@
 config_version=5
 
 _global_script_classes=[{
+"base": "AllPartyRollOption",
+"class": &"AllMustPassRollOption",
+"language": &"GDScript",
+"path": "res://src/models/encounters/option_types/all_must_pass_roll_option.gd"
+}, {
+"base": "RollOption",
+"class": &"AllPartyRollOption",
+"language": &"GDScript",
+"path": "res://src/models/encounters/option_types/all_party_roll_option.gd"
+}, {
+"base": "AllPartyRollOption",
+"class": &"AnyMustPassRollOption",
+"language": &"GDScript",
+"path": "res://src/models/encounters/option_types/any_must_pass_roll_option.gd"
+}, {
 "base": "Equipment",
 "class": &"Armour",
 "language": &"GDScript",
@@ -164,6 +179,11 @@ _global_script_classes=[{
 "language": &"GDScript",
 "path": "res://src/models/puny_characters_sprite.gd"
 }, {
+"base": "EncounterOption",
+"class": &"RollOption",
+"language": &"GDScript",
+"path": "res://src/models/encounters/option_types/roll_option.gd"
+}, {
 "base": "RefCounted",
 "class": &"RollResult",
 "language": &"GDScript",
@@ -220,6 +240,9 @@ _global_script_classes=[{
 "path": "res://src/models/weapon.gd"
 }]
 _global_script_class_icons={
+"AllMustPassRollOption": "",
+"AllPartyRollOption": "",
+"AnyMustPassRollOption": "",
 "Armour": "",
 "Attack": "",
 "BattleMap": "",
@@ -251,6 +274,7 @@ _global_script_class_icons={
 "OverworldTerrain": "",
 "Party": "",
 "PunyCharacterSprite": "",
+"RollOption": "",
 "RollResult": "",
 "Shield": "",
 "SimpleMenu": "",

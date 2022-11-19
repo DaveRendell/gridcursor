@@ -8,15 +8,13 @@ func _ready():
 	exclusive = true
 	transient = false
 	popup_centered()
-	
-	#$Panel/ScrollContainer/Contents/Button.grab_focus()
 
 func set_encounter_stage(encounter: Encounter) -> void:
 	var stage = encounter.get_current_stage()
-	if stage.roll_results:
+	if stage.roll_success is not null:
 		var roll_result = stage.roll_results
 		var roll_label = $Panel/ScrollContainer/Contents/RollResult as Label
-		if roll_result.success:
+		if stage.roll_success:
 			roll_label.text = "Success"
 			roll_label.add_theme_color_override("font_color", SUCCESS_COLOR)
 		else:

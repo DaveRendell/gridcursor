@@ -1,8 +1,10 @@
 res://src/overworld/EncounterDisplay.tscn
 res://src/ui/theme.tres
 res://src/overworld/EncounterPopup.gd
-res://src/models/encounters/encounter_option.gd
 res://src/overworld/EncounterPopup.tscn
-res://src/models/encounters/option_types/change_stage_option.gd
-res://src/models/encounters/option_types/end_encounter_option.gd
-res://src/models/encounters/option_types/single_route_option.gd
+res://src/models/encounters/option_types/roll_option.gd
+res://src/models/encounters/option_types/all_party_roll_option.gd
+res://src/models/encounters/encounter_stage.gd
+res://src/models/encounters/option_types/all_must_pass_roll_option.gd
+res://src/models/encounters/option_types/any_must_pass_roll_option.gd
+res://src/models/roll_result.gd

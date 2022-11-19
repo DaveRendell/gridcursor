@@ -14,3 +14,14 @@ func total() -> int:
 		out += roll
 	out += modifier
 	return out
+
+func _to_string():
+	var out = "("
+	for i in rolls.size():
+		out += rolls[i]
+		if i != rolls.size() - 1:
+			out += ","
+	out += " + "
+	out += modifier
+	out += " = "
+	out += total()
