@@ -12,7 +12,6 @@ func _ready():
 func set_encounter_stage(encounter: Encounter) -> void:
 	var stage = encounter.get_current_stage()
 	if stage.roll_results:
-		var roll_result = stage.roll_results
 		var roll_label = $Panel/ScrollContainer/Contents/RollResult as Label
 		if stage.roll_success:
 			roll_label.text = "Success"
@@ -20,7 +19,17 @@ func set_encounter_stage(encounter: Encounter) -> void:
 		else:
 			roll_label.text = "Failure"
 			roll_label.add_theme_color_override("font_color", FAIL_COLOUR)
-		# TODO: Add party roll results here
+		for i in stage.roll_results.size():
+			var roll_result = stage.roll_results[i]
+			var character = encounter.party.characters[i]
+			var label = Label.new()
+			var result_text = "Success" if roll_result.total() >= stage.roll_target else "Failure"
+			label.text = "%s: rolled %s (%s)" % [
+				character.display_name,
+				roll_result.total(),
+				result_text]
+			$Panel/ScrollContainer/Contents.add_child(label)
+			$Panel/ScrollContainer/Contents.move_child(label, i)
 	else:
 		$Panel/ScrollContainer/Contents/RollResult.queue_free()
 	

@@ -21,6 +21,7 @@ func select(encounter: Encounter) -> void:
 	var next_stage = encounter.stages[next_stage_id]
 	next_stage.roll_results = roll_results
 	next_stage.roll_success = success
+	next_stage.roll_target = roll_target
 	encounter.set_stage(next_stage_id)
 
 func render(encounter: Encounter, focus: bool = false) -> Node:
