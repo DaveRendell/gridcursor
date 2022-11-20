@@ -1,7 +1,0 @@
-res://src/battle/Unit.tscn
-res://src/ui/theme.tres
-res://src/overworld/party_marker_frames.tres
-res://src/battle/computer_player.gd
-res://src/battle/BattleMap.gd
-res://src/overworld/EncounterDisplay.tscn
-res://src/battle/Unit.gd
