@@ -26,7 +26,7 @@ func _init():
 		"Fire Rod",
 		3,
 		[Attack.new("Firebolt", 1, 4, [3], 3, "staff")],
-		[Teleport.new(), Fireball.new()]
+		[Teleport.new() as Spell, Fireball.new() as Spell]
 		)
 
 	var leather_armour = Armour.new("Leather armour", 5, 8)

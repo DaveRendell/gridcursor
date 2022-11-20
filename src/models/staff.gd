@@ -1,17 +1,21 @@
 class_name Staff
 extends Equipment
 
-var attacks: Array
-var spells: Array
-
-func _init(display_name: String,weight: int,attacks: Array,spells: Array):
-	super(display_name,weight)
-	self.attacks = attacks
-	self.spells = spells
-	self.equipable_slots = ["main_hand"]
+class StaffFeature extends Feature:
+	var staff_attacks: Array[Attack]
+	var staff_spells: Array[Spell]
 	
-func get_attacks() -> Array:
-	return attacks
+	func _init(_display_name: String, _attacks: Array[Attack], _spells: Array[Spell]):
+		staff_attacks = _attacks
+		staff_spells = _spells
+		super(_display_name)
+	
+	func attacks() -> Array[Attack]:
+		return staff_attacks
+	
+	func spells() -> Array[Spell]:
+		return staff_spells
 
-func get_spells() -> Array:
-	return spells
+func _init(_display_name: String, _weight: int, _attacks: Array[Attack], _spells: Array[Spell]):
+	self.equipable_slots = ["main_hand"]
+	super(_display_name, _weight, StaffFeature.new(_display_name, _attacks, _spells))

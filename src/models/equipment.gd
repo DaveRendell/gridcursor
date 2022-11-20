@@ -2,21 +2,12 @@ class_name Equipment
 extends Item
 
 var equipable_slots: Array = []
+var feature: Feature
 
 func _init(
-	display_name: String,
-	weight: int
+	_display_name: String,
+	_weight: int,
+	_feature: Feature
 ):
-	super(display_name, weight)
-
-func set_base_defence() -> int:
-	return 0
-
-func set_defence_boost() -> int:
-	return 0
-
-func get_attacks() -> Array:
-	return []
-
-func get_spells() -> Array:
-	return []
+	feature = _feature
+	super(_display_name, _weight)

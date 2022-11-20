@@ -1,16 +1,20 @@
 class_name Shield
 extends Equipment
 
-var defence_boost: int
+class ShieldFeature extends Feature:
+	var boost: int
+	
+	func _init(_display_name: String, _defence_boost: int):
+		boost = _defence_boost
+		super(_display_name)
+	
+	func defence_boost() -> int:
+		return boost
 
 func _init(
 	display_name: String,
 	weight: int,
 	defence_boost: int
 ):
-	super(display_name, weight)
 	self.equipable_slots = ["off_hand"]
-	self.defence_boost = defence_boost
-
-func set_defence_boost() -> int:
-	return defence_boost
+	super(display_name, weight, ShieldFeature.new(display_name, defence_boost))

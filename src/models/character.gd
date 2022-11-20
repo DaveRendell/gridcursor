@@ -51,11 +51,9 @@ func defence() -> int:
 	var base_defence: int = 7
 	var defence_boost = 0
 	
-	for x in equipment.to_array():
-		var item = x as Equipment
-		if item:
-			base_defence = max(base_defence, item.set_base_defence())
-			defence_boost += item.set_defence_boost()
+	for f in features():
+		base_defence = max(base_defence, f.base_defence())
+		defence_boost += f.defence_boost()
 	
 	return base_defence + stats[1] + defence_boost
 
@@ -66,20 +64,26 @@ func equip(slot: String, item: Equipment) -> void:
 	else:
 		equipment.set(slot, item)
 
+func features() -> Array[Feature]:
+	var feats = [] as Array[Feature]
+	
+	for item in equipment.to_array():
+		var equipped = item as Equipment
+		if equipped:
+			feats.append(equipped.feature)
+	
+	return feats
+
 func attacks() -> Array:
 	var attacks = []
-	for x in equipment.to_array():
-		var item = x as Equipment
-		if item:
-			attacks.append_array(item.get_attacks())
+	for f in features():
+		attacks.append_array(f.attacks())
 	return attacks
 
 func spells() -> Array:
 	var spells = []
-	for x in equipment.to_array():
-		var item = x as Equipment
-		if item:
-			spells.append_array(item.get_spells())
+	for f in features():
+		spells.append_array(f.spells())
 	return spells
 
 func roll_skill(stat: E.Stat, skills: Array[String] = [] as Array[String]) -> RollResult:
