@@ -79,6 +79,11 @@ _global_script_classes=[{
 "language": &"GDScript",
 "path": "res://src/coordinate/coordinate_map.gd"
 }, {
+"base": "Feature",
+"class": &"Crest",
+"language": &"GDScript",
+"path": "res://src/models/crest.gd"
+}, {
 "base": "RefCounted",
 "class": &"DiceTexture",
 "language": &"GDScript",
@@ -195,6 +200,11 @@ _global_script_classes=[{
 "path": "res://src/models/encounters/option_types/pick_one_roll_option.gd"
 }, {
 "base": "RefCounted",
+"class": &"PostAttackAction",
+"language": &"GDScript",
+"path": "res://src/models/post_attack_action.gd"
+}, {
+"base": "RefCounted",
 "class": &"PunyCharacterSprite",
 "language": &"GDScript",
 "path": "res://src/models/puny_characters_sprite.gd"
@@ -218,6 +228,11 @@ _global_script_classes=[{
 "class": &"SimpleMenu",
 "language": &"GDScript",
 "path": "res://src/ui/SimpleMenu.gd"
+}, {
+"base": "Crest",
+"class": &"Skirmisher",
+"language": &"GDScript",
+"path": "res://src/models/crests/skirmisher.gd"
 }, {
 "base": "RefCounted",
 "class": &"Spell",
@@ -269,6 +284,7 @@ _global_script_class_icons={
 "Character": "",
 "ComputerPlayer": "",
 "CoordinateMap": "",
+"Crest": "",
 "DiceTexture": "",
 "E": "",
 "Encounter": "",
@@ -292,11 +308,13 @@ _global_script_class_icons={
 "OverworldTerrain": "",
 "Party": "",
 "PickOneRollOption": "",
+"PostAttackAction": "",
 "PunyCharacterSprite": "",
 "RollOption": "",
 "RollResult": "",
 "Shield": "",
 "SimpleMenu": "",
+"Skirmisher": "",
 "Spell": "",
 "SquareGeometry": "",
 "Staff": "",

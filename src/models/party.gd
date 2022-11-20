@@ -32,6 +32,8 @@ func _init():
 	var leather_armour = Armour.new("Leather armour", 5, 8)
 
 	var shield = Shield.new("Buckler", 4, 1)
+	
+	var skirmisher = Skirmisher.new()
 
 	var reginald = Character.new("Reginald", blue_soldier_sprite, 3, 2, 1, 1)
 	reginald.equip("main_hand", sword)
@@ -43,6 +45,7 @@ func _init():
 	
 	var tobias = Character.new("Tobias", green_archer_sprite, 1, 3, 2, 1)
 	tobias.equip("main_hand", short_bow)
+	tobias.crests = [skirmisher]
 	###
 	
 	characters = [reginald, yanil, tobias]

@@ -12,6 +12,7 @@ var stats = [0, 0, 0, 0]
 var hp: int = 1
 
 var equipment: CharacterEquipment
+var crests: Array[Crest] = [] as Array[Crest]
 
 var die_when_downed = false
 
@@ -71,7 +72,7 @@ func features() -> Array[Feature]:
 		var equipped = item as Equipment
 		if equipped:
 			feats.append(equipped.feature)
-	
+	feats.append_array(crests)
 	return feats
 
 func attacks() -> Array:
@@ -85,6 +86,12 @@ func spells() -> Array:
 	for f in features():
 		spells.append_array(f.spells())
 	return spells
+
+func post_attack_actions() -> Array:
+	var actions = []
+	for f in features():
+		actions.append_array(f.post_attack_actions())
+	return actions
 
 func roll_skill(stat: E.Stat, skills: Array[String] = [] as Array[String]) -> RollResult:
 	var rng = RandomNumberGenerator.new()

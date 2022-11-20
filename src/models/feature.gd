@@ -16,3 +16,6 @@ func attacks() -> Array[Attack]:
 
 func spells() -> Array[Spell]:
 	return []
+
+func post_attack_actions() -> Array:
+	return []

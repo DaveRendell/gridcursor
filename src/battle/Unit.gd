@@ -17,6 +17,8 @@ enum UnitState {
 	ACTION_SELECT,
 	ATTACK_SELECT,
 	ATTACK_CONFIRM,
+	SPELL_SELECT,
+	POST_ATTACK_ACTION_SELECT,
 	DONE,
 }
 var unit_state: int = 0
@@ -198,9 +200,16 @@ func set_state_attack_confirm(map: Map, path: Array[Vector2i]):
 		perform_attack(map, attacked_node, attack)
 		await sprite.animation_finished
 		update_position(map, path.back())
-		set_state_done(map)	
+		var actions = character.post_attack_actions().filter(func(action):
+			return action.is_allowed(map, self, path))
+		if actions.size() > 0:
+			set_state_post_attack_action_select(map, path)
+		else:
+			set_state_done(map)
 
 func set_state_spell_select(map: Map, path: Array[Vector2i]):
+	print("Unit state: Spell select")
+	unit_state = UnitState.SPELL_SELECT
 	var popup_menu = simple_menu_scene.instantiate()
 	for i in character.spells().size():
 		var spell = character.spells()[i]
@@ -217,6 +226,27 @@ func set_state_spell_select(map: Map, path: Array[Vector2i]):
 	else:
 		var spell = character.spells()[id]
 		spell.battle_action(map, self, path)
+
+func set_state_post_attack_action_select(map: Map, path: Array[Vector2i]):
+	print("Unit state: Post attack action select")
+	unit_state = UnitState.POST_ATTACK_ACTION_SELECT
+	
+	var actions = character.post_attack_actions().filter(func(action):
+		return action.is_allowed(map, self, path))
+	var popup_menu = simple_menu_scene.instantiate()
+	for i in actions.size():
+		var action = actions[i]
+		popup_menu.add_item(action.display_name, i)
+	popup_menu.add_item("Done")
+	
+	map.display_menu(popup_menu)
+	var id = await popup_menu.id_pressed
+	
+	if id == actions.size():
+		set_state_done(map)
+	else:
+		var action = actions[id]
+		action.action(map, self, path)
 
 func set_state_done(map: Map):
 	print("Unit state: Done")
@@ -380,7 +410,7 @@ class AttackSource:
 		self.attack_id = attack_id
 		self.source = source
 
-func calculate_options(map: Map) -> void:
+func calculate_options(map: Map, max_movement: int = movement) -> void:
 	distance_to_cell = CoordinateMap.new(map.grid_width, map.grid_width) # -> int
 	default_attack_sources = CoordinateMap.new(map.grid_width, map.grid_height) # -> AttackSource
 	all_attack_sources = CoordinateMap.new(map.grid_width, map.grid_height, [], [])
@@ -397,7 +427,7 @@ func calculate_options(map: Map) -> void:
 			var u_distance = distance_to_cell.at(u)
 			
 			# Add to movement options if valid
-			if u_distance <= movement:
+			if u_distance <= max_movement:
 				movement_options.append(u)
 				var space_free = true
 				for cell in cells(u):
