@@ -31,6 +31,7 @@ func battle_action(map: Map, caster: Unit, path: Array[Vector2i]) -> void:
 		caster.set_state_spell_select(map, path)
 	else:
 		map.clear_highlights()
+		caster.update_position(map, path.back())
 		var target = map.cursor
 		
 		var aoe = calculate_aoe(map, target)
@@ -48,7 +49,6 @@ func battle_action(map: Map, caster: Unit, path: Array[Vector2i]) -> void:
 		map.add_child(explosion)
 		await explosion.animation_finished
 		explosion.queue_free()
-		caster.update_position(map, path.back())
 		caster.set_state_done(map)
 		
 func apply_highlights(map: Map, targets: Array[Vector2i]) -> void:

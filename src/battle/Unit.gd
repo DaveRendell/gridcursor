@@ -38,10 +38,12 @@ func from_char(character: Character, team: int, coordinate: Vector2i):
 	self.y = coordinate.y
 	self.width = character.width
 	self.height = character.height
-	sprite = character.sprite
+	sprite = character.sprite.duplicate()
 	
 	$HPBar.scale = Vector2(width, height)
 	$HPBar.offset = (width - 1) * Vector2(4, 4)
+	$HPBar.visible = character.hp != character.max_hp()
+	$HPBar.frame = round((float(character.hp) / character.max_hp()) * 14)
 	
 	add_child(sprite)
 
