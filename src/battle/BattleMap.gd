@@ -5,7 +5,7 @@ var new_unit = preload("res://src/battle/Unit.tscn")
 signal next_turn
 signal battle_finished(result: E.BattleResult)
 
-var terrain_grid: CoordinateMap = CoordinateMap.new(grid_width, grid_height, [], 0)
+var terrain: CoordinateMap = CoordinateMap.new(grid_width, grid_height, [], 0)
 var units: CoordinateMap = CoordinateMap.new(grid_width, grid_height)
 var path: Array[Vector2i] = []
 
@@ -18,7 +18,7 @@ func _ready():
 	geometry = SquareGeometry.new(grid_size, grid_width, grid_height)
 	super()
 	
-	set_terrain_types()
+	setup_terrain()
 	place_mobs()
 	draw_nodes()
 
@@ -42,16 +42,12 @@ func _draw():
 		]
 		draw_colored_polygon(arrow_head_points, color)
 
-func set_terrain_types() -> void:
-	var file = FileAccess.open("res://data/terrain.json", FileAccess.READ)
-	var test_json_conv = JSON.new()
-	test_json_conv.parse(file.get_as_text())
-	terrain_types = test_json_conv.get_data()
+func setup_terrain():
+	terrain = CoordinateMap.new(grid_width, grid_height)
 	var location = $LocationData.get_child(0) as Location
-	
-	for coordinate in terrain_grid.coordinates():
+	for coordinate in terrain.coordinates():
 		var terrain_id = location.get_terrain_id_at(coordinate)
-		terrain_grid.set_value(coordinate, terrain_id)
+		terrain.set_value(coordinate, BattleTerrain.get_terrain(terrain_id))
 
 func click_empty_cell():
 	var popup_menu = simple_menu_scene.instantiate()

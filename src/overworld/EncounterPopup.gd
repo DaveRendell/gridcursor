@@ -19,11 +19,16 @@ func set_encounter_stage(encounter: Encounter) -> void:
 		else:
 			roll_label.text = "Failure"
 			roll_label.add_theme_color_override("font_color", FAIL_COLOUR)
-		var non_empty_roll_results = stage.roll_results.filter(func(r): return r != null)
-		for i in non_empty_roll_results.size():
-			var roll_result = non_empty_roll_results[i]
-			#if roll_result:
-			var character = encounter.party.characters[i]
+		var character_results = ArrayMethods.zip({
+			"character": encounter.party.characters,
+			"result": stage.roll_results
+		})
+		var non_empty_character_results = character_results.filter(func(character_result):
+			return character_result.result != null)
+		
+		for character_result in non_empty_character_results:
+			var roll_result = character_result.result
+			var character = character_result.character
 			var label = Label.new()
 			var result_text = "Success" if roll_result.total() >= stage.roll_target else "Failure"
 			label.text = "%s: rolled %s (%s)" % [
@@ -31,7 +36,7 @@ func set_encounter_stage(encounter: Encounter) -> void:
 				roll_result.total(),
 				result_text]
 			$Panel/ScrollContainer/Contents.add_child(label)
-			$Panel/ScrollContainer/Contents.move_child(label, i)
+			$Panel/ScrollContainer/Contents.move_child(label, character_result.index)
 	else:
 		$Panel/ScrollContainer/Contents/RollResult.queue_free()
 	

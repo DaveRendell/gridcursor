@@ -16,3 +16,7 @@ enum BattleResult {
 	VICTORY,
 	TPK,
 }
+
+enum MovementType {
+	FOOT
+}

@@ -14,7 +14,7 @@ func _init():
 
 func battle_action(map: Map, caster: Unit, path: Array[Vector2i]) -> void:
 	var possible_targets: Array[Vector2i] = []
-	for coordinate in map.terrain_grid.coordinates():
+	for coordinate in map.terrain.coordinates():
 		if map.geometry.distance(path.back(), coordinate) <= spell_range:
 			possible_targets.append(coordinate)
 	var targets = possible_targets
@@ -60,7 +60,7 @@ func apply_highlights(map: Map, targets: Array[Vector2i]) -> void:
 
 func calculate_aoe(map: Map, target: Vector2i) -> Array[Vector2i]:
 	var aoe = []
-	for coordinate in map.terrain_grid.coordinates():
+	for coordinate in map.terrain.coordinates():
 		if map.geometry.distance(map.cursor, coordinate) <= aoe_radius:
 			aoe.append(coordinate)
 	return aoe

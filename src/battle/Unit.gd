@@ -6,7 +6,7 @@ const move_option_color = Color.LIGHT_BLUE
 const attack_option_color = Color.RED
 
 @export var movement = 6
-@export var movement_type = "foot"
+@export var movement_type = E.MovementType.FOOT
 
 @export var team = 0
 var simple_menu_scene = preload("res://src/ui/SimpleMenu.tscn")
@@ -441,15 +441,13 @@ func movement_cost_of_cell(map: Map, coordinate: Vector2i) -> int:
 			if cell.clamp(Vector2i.ZERO, Vector2i(map.grid_width - 1, map.grid_height - 1)) != cell:
 				# If part of the unit would move off the map, cannot move here
 				return -1
-			var terrain: int = map.terrain_grid.at(cell)
+			var terrain: BattleTerrain = map.terrain.at(cell)
 			var node: Unit = map.units.at(cell)
 			if (node != null) and (node.team != team):
 				# If any cell is enemy occupied, cannot move here
 				return -1
-			elif terrain == -1:
-				highest_cost = maxi(highest_cost, 1)
-			elif map.terrain_types[terrain]["movement"].has(movement_type):
-				var cost =  map.terrain_types[terrain]["movement"][movement_type]
+			elif terrain.movement_costs.has(movement_type):
+				var cost =  terrain.movement_costs[movement_type]
 				highest_cost = maxi(highest_cost, cost)
 			else:
 				# If any cell is impassable, cannot move here

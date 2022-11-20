@@ -9,7 +9,7 @@ func _init():
 
 func battle_action(map: Map, caster: Unit, path: Array[Vector2i]) -> void:
 	var teleport_options: Array[Vector2i] = []
-	for coordinate in map.terrain_grid.coordinates():
+	for coordinate in map.terrain.coordinates():
 		if map.geometry.distance(path.back(), coordinate) <= spell_range\
 		and caster.movement_cost_of_cell(map, coordinate) >= 0:
 			teleport_options.append(coordinate)

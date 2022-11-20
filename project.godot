@@ -30,6 +30,11 @@ _global_script_classes=[{
 "path": "res://src/models/armour.gd"
 }, {
 "base": "RefCounted",
+"class": &"ArrayMethods",
+"language": &"GDScript",
+"path": "res://src/utils/array_methods.gd"
+}, {
+"base": "RefCounted",
 "class": &"Attack",
 "language": &"GDScript",
 "path": "res://src/models/attack.gd"
@@ -38,6 +43,11 @@ _global_script_classes=[{
 "class": &"BattleMap",
 "language": &"GDScript",
 "path": "res://src/battle/BattleMap.gd"
+}, {
+"base": "RefCounted",
+"class": &"BattleTerrain",
+"language": &"GDScript",
+"path": "res://src/battle/battle_terrain.gd"
 }, {
 "base": "Mob",
 "class": &"BigBlobber",
@@ -244,8 +254,10 @@ _global_script_class_icons={
 "AllPartyRollOption": "",
 "AnyMustPassRollOption": "",
 "Armour": "",
+"ArrayMethods": "",
 "Attack": "",
 "BattleMap": "",
+"BattleTerrain": "",
 "BigBlobber": "",
 "Blobber": "",
 "ChangeStageOption": "",
