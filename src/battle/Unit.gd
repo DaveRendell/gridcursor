@@ -63,6 +63,8 @@ func set_state_unselected(map: Map):
 	
 
 func set_state_selected(map: Map, initial_path: Array[Vector2i]):
+	print("DEF: %s" % [character.defence()])
+	print(character.features().map(func(f): return f.display_name))
 	print("Unit state: Selected")
 	unit_state = UnitState.SELECTED
 	
@@ -113,7 +115,7 @@ func set_state_selected(map: Map, initial_path: Array[Vector2i]):
 			set_state_attack_confirm(map, path)
 			
 
-func set_state_action_select(map: Map, path: Array[Vector2i]):
+func set_state_action_select(map: Map, path: Array[Vector2i], allow_cancel: bool = true):
 	print("Unit state: Action select")
 	unit_state = UnitState.ACTION_SELECT
 	var new_location = path.back()
@@ -126,11 +128,17 @@ func set_state_action_select(map: Map, path: Array[Vector2i]):
 	var current_attack_options = valid_attacks(map, new_location)
 	
 	var popup_menu = simple_menu_scene.instantiate()
-	var options = ["Wait", "Cancel"]
+	var options = ["Wait"]
+	for feature in character.features():
+		for action in feature.battle_actions():
+			options.append(action.display_name)
 	if character.spells().size() > 0:
 		options.push_front("Spells")
 	if current_attack_options.non_empty_coordinates().size() > 0:
 		options.push_front("Attack")
+	
+	if allow_cancel:
+		options.append("Cancel")
 	
 	for i in options.size():
 		popup_menu.add_item(options[i], i)
@@ -151,6 +159,10 @@ func set_state_action_select(map: Map, path: Array[Vector2i]):
 		set_state_attack_select(map, path, new_location)
 	if option == "Spells":
 		set_state_spell_select(map, path)
+	for feature in character.features():
+		for action in feature.battle_actions():
+			if option == action.display_name:
+				await action.perform_action(map, self, path)
 
 func set_state_attack_select(map: Map, path: Array[Vector2i], new_location: Vector2i):
 	print("Unit state: Attack select")
@@ -250,7 +262,7 @@ func set_state_post_attack_action_select(map: Map, path: Array[Vector2i]):
 
 func set_state_done(map: Map):
 	print("Unit state: Done")
-	unit_state == UnitState.DONE
+	unit_state = UnitState.DONE
 	modulate = Color(0.5, 0.5, 0.5, 1.0)
 	map.clear_highlights()
 	

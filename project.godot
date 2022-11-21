@@ -249,6 +249,11 @@ _global_script_classes=[{
 "language": &"GDScript",
 "path": "res://src/models/battle_actions/skirmisher_action.gd"
 }, {
+"base": "Crest",
+"class": &"SongOfFortitude",
+"language": &"GDScript",
+"path": "res://src/models/crests/song_of_fortitude.gd"
+}, {
 "base": "RefCounted",
 "class": &"Spell",
 "language": &"GDScript",
@@ -273,6 +278,11 @@ _global_script_classes=[{
 "class": &"Teleport",
 "language": &"GDScript",
 "path": "res://src/models/spells/teleport.gd"
+}, {
+"base": "Feature",
+"class": &"TemporaryEffect",
+"language": &"GDScript",
+"path": "res://src/battle/temporary_effect.gd"
 }, {
 "base": "MarginContainer",
 "class": &"Toast",
@@ -338,11 +348,13 @@ _global_script_class_icons={
 "SimpleMenu": "",
 "Skirmisher": "",
 "SkirmisherAction": "",
+"SongOfFortitude": "",
 "Spell": "",
 "SpriteUtils": "",
 "SquareGeometry": "",
 "Staff": "",
 "Teleport": "",
+"TemporaryEffect": "",
 "Toast": "",
 "Unit": "",
 "Weapon": ""

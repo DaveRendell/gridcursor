@@ -13,6 +13,7 @@ var hp: int = 1
 
 var equipment: CharacterEquipment
 var crests: Array[Crest] = [] as Array[Crest]
+var temporary_effects: Array[Feature] = [] as Array[Feature]
 
 var die_when_downed = false
 
@@ -73,6 +74,7 @@ func features() -> Array[Feature]:
 		if equipped and equipped.feature:
 			feats.append(equipped.feature)
 	feats.append_array(crests)
+	feats.append_array(temporary_effects)
 	return feats
 
 func attacks() -> Array:

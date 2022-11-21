@@ -1,6 +1,6 @@
 class_name BattleMap extends "res://src/map/Map.gd"
 
-var new_unit = preload("res://src/battle/Unit.tscn")
+var new_unit = load("res://src/battle/Unit.tscn")
 
 signal next_turn
 signal battle_finished(result: E.BattleResult)
@@ -119,21 +119,33 @@ func draw_grid():
 func update_units() -> void:
 	units = CoordinateMap.new(grid_width, grid_height, $GridNodes.get_children(), null)
 
+func list_units() -> Array[Unit]:
+	var out = []
+	for child in $GridNodes.get_children():
+		var unit = child as Unit
+		if unit:
+			out.append(unit)
+	return out
+
 func check_win_condition():
 	var player_unit_count = 0
 	var enemy_unit_count = 0
-	for unit in $GridNodes.get_children():
+	for unit in list_units():
 		if !unit.character.is_down():
 			if unit.team == 0:
 				player_unit_count += 1
 			else:
 				enemy_unit_count += 1
 	
-	if player_unit_count == 0:
+	if player_unit_count == 0 or enemy_unit_count == 0:
 		set_state_in_menu()
 		await get_tree().create_timer(1.0).timeout
-		battle_finished.emit(E.BattleResult.TPK)
-	if enemy_unit_count == 0:
-		set_state_in_menu()
-		await get_tree().create_timer(1.0).timeout
-		battle_finished.emit(E.BattleResult.VICTORY)
+		
+		for unit in list_units():
+			for feature in unit.character.features():
+				feature.end_of_battle(unit)
+		
+		if player_unit_count == 0:
+			battle_finished.emit(E.BattleResult.TPK)
+		else:
+			battle_finished.emit(E.BattleResult.VICTORY)

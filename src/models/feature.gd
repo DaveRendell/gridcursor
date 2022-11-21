@@ -17,5 +17,17 @@ func attacks() -> Array[Attack]:
 func spells() -> Array[Spell]:
 	return []
 
+func battle_actions() -> Array:
+	return []
+
 func post_attack_actions() -> Array:
 	return []
+
+func end_of_battle(unit: Unit) -> void:
+	pass
+
+func start_of_turn(map: BattleMap, unit: Unit) -> void:
+	pass
+
+func end_of_turn(map: BattleMap, unit: Unit) -> void:
+	pass

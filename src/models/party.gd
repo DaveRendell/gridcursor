@@ -36,6 +36,7 @@ func _init():
 	var shield = Shield.new("Buckler", 4, 1)
 	
 	var skirmisher = Skirmisher.new()
+	var song_of_fortitude = SongOfFortitude.new()
 
 	var reginald = Humanoid.new("Reginald", Humanoid.AppearanceDetails.new(5, 1, E.HairColour.GRAY), 3, 2, 1, 1)
 	reginald.equip("main_hand", sword)
@@ -45,10 +46,11 @@ func _init():
 	var yanil = Humanoid.new("Yanil", Humanoid.AppearanceDetails.new(2, 7, E.HairColour.RED), 0, 2, 3, 2)
 	yanil.equip("main_hand", staff)
 	yanil.equip("clothing", mage_robes)
+	yanil.crests = [song_of_fortitude]
 	
-	var tobias = Humanoid.new("Tobias", Humanoid.AppearanceDetails.new(0, 3, E.HairColour.BLOND), 1, 3, 2, 1)
+	var tobias = Humanoid.new("Tobias", Humanoid.AppearanceDetails.new(4, 5, E.HairColour.WHITE), 1, 3, 2, 1)
 	tobias.equip("main_hand", short_bow)
-	tobias.equip("clothing", scout_tunic)
+	#tobias.equip("clothing", scout_tunic)
 	tobias.crests = [skirmisher]
 
 	###
