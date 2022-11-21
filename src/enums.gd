@@ -20,3 +20,17 @@ enum BattleResult {
 enum MovementType {
 	FOOT
 }
+
+enum HairColour {
+	BLACK,
+	BLOND,
+	BLUE,
+	BROWN,
+	CYAN,
+	GRAY,
+	GREEN,
+	MAGENTA,
+	RED,
+	WHITE,
+	YELLOW,
+}

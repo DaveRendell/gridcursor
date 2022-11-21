@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cy2ijwocpl06t"]
+
+[ext_resource type="Script" path="res://img/characters/humanoid/layer_4_hairstyle/hair_1/generate_palette.gd" id="1_77475"]
+
+[node name="generate_palette" type="Node2D"]
+script = ExtResource("1_77475")

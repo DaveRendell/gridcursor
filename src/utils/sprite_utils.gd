@@ -30,3 +30,32 @@ static func generate_palette_map(palette: Image) -> Dictionary:
 		var colour = palette.get_pixel(i, 0)
 		out[colour] = i
 	return out
+
+static func generate_palette(images: Array[Image], output_path: String):
+	var base_image = images[0]
+	var recolours = images.slice(1, images.size())
+	
+	var palette = {}
+	for coordinate in get_pixel_coordinates(base_image):
+		var colour = base_image.get_pixelv(coordinate)
+		if colour.a and !palette.has(colour):
+			var entry = []
+			for recolour in recolours:
+				entry.append(recolour.get_pixelv(coordinate))
+			palette[colour] = entry
+	
+	# Delete any colours that are the same for all recolours
+	for colour in palette.keys():
+		if palette[colour].all(func(c): return c == colour):
+			palette.erase(colour)
+	
+	var palette_image = Image.new()
+	palette_image.create(palette.size(), images.size(), false, base_image.get_format())
+	for i in palette.size():
+		var base_colour = palette.keys()[i]
+		palette_image.set_pixel(i, 0, base_colour)
+		var new_colours = palette[base_colour]
+		for j in new_colours.size():
+			palette_image.set_pixel(i, j + 1, new_colours[j])
+	
+	palette_image.save_png(output_path)

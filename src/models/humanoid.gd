@@ -4,9 +4,13 @@ var appearance_details: AppearanceDetails
 
 class AppearanceDetails:
 	var skin_tone: int
+	var hair_style: int
+	var hair_colour: int
 	
-	func _init(_skin_tone: int):
+	func _init(_skin_tone: int, _hair_style: int, _hair_colour: int):
 		skin_tone = _skin_tone
+		hair_style = _hair_style
+		hair_colour = _hair_colour
 
 func _init(
 	_display_name: String,
@@ -45,6 +49,11 @@ func generate_sprite() -> AnimatedSprite2D:
 		var gloves_sprite = clothes_sprites[3]
 		image.blend_rect(gloves_sprite, Rect2i(Vector2i.ZERO, gloves_sprite.get_size()), Vector2i.ZERO)
 	# Layer 4 - Hairstyle
+	if appearance_details.hair_style > 0:
+		var base_hair = Image.load_from_file("res://img/characters/humanoid/layer_4_hairstyle/hair_%s/base.png" % [appearance_details.hair_style])
+		var hair_palette = Image.load_from_file("res://img/characters/humanoid/layer_4_hairstyle/hair_%s/palette.png" % [appearance_details.hair_style])
+		var hair_sprite = SpriteUtils.recolour_image(base_hair, hair_palette, appearance_details.hair_colour)
+		image.blend_rect(hair_sprite, Rect2i(Vector2i.ZERO, hair_sprite.get_size()), Vector2i.ZERO)
 	
 	# Layer 5 - Eyes
 	
