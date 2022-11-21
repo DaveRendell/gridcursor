@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c5wfday1ya2co"
-path="res://.godot/imported/Esper-Red.png-0d7514b30d726edde37c55cfb5273a32.ctex"
+uid="uid://ddv330lbdml1k"
+path="res://.godot/imported/ArcherHatGreen.png-abda54ae9931555cd293af6c15ea8104.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://img/characters/Esper-Red.png"
-dest_files=["res://.godot/imported/Esper-Red.png-0d7514b30d726edde37c55cfb5273a32.ctex"]
+source_file="res://img/characters/humanoid/layer_6_headgears/ArcherHatGreen.png"
+dest_files=["res://.godot/imported/ArcherHatGreen.png-abda54ae9931555cd293af6c15ea8104.ctex"]
 
 [params]
 

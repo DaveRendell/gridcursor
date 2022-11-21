@@ -70,7 +70,7 @@ func features() -> Array[Feature]:
 	
 	for item in equipment.to_array():
 		var equipped = item as Equipment
-		if equipped:
+		if equipped and equipped.feature:
 			feats.append(equipped.feature)
 	feats.append_array(crests)
 	return feats
