@@ -176,7 +176,8 @@ func click_position(coordinate: Vector2i):
 	if state == GridState.UNIT_CONTROLLED:
 		print("Clicked grid position %s" % [coordinate])
 		if clickable_cells.has(coordinate):
-			emit_signal("click", self)
+			print(click.get_connections())
+			click.emit(self)
 
 func click_empty_cell():
 	pass

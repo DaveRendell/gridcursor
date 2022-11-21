@@ -246,7 +246,7 @@ func set_state_post_attack_action_select(map: Map, path: Array[Vector2i]):
 		set_state_done(map)
 	else:
 		var action = actions[id]
-		action.action(map, self, path)
+		await action.perform_action(map, self, path)
 
 func set_state_done(map: Map):
 	print("Unit state: Done")
@@ -346,7 +346,7 @@ func update_position(map: Map, coordinate: Vector2i):
 	empty_movement_options = []
 	attack_options = []
 
-func handle_cursor_move(map: Map):
+func handle_cursor_move(map: Map, movement_remaining: int = movement):
 	if attack_options.has(map.cursor):
 		if map.path.size() > 0\
 		and empty_movement_options.has(map.path.back())\
@@ -377,7 +377,7 @@ func handle_cursor_move(map: Map):
 		var enemy_in_cell = (c_node != null) and (c_node.team != team)
 		if adjacent_cells.has(map.cursor) and !enemy_in_cell:
 			var manual_path: Array[Vector2i] = map.path + [map.cursor]
-			if movement_cost_of_path(map, manual_path) <= movement:
+			if movement_cost_of_path(map, manual_path) <= movement_remaining:
 				map.path = manual_path
 				map.queue_redraw()
 				return
