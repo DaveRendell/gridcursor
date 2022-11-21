@@ -1,4 +1,4 @@
-class_name SkirmisherAction extends PostAttackAction
+class_name SkirmisherAction extends BattleAction
 func _init():
 	super("Skirmish")
 

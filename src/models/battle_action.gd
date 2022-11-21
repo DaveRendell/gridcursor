@@ -1,4 +1,4 @@
-class_name PostAttackAction
+class_name BattleAction
 
 var display_name
 

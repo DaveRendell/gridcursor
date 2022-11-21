@@ -9,9 +9,9 @@ var marches_remaining: int = 4
 
 func _init():
 	# Hardcoded for now
-	var blue_soldier_sprite_sheet = preload("res://img/characters/Soldier-Blue.png")
+	var blue_soldier_sprite_sheet = preload("res://img/characters/Paladin.png")
 	var blue_soldier_sprite = PunyCharacterSprite.character_sprite(blue_soldier_sprite_sheet)
-	var red_mage_sprite_sheet = preload("res://img/characters/Mage-Red.png")
+	var red_mage_sprite_sheet = preload("res://img/characters/Esper-Red.png")
 	var red_mage_sprite = PunyCharacterSprite.character_sprite(red_mage_sprite_sheet)
 	var green_archer_sprite_sheet = preload("res://img/characters/Archer-Green.png")
 	var green_archer_sprite= PunyCharacterSprite.character_sprite(green_archer_sprite_sheet)

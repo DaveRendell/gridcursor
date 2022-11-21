@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d4f3vm64qsjc6"
-path="res://.godot/imported/Mage-Red.png-ff22af90d2aba40ce758c419a4ba3f31.ctex"
+uid="uid://c5wfday1ya2co"
+path="res://.godot/imported/Esper-Red.png-0d7514b30d726edde37c55cfb5273a32.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://img/characters/Mage-Red.png"
-dest_files=["res://.godot/imported/Mage-Red.png-ff22af90d2aba40ce758c419a4ba3f31.ctex"]
+source_file="res://img/characters/Esper-Red.png"
+dest_files=["res://.godot/imported/Esper-Red.png-0d7514b30d726edde37c55cfb5273a32.ctex"]
 
 [params]
 
