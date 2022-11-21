@@ -29,7 +29,12 @@ func _init():
 		[Teleport.new() as Spell, Fireball.new() as Spell]
 		)
 
-	var leather_armour = Armour.new("Leather armour", 5, 8)
+	var steel_armour = Armour.new("Steel armour", 5, 8, {
+		1: Image.load_from_file("res://img/characters/humanoid/layer_1_shoes/IronBoots.png"),
+		2: Image.load_from_file("res://img/characters/humanoid/layer_2_clothes/SteelArmour.png"),
+		3: Image.load_from_file("res://img/characters/humanoid/layer_3_gloves/IronGloves.png"),
+		6: Image.load_from_file("res://img/characters/humanoid/layer_6_headgears/SoldierSteelHelmRed.png")
+	})
 
 	var shield = Shield.new("Buckler", 4, 1)
 	
@@ -38,7 +43,7 @@ func _init():
 	var reginald = Character.new("Reginald", blue_soldier_sprite, 3, 2, 1, 1)
 	reginald.equip("main_hand", sword)
 	reginald.equip("off_hand", shield)
-	reginald.equip("clothing", leather_armour)
+	reginald.equip("clothing", steel_armour)
 	
 	var yanil = Character.new("Yanil", red_mage_sprite, 0, 2, 3, 2)
 	yanil.equip("main_hand", staff)
@@ -46,10 +51,16 @@ func _init():
 	var tobias = Character.new("Tobias", green_archer_sprite, 1, 3, 2, 1)
 	tobias.equip("main_hand", short_bow)
 	tobias.crests = [skirmisher]
+	
+	var skin_tone = 3
+	var larry = Humanoid.new("Larry", Humanoid.AppearanceDetails.new(skin_tone), 1, 2, 3, 2)
+	larry.equip("clothing", steel_armour)
+	larry.equip("main_hand", sword)
 	###
 	
-	characters = [reginald, yanil, tobias]
+	characters = [reginald, yanil, tobias, larry]
 	formation = CoordinateMap.new(FORMATION_DIMENSIONS.x, FORMATION_DIMENSIONS.y)
 	formation.set_value(Vector2i(0, 0), reginald)
 	formation.set_value(Vector2i(1, 1), yanil)
 	formation.set_value(Vector2i(0, 2), tobias)
+	formation.set_value(Vector2i(2, 0), larry)

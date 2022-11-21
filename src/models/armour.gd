@@ -1,5 +1,5 @@
 class_name Armour
-extends Equipment
+extends Clothing
 
 class ArmourFeature extends Feature:
 	var defence: int
@@ -14,7 +14,7 @@ class ArmourFeature extends Feature:
 func _init(
 	display_name: String,
 	weight: int,
-	base_defence: int
+	base_defence: int,
+	_sprite_sheets: Dictionary
 ):
-	self.equipable_slots = ["clothing"]
-	super(display_name, weight, ArmourFeature.new(display_name, base_defence))
+	super(display_name, weight, ArmourFeature.new(display_name, base_defence), _sprite_sheets)
