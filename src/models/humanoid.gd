@@ -49,7 +49,7 @@ func generate_sprite() -> AnimatedSprite2D:
 		var gloves_sprite = clothes_sprites[3]
 		image.blend_rect(gloves_sprite, Rect2i(Vector2i.ZERO, gloves_sprite.get_size()), Vector2i.ZERO)
 	# Layer 4 - Hairstyle
-	if appearance_details.hair_style > 0:
+	if appearance_details.hair_style > 0: # Zero is bald
 		var base_hair = Image.load_from_file("res://img/characters/humanoid/layer_4_hairstyle/hair_%s/base.png" % [appearance_details.hair_style])
 		var hair_palette = Image.load_from_file("res://img/characters/humanoid/layer_4_hairstyle/hair_%s/palette.png" % [appearance_details.hair_style])
 		var hair_sprite = SpriteUtils.recolour_image(base_hair, hair_palette, appearance_details.hair_colour)

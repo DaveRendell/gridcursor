@@ -52,8 +52,8 @@ func _init():
 	tobias.equip("main_hand", short_bow)
 	tobias.crests = [skirmisher]
 	
-	var skin_tone = 6
-	var larry = Humanoid.new("Lara", Humanoid.AppearanceDetails.new(skin_tone, 1, E.HairColour.BLOND), 1, 2, 3, 2)
+	var skin_tone = 2
+	var larry = Humanoid.new("Lara", Humanoid.AppearanceDetails.new(skin_tone, 7, E.HairColour.BLUE), 1, 2, 3, 2)
 	#larry.equip("clothing", steel_armour)
 	larry.equip("main_hand", sword)
 	###
