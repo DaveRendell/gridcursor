@@ -1,5 +1,6 @@
 class_name Humanoid extends Character
 
+var ancestry: Ancestry
 var appearance_details: AppearanceDetails
 
 class AppearanceDetails:
@@ -14,12 +15,14 @@ class AppearanceDetails:
 
 func _init(
 	_display_name: String,
+	_ancestry: Ancestry,
 	_appearance_details: AppearanceDetails,
 	_might: int = 0,
 	_precision: int = 0,
 	_knowledge: int = 0,
 	_wit: int = 0
 ):
+	ancestry = _ancestry
 	appearance_details = _appearance_details
 	var _sprite = generate_sprite()
 	super(_display_name, _sprite, _might, _precision, _knowledge, _wit)
@@ -44,10 +47,12 @@ func generate_sprite() -> AnimatedSprite2D:
 		if clothes_sprites.has(2)\
 		else Image.load_from_file("res://img/characters/humanoid/layer_2_clothes/BasicBlack.png")
 	image.blend_rect(clothes_sprite, Rect2i(Vector2i.ZERO, clothes_sprite.get_size()), Vector2i.ZERO)
+	
 	# Layer 3 - Gloves
 	if clothes_sprites.has(3):
 		var gloves_sprite = clothes_sprites[3]
 		image.blend_rect(gloves_sprite, Rect2i(Vector2i.ZERO, gloves_sprite.get_size()), Vector2i.ZERO)
+		
 	# Layer 4 - Hairstyle
 	if appearance_details.hair_style > 0: # Zero is bald
 		var base_hair = Image.load_from_file("res://img/characters/humanoid/layer_4_hairstyle/hair_%s/base.png" % [appearance_details.hair_style])
@@ -63,6 +68,10 @@ func generate_sprite() -> AnimatedSprite2D:
 		image.blend_rect(headgear_sprite, Rect2i(Vector2i.ZERO, headgear_sprite.get_size()), Vector2i.ZERO)
 	
 	# Layer 7 - Add-ons
+	if ancestry.skin_sprites.has(7):
+		var base_addon_sprite = ancestry.skin_sprites[7]
+		var recoloured_addon_sprite = SpriteUtils.recolour_image(base_addon_sprite, skin_palette, appearance_details.skin_tone)
+		image.blend_rect(recoloured_addon_sprite, Rect2i(Vector2i.ZERO, recoloured_addon_sprite.get_size()), Vector2i.ZERO)
 	
 	return PunyCharacterSprite.character_sprite(ImageTexture.create_from_image(image))
 

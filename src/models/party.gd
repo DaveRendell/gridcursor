@@ -38,17 +38,17 @@ func _init():
 	var skirmisher = Skirmisher.new()
 	var song_of_fortitude = SongOfFortitude.new()
 
-	var reginald = Humanoid.new("Reginald", Humanoid.AppearanceDetails.new(5, 1, E.HairColour.GRAY), 3, 2, 1, 1)
+	var reginald = Humanoid.new("Reginald", Ancestry.human(), Humanoid.AppearanceDetails.new(5, 1, E.HairColour.GRAY), 3, 2, 1, 1)
 	reginald.equip("main_hand", sword)
 	reginald.equip("off_hand", shield)
 	reginald.equip("clothing", steel_armour)
 	
-	var yanil = Humanoid.new("Yanil", Humanoid.AppearanceDetails.new(2, 7, E.HairColour.RED), 0, 2, 3, 2)
+	var yanil = Humanoid.new("Yanil", Ancestry.human(), Humanoid.AppearanceDetails.new(2, 7, E.HairColour.RED), 0, 2, 3, 2)
 	yanil.equip("main_hand", staff)
 	yanil.equip("clothing", mage_robes)
 	yanil.crests = [song_of_fortitude]
 	
-	var myla = Humanoid.new("Myla", Humanoid.AppearanceDetails.new(7, 1, E.HairColour.WHITE), 1, 3, 2, 1)
+	var myla = Humanoid.new("Myla", Ancestry.elf(), Humanoid.AppearanceDetails.new(7, 3, E.HairColour.WHITE), 1, 3, 2, 1)
 	myla.equip("main_hand", short_bow)
 	#myla.equip("clothing", scout_tunic)
 	myla.crests = [skirmisher]
