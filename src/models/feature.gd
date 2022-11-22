@@ -20,6 +20,9 @@ func spells() -> Array[Spell]:
 func songs() -> Array:
 	return []
 
+func beast_forms() -> Array:
+	return []
+
 func battle_actions() -> Array:
 	return []
 
@@ -33,4 +36,7 @@ func start_of_turn(map: BattleMap, unit: Unit) -> void:
 	pass
 
 func end_of_turn(map: BattleMap, unit: Unit) -> void:
+	pass
+
+func on_knocked_down(map: BattleMap, unit: Unit) -> void:
 	pass

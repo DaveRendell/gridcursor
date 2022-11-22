@@ -95,6 +95,12 @@ func songs() -> Array:
 		songs.append_array(f.songs())
 	return songs
 
+func beast_forms() -> Array:
+	var beast_forms = []
+	for f in features():
+		beast_forms.append_array(f.beast_forms())
+	return beast_forms
+
 func post_attack_actions() -> Array:
 	var actions = []
 	for f in features():

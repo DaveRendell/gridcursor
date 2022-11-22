@@ -59,6 +59,16 @@ _global_script_classes=[{
 "language": &"GDScript",
 "path": "res://src/battle/battle_terrain.gd"
 }, {
+"base": "RefCounted",
+"class": &"BeastForm",
+"language": &"GDScript",
+"path": "res://src/models/beast_form.gd"
+}, {
+"base": "Crest",
+"class": &"BeastFormWolf",
+"language": &"GDScript",
+"path": "res://src/models/crests/beast_form_wolf.gd"
+}, {
 "base": "Mob",
 "class": &"BigBlobber",
 "language": &"GDScript",
@@ -320,6 +330,8 @@ _global_script_class_icons={
 "BattleAction": "",
 "BattleMap": "",
 "BattleTerrain": "",
+"BeastForm": "",
+"BeastFormWolf": "",
 "BigBlobber": "",
 "Blobber": "",
 "ChangeStageOption": "",

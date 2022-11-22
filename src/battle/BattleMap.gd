@@ -68,11 +68,14 @@ func click_empty_cell():
 	if option == "Cancel":
 		set_state_nothing_selected()
 
-func add_character(character: Character, coordinate: Vector2i, team: E.Team) -> void:
+func add_character(character: Character, coordinate: Vector2i, team: E.Team) -> Unit:
 	var unit = new_unit.instantiate()
 	unit.from_char(character, team, coordinate)
+	if geometry:
+		unit.position = geometry.cell_centre_position(coordinate)
 	$GridNodes.add_child(unit)
 	update_units()
+	return unit
 
 func place_mobs() -> void:
 	for child in $MobMarkers.get_children():

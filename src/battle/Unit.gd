@@ -5,6 +5,7 @@ var character: Character
 const move_option_color = Color.LIGHT_BLUE
 const attack_option_color = Color.RED
 
+
 @export var movement = 6
 @export var movement_type = E.MovementType.FOOT
 
@@ -22,6 +23,7 @@ enum UnitState {
 	ATTACK_CONFIRM,
 	SPELL_SELECT,
 	SONG_SELECT,
+	BEAST_FORM_SELECT,
 	POST_ATTACK_ACTION_SELECT,
 	DONE,
 }
@@ -136,6 +138,8 @@ func set_state_action_select(map: Map, path: Array[Vector2i], allow_cancel: bool
 	for feature in character.features():
 		for action in feature.battle_actions():
 			options.append(action.display_name)
+	if character.beast_forms().size() > 0:
+		options.push_front("Beast form")
 	if character.songs().size() > 0:
 		options.push_front("Songs")
 	if character.spells().size() > 0:
@@ -167,6 +171,8 @@ func set_state_action_select(map: Map, path: Array[Vector2i], allow_cancel: bool
 		set_state_spell_select(map, path)
 	if option == "Songs":
 		set_state_song_select(map, path)
+	if option == "Beast form":
+		set_state_beast_form_select(map, path)
 	for feature in character.features():
 		for action in feature.battle_actions():
 			if option == action.display_name:
@@ -272,10 +278,36 @@ func set_state_song_select(map, path: Array[Vector2i]):
 		playing_song = null
 		set_state_action_select(map, path, false)
 	else:
-		var song: Song = character.songs()[id]
+		var song = character.songs()[id]
 		playing_song = song
 		await song.perform_effect(map, self, path.back())
 		set_state_action_select(map, path, false)
+
+func set_state_beast_form_select(map: Map, path: Array[Vector2i]):
+	print("Unit state: Beast form select")
+	unit_state = UnitState.BEAST_FORM_SELECT
+	var popup_menu = simple_menu_scene.instantiate()
+	for i in character.beast_forms().size():
+		var beast_form = character.beast_forms()[i]
+		popup_menu.add_item("%s form" % [beast_form.beast_name], i)
+	popup_menu.add_item("Cancel")
+	
+	map.display_menu(popup_menu)
+	var id = await popup_menu.id_pressed
+	
+	if id == character.beast_forms().size():
+		# Cancel selected
+		await get_tree().process_frame
+		set_state_action_select(map, path)
+	else:
+		var beast_form = character.beast_forms()[id]
+		var beast = beast_form.create_beast(character)
+		map.add_character(beast, path.back(), team)
+		map.update_units()
+		map.set_state_nothing_selected()
+		map.clear_highlights()
+		queue_free()
+		tree_exited.connect(map.update_units)
 
 func set_state_post_attack_action_select(map: Map, path: Array[Vector2i]):
 	print("Unit state: Post attack action select")
@@ -579,6 +611,8 @@ func take_damage(damage: int, map: Map) -> void:
 		sprite.animation = "knocked_down"
 		await sprite.animation_finished
 		map.check_win_condition()
+		for f in character.features():
+			f.on_knocked_down(map, self)
 		if character.die_when_downed:
 			queue_free()
 			tree_exited.connect(map.update_units)
