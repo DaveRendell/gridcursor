@@ -26,6 +26,8 @@ func next_turn():
 	map.current_turn = (map.current_turn + 1) % teams
 	
 	for unit in map.list_units().filter(func(u): return u.team == map.current_turn):
+		if unit.playing_song:
+			await unit.playing_song.perform_effect(map, unit, unit.coordinate())
 		for feature in unit.character.features():
 			feature.start_of_turn(map, unit)
 	

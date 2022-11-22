@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cfuapdyd7o1aq"
-path="res://.godot/imported/skin-tones.png-7137597c4503c7dae3f45f7f328c7e4e.ctex"
+uid="uid://c1vf6ag5mbwu1"
+path="res://.godot/imported/pointy_ears.png-5abbbffd91d72b84ce63e8e12e8b0e0b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://img/characters/skin/skin-tones.png"
-dest_files=["res://.godot/imported/skin-tones.png-7137597c4503c7dae3f45f7f328c7e4e.ctex"]
+source_file="res://img/characters/humanoid/layer_7_addons/pointy_ears.png"
+dest_files=["res://.godot/imported/pointy_ears.png-5abbbffd91d72b84ce63e8e12e8b0e0b.ctex"]
 
 [params]
 

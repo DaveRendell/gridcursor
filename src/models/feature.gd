@@ -17,6 +17,9 @@ func attacks() -> Array[Attack]:
 func spells() -> Array[Spell]:
 	return []
 
+func songs() -> Array:
+	return []
+
 func battle_actions() -> Array:
 	return []
 

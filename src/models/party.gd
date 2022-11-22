@@ -48,15 +48,15 @@ func _init():
 	yanil.equip("clothing", mage_robes)
 	yanil.crests = [song_of_fortitude]
 	
-	var tobias = Humanoid.new("Tobias", Humanoid.AppearanceDetails.new(4, 5, E.HairColour.WHITE), 1, 3, 2, 1)
-	tobias.equip("main_hand", short_bow)
-	#tobias.equip("clothing", scout_tunic)
-	tobias.crests = [skirmisher]
+	var myla = Humanoid.new("Myla", Humanoid.AppearanceDetails.new(7, 1, E.HairColour.WHITE), 1, 3, 2, 1)
+	myla.equip("main_hand", short_bow)
+	#myla.equip("clothing", scout_tunic)
+	myla.crests = [skirmisher]
 
 	###
 	
-	characters = [reginald, yanil, tobias]
+	characters = [reginald, yanil, myla]
 	formation = CoordinateMap.new(FORMATION_DIMENSIONS.x, FORMATION_DIMENSIONS.y)
 	formation.set_value(Vector2i(0, 0), reginald)
 	formation.set_value(Vector2i(1, 1), yanil)
-	formation.set_value(Vector2i(0, 2), tobias)
+	formation.set_value(Vector2i(0, 2), myla)

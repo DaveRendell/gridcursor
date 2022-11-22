@@ -218,7 +218,6 @@ func display_toast(text: String, delay: float = 1.0):
 	return toast
 
 
-
 # Signals
 func _on_ScrollStartTimer_timeout():
 	scrolling = true

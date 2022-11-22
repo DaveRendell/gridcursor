@@ -89,11 +89,20 @@ func spells() -> Array:
 		spells.append_array(f.spells())
 	return spells
 
+func songs() -> Array:
+	var songs = []
+	for f in features():
+		songs.append_array(f.songs())
+	return songs
+
 func post_attack_actions() -> Array:
 	var actions = []
 	for f in features():
 		actions.append_array(f.post_attack_actions())
 	return actions
+
+func add_temporary_effect(temporary_effect: TemporaryEffect):
+	temporary_effects.append(temporary_effect)
 
 func roll_skill(stat: E.Stat, skills: Array[String] = [] as Array[String]) -> RollResult:
 	var rng = RandomNumberGenerator.new()

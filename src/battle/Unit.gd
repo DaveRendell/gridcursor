@@ -9,6 +9,9 @@ const attack_option_color = Color.RED
 @export var movement_type = E.MovementType.FOOT
 
 @export var team = 0
+
+var playing_song: Song
+
 var simple_menu_scene = preload("res://src/ui/SimpleMenu.tscn")
 
 enum UnitState {
@@ -18,6 +21,7 @@ enum UnitState {
 	ATTACK_SELECT,
 	ATTACK_CONFIRM,
 	SPELL_SELECT,
+	SONG_SELECT,
 	POST_ATTACK_ACTION_SELECT,
 	DONE,
 }
@@ -132,6 +136,8 @@ func set_state_action_select(map: Map, path: Array[Vector2i], allow_cancel: bool
 	for feature in character.features():
 		for action in feature.battle_actions():
 			options.append(action.display_name)
+	if character.songs().size() > 0:
+		options.push_front("Songs")
 	if character.spells().size() > 0:
 		options.push_front("Spells")
 	if current_attack_options.non_empty_coordinates().size() > 0:
@@ -159,6 +165,8 @@ func set_state_action_select(map: Map, path: Array[Vector2i], allow_cancel: bool
 		set_state_attack_select(map, path, new_location)
 	if option == "Spells":
 		set_state_spell_select(map, path)
+	if option == "Songs":
+		set_state_song_select(map, path)
 	for feature in character.features():
 		for action in feature.battle_actions():
 			if option == action.display_name:
@@ -238,6 +246,36 @@ func set_state_spell_select(map: Map, path: Array[Vector2i]):
 	else:
 		var spell = character.spells()[id]
 		spell.battle_action(map, self, path)
+
+func set_state_song_select(map, path: Array[Vector2i]):
+	print("Unit state: Song select")
+	unit_state = UnitState.SONG_SELECT
+	var popup_menu: PopupMenu = simple_menu_scene.instantiate()
+	for i in character.songs().size():
+		var song = character.songs()[i]
+		popup_menu.add_item(song.display_name, i)
+	var stop_id: int
+	if playing_song:
+		popup_menu.add_item("Stop playing")
+		stop_id = popup_menu.item_count - 1
+	popup_menu.add_item("Cancel")
+	var cancel_id = popup_menu.item_count - 1
+	
+	map.display_menu(popup_menu)
+	var id = await popup_menu.id_pressed
+	
+	if id == cancel_id:
+		# Cancel selected
+		await get_tree().process_frame
+		set_state_action_select(map, path)
+	if playing_song and id == stop_id:
+		playing_song = null
+		set_state_action_select(map, path, false)
+	else:
+		var song: Song = character.songs()[id]
+		playing_song = song
+		await song.perform_effect(map, self, path.back())
+		set_state_action_select(map, path, false)
 
 func set_state_post_attack_action_select(map: Map, path: Array[Vector2i]):
 	print("Unit state: Post attack action select")

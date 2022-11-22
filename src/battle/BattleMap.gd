@@ -127,6 +127,11 @@ func list_units() -> Array[Unit]:
 			out.append(unit)
 	return out
 
+func units_in_aoe(position: Vector2i, range: int) -> Array:
+	return list_units().filter(func(unit):
+		return geometry.distance(unit.coordinate(), position) <= range)
+		
+
 func check_win_condition():
 	var player_unit_count = 0
 	var enemy_unit_count = 0
