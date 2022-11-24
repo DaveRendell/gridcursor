@@ -2,13 +2,14 @@ class_name Ancestry
 
 var display_name: String
 var skin_tones: Array
-var skin_sprites: Dictionary
+var skin_coloured_add_ons: Array[Image]
+var alternate_base: Image
 	
 
-func _init(_display_name: String, _skin_tones: Array, _skin_sprites: Dictionary):
+func _init(_display_name: String, _skin_coloured_add_ons: Array[Image], _alternate_base: Image = null):
 	display_name = _display_name
-	skin_tones = _skin_tones
-	skin_sprites = _skin_sprites
+	skin_coloured_add_ons = _skin_coloured_add_ons
+	alternate_base = _alternate_base
 
 enum SkinTones {
 	HUMAN_1,
@@ -18,7 +19,11 @@ enum SkinTones {
 	HUMAN_5,
 	HUMAN_6,
 	HUMAN_7,
-	LIGHT_BLUE
+	LIGHT_BLUE,
+	PURPLE,
+	GREEN,
+	YELLOW_GREEN,
+	RED
 }
 
 const HUMAN_SKIN_TONES = [
@@ -34,13 +39,30 @@ const HUMAN_SKIN_TONES = [
 static func human():
 	return Ancestry.new(
 		"Human",
-		HUMAN_SKIN_TONES,
-		{})
+		[])
 
 static func elf():
 	return Ancestry.new(
 		"Elf",
-		HUMAN_SKIN_TONES + [SkinTones.LIGHT_BLUE],
-		{
-			7: Image.load_from_file("res://img/characters/humanoid/layer_7_addons/pointy_ears.png")
-		})
+		[Image.load_from_file("res://img/characters/humanoid/layer_7_addons/pointy_ears.png")])
+
+static func dwarf():
+	return Ancestry.new(
+		"Dwarf",
+		[])
+
+static func goblin():
+	return Ancestry.new(
+		"Goblin",
+		[Image.load_from_file("res://img/characters/humanoid/layer_7_addons/pointy_ears.png")])
+
+static func orc():
+	return Ancestry.new(
+		"Orc",
+		[Image.load_from_file("res://img/characters/humanoid/layer_7_addons/thick_jaw.png")])
+
+static func skeleton():
+	return Ancestry.new(
+		"Skeleton",
+		[],
+		Image.load_from_file("res://img/characters/humanoid/layer_0_skin/skeleton.png"))

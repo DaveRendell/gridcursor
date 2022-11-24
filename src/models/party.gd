@@ -17,6 +17,15 @@ func _init():
 		[Attack.new("Firebolt", 1, 4, [3], 3, "staff")],
 		[Teleport.new() as Spell, Fireball.new() as Spell]
 		)
+	var druid_staff = Staff.new(
+		"Druid staff",
+		3,
+		[
+			Attack.new("Shillelagh", 1, 1, [0], 3, "staff"),
+			Attack.new("Frostbite", 2, 5, [2], 2, "staff")
+		],
+		[]
+	)
 
 	var steel_armour = Armour.new("Steel armour", 5, 8, {
 		1: Image.load_from_file("res://img/characters/humanoid/layer_1_shoes/IronBoots.png"),
@@ -50,7 +59,7 @@ func _init():
 	yanil.crests = [song_of_fortitude]
 	
 	var myla = Humanoid.new("Myla", Ancestry.elf(), Humanoid.AppearanceDetails.new(7, 1, E.HairColour.WHITE), 1, 3, 2, 1)
-	myla.equip("main_hand", short_bow)
+	myla.equip("main_hand", druid_staff)
 	#myla.equip("clothing", scout_tunic)
 	myla.crests = [beast_form_wolf]
 

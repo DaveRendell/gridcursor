@@ -1,8 +1,8 @@
 class_name SpriteUtils
 
-static func recolour_image(base: Image, palette: Image, row: int) -> Image:
+static func recolour_image(base: Image, palette: Image, row: int, base_row: int = 0) -> Image:
 	var new_image = base.duplicate() as Image
-	var palette_map = generate_palette_map(palette)
+	var palette_map = generate_palette_map(palette, base_row)
 	for coordinate in get_pixel_coordinates(base):
 		var base_colour = base.get_pixelv(coordinate)
 		if palette_map.has(base_colour):
@@ -23,11 +23,11 @@ static func get_pixel_coordinates(image: Image) -> Array[Vector2i]:
 
 # Returns a dictionary mapping a colour in the base palette to its column in
 # the palette.
-static func generate_palette_map(palette: Image) -> Dictionary:
+static func generate_palette_map(palette: Image, base_row: int) -> Dictionary:
 	var out = {}
 	var width = palette.get_width()
 	for i in width:
-		var colour = palette.get_pixel(i, 0)
+		var colour = palette.get_pixel(i, base_row)
 		out[colour] = i
 	return out
 

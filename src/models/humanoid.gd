@@ -31,10 +31,14 @@ func generate_sprite() -> AnimatedSprite2D:
 	var clothes_sprites = equipment.clothing.sprite_sheets as Dictionary if equipment else Dictionary()
 	
 	# Layer 0 - Skin
-	var base_skin = Image.load_from_file("res://img/characters/humanoid/layer_0_skin/base.png")
+	var image: Image
 	var skin_palette = Image.load_from_file("res://img/characters/humanoid/layer_0_skin/skin_palette.png")
-	
-	var image = SpriteUtils.recolour_image(base_skin, skin_palette, appearance_details.skin_tone)
+	if ancestry.alternate_base:
+		image = ancestry.alternate_base
+	else:
+		var base_skin = Image.load_from_file("res://img/characters/humanoid/layer_0_skin/base.png")
+		
+		image = SpriteUtils.recolour_image(base_skin, skin_palette, appearance_details.skin_tone)
 	
 	# Layer 1 - Shoes
 	var shoes_sprite = clothes_sprites[1]\
@@ -68,9 +72,8 @@ func generate_sprite() -> AnimatedSprite2D:
 		image.blend_rect(headgear_sprite, Rect2i(Vector2i.ZERO, headgear_sprite.get_size()), Vector2i.ZERO)
 	
 	# Layer 7 - Add-ons
-	if ancestry.skin_sprites.has(7):
-		var base_addon_sprite = ancestry.skin_sprites[7]
-		var recoloured_addon_sprite = SpriteUtils.recolour_image(base_addon_sprite, skin_palette, appearance_details.skin_tone)
+	for add_on in ancestry.skin_coloured_add_ons:
+		var recoloured_addon_sprite = SpriteUtils.recolour_image(add_on, skin_palette, appearance_details.skin_tone)
 		image.blend_rect(recoloured_addon_sprite, Rect2i(Vector2i.ZERO, recoloured_addon_sprite.get_size()), Vector2i.ZERO)
 	
 	return PunyCharacterSprite.character_sprite(ImageTexture.create_from_image(image))
