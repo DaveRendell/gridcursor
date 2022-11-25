@@ -48,17 +48,17 @@ func _init():
 	var song_of_fortitude = SongOfFortitude.new()
 	var beast_form_wolf = BeastFormWolf.new()
 
-	var reginald = Humanoid.new("Reginald", Ancestry.human(), Humanoid.AppearanceDetails.new(5, 1, E.HairColour.GRAY), 3, 2, 1, 1)
+	var reginald = Humanoid.new("Reginald", Ancestry.human(), Humanoid.AppearanceDetails.new(5, 1, E.HairColour.GRAY, 0, 0), 3, 2, 1, 1)
 	reginald.equip("main_hand", sword)
 	reginald.equip("off_hand", shield)
 	reginald.equip("clothing", steel_armour)
 	
-	var yanil = Humanoid.new("Yanil", Ancestry.human(), Humanoid.AppearanceDetails.new(2, 7, E.HairColour.RED), 0, 2, 3, 2)
+	var yanil = Humanoid.new("Yanil", Ancestry.human(), Humanoid.AppearanceDetails.new(2, 7, E.HairColour.RED, 0, 0), 0, 2, 3, 2)
 	yanil.equip("main_hand", staff)
 	yanil.equip("clothing", mage_robes)
 	yanil.crests = [song_of_fortitude]
 	
-	var myla = Humanoid.new("Myla", Ancestry.elf(), Humanoid.AppearanceDetails.new(7, 1, E.HairColour.WHITE), 1, 3, 2, 1)
+	var myla = Humanoid.new("Myla", Ancestry.elf(), Humanoid.AppearanceDetails.new(7, 1, E.HairColour.WHITE, 0, 3), 1, 3, 2, 1)
 	myla.equip("main_hand", druid_staff)
 	#myla.equip("clothing", scout_tunic)
 	myla.crests = [beast_form_wolf]

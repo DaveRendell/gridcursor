@@ -1,0 +1,207 @@
+[gd_scene load_steps=4 format=3 uid="uid://dngq5acj1a13h"]
+
+[ext_resource type="Theme" uid="uid://cq6hal2383lbi" path="res://src/ui/theme.tres" id="1_lhdly"]
+[ext_resource type="Script" path="res://src/utils/character_appearance_checker.gd" id="2_0xh32"]
+
+[sub_resource type="Texture2D" id="Texture2D_6p3so"]
+resource_local_to_scene = false
+resource_name = ""
+
+[node name="CharacterAppearanceChecker" type="Panel"]
+custom_minimum_size = Vector2i(1, 0)
+anchors_preset = -1
+anchor_left = 0.25
+anchor_top = 0.25
+anchor_right = 0.75
+anchor_bottom = 0.75
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_lhdly")
+script = ExtResource("2_0xh32")
+
+[node name="Preview" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 32.0
+offset_top = -32.0
+offset_right = 96.0
+offset_bottom = 32.0
+grow_vertical = 2
+texture = SubResource("Texture2D_6p3so")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Preview"]
+position = Vector2(32, 32)
+
+[node name="SpinButton" type="Button" parent="Preview"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 6.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Spin!"
+
+[node name="Controls" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -125.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -8.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="Ancestry" type="MenuButton" parent="Controls"]
+layout_mode = 2
+offset_right = 144.0
+offset_bottom = 24.0
+text = "Ancestry"
+flat = false
+item_count = 6
+popup/item_0/text = "Human"
+popup/item_0/id = 0
+popup/item_1/text = "Elf"
+popup/item_1/id = 1
+popup/item_2/text = "Dwarf"
+popup/item_2/id = 2
+popup/item_3/text = "Goblin"
+popup/item_3/id = 3
+popup/item_4/text = "Orc"
+popup/item_4/id = 4
+popup/item_5/text = "Skeleton"
+popup/item_5/id = 5
+
+[node name="SkinTone" type="HBoxContainer" parent="Controls"]
+layout_mode = 2
+offset_top = 28.0
+offset_right = 144.0
+offset_bottom = 52.0
+alignment = 2
+
+[node name="Label" type="Label" parent="Controls/SkinTone"]
+layout_mode = 2
+offset_left = 27.0
+offset_top = 2.0
+offset_right = 84.0
+offset_bottom = 21.0
+text = "Skin tone"
+vertical_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="Controls/SkinTone"]
+layout_mode = 2
+offset_left = 88.0
+offset_right = 144.0
+offset_bottom = 24.0
+rounded = true
+
+[node name="HairStyle" type="HBoxContainer" parent="Controls"]
+layout_mode = 2
+offset_top = 56.0
+offset_right = 144.0
+offset_bottom = 80.0
+alignment = 2
+
+[node name="Label" type="Label" parent="Controls/HairStyle"]
+layout_mode = 2
+offset_left = 26.0
+offset_top = 2.0
+offset_right = 84.0
+offset_bottom = 21.0
+text = "Hair style"
+vertical_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="Controls/HairStyle"]
+layout_mode = 2
+offset_left = 88.0
+offset_right = 144.0
+offset_bottom = 24.0
+max_value = 12.0
+rounded = true
+
+[node name="HairColour" type="HBoxContainer" parent="Controls"]
+layout_mode = 2
+offset_top = 84.0
+offset_right = 144.0
+offset_bottom = 108.0
+alignment = 2
+
+[node name="Label" type="Label" parent="Controls/HairColour"]
+layout_mode = 2
+offset_left = 17.0
+offset_top = 2.0
+offset_right = 84.0
+offset_bottom = 21.0
+text = "Hair colour"
+vertical_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="Controls/HairColour"]
+layout_mode = 2
+offset_left = 88.0
+offset_right = 144.0
+offset_bottom = 24.0
+max_value = 10.0
+rounded = true
+
+[node name="BeardStyle" type="HBoxContainer" parent="Controls"]
+layout_mode = 2
+offset_top = 112.0
+offset_right = 144.0
+offset_bottom = 136.0
+alignment = 2
+
+[node name="Label" type="Label" parent="Controls/BeardStyle"]
+layout_mode = 2
+offset_left = 17.0
+offset_top = 2.0
+offset_right = 84.0
+offset_bottom = 21.0
+text = "Beard style"
+vertical_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="Controls/BeardStyle"]
+layout_mode = 2
+offset_left = 88.0
+offset_right = 144.0
+offset_bottom = 24.0
+max_value = 3.0
+rounded = true
+
+[node name="ClothesColour" type="HBoxContainer" parent="Controls"]
+layout_mode = 2
+offset_top = 140.0
+offset_right = 144.0
+offset_bottom = 164.0
+alignment = 2
+
+[node name="Label" type="Label" parent="Controls/ClothesColour"]
+layout_mode = 2
+offset_top = 2.0
+offset_right = 84.0
+offset_bottom = 21.0
+text = "Clothes colour"
+vertical_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="Controls/ClothesColour"]
+layout_mode = 2
+offset_left = 88.0
+offset_right = 144.0
+offset_bottom = 24.0
+max_value = 6.0
+rounded = true
+
+[connection signal="pressed" from="Preview/SpinButton" to="." method="_on_spin_button_pressed"]
+[connection signal="value_changed" from="Controls/SkinTone/SpinBox" to="." method="_on_skin_tone_value_changed"]
+[connection signal="value_changed" from="Controls/HairStyle/SpinBox" to="." method="_on_hair_style_value_changed"]
+[connection signal="value_changed" from="Controls/HairColour/SpinBox" to="." method="_on_hair_colour_value_changed"]
+[connection signal="value_changed" from="Controls/BeardStyle/SpinBox" to="." method="_on_beard_style_value_changed"]
+[connection signal="value_changed" from="Controls/ClothesColour/SpinBox" to="." method="_on_clothes_colour_value_changed"]
