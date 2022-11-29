@@ -38,7 +38,11 @@ func _init(
 	super(_display_name, _sprite, _might, _precision, _knowledge, _wit)
 
 func generate_sprite() -> AnimatedSprite2D:
-	var clothes_sprites = equipment.clothing.sprite_sheets as Dictionary if equipment and equipment.clothing else Dictionary()
+	var clothing_sprites = Dictionary()
+	for equipped in equipment:
+		var clothing = equipped as Clothing
+		if clothing:
+			clothing_sprites.merge(clothing.sprite_sheets)
 	
 	# Layer 0 - Skin
 	var image: Image
@@ -51,15 +55,15 @@ func generate_sprite() -> AnimatedSprite2D:
 		image = SpriteUtils.recolour_image(base_skin, skin_palette, appearance_details.skin_tone)
 	
 	# Layer 1 - Shoes
-	var shoes_sprite = clothes_sprites[1]\
-		if clothes_sprites.has(1)\
+	var shoes_sprite = clothing_sprites[1]\
+		if clothing_sprites.has(1)\
 		else Image.load_from_file("res://img/characters/humanoid/layer_1_shoes/ShoesBrown.png")
 	image.blend_rect(shoes_sprite, Rect2i(Vector2i.ZERO, shoes_sprite.get_size()), Vector2i.ZERO)
 	
 	# Layer 2 - Clothes
 	var clothes_sprite
-	if clothes_sprites.has(2):
-		clothes_sprite = clothes_sprites[2]
+	if clothing_sprites.has(2):
+		clothes_sprite = clothing_sprites[2]
 	else:
 		var base_clothes_sprite = Image.load_from_file("res://img/characters/humanoid/layer_2_clothes/basic/base.png")
 		var palette = Image.load_from_file("res://img/characters/humanoid/layer_2_clothes/basic/palette.png")
@@ -67,8 +71,8 @@ func generate_sprite() -> AnimatedSprite2D:
 	image.blend_rect(clothes_sprite, Rect2i(Vector2i.ZERO, clothes_sprite.get_size()), Vector2i.ZERO)
 	
 	# Layer 3 - Gloves
-	if clothes_sprites.has(3):
-		var gloves_sprite = clothes_sprites[3]
+	if clothing_sprites.has(3):
+		var gloves_sprite = clothing_sprites[3]
 		image.blend_rect(gloves_sprite, Rect2i(Vector2i.ZERO, gloves_sprite.get_size()), Vector2i.ZERO)
 		
 	# Layer 4 - Hairstyle
@@ -87,8 +91,8 @@ func generate_sprite() -> AnimatedSprite2D:
 	# Layer 5 - Eyes
 	
 	# Layer 6 - Headgears
-	if clothes_sprites.has(6):
-		var headgear_sprite = clothes_sprites[6]
+	if clothing_sprites.has(6):
+		var headgear_sprite = clothing_sprites[6]
 		image.blend_rect(headgear_sprite, Rect2i(Vector2i.ZERO, headgear_sprite.get_size()), Vector2i.ZERO)
 	
 	# Layer 7 - Add-ons
@@ -98,7 +102,6 @@ func generate_sprite() -> AnimatedSprite2D:
 	
 	return PunyCharacterSprite.character_sprite(ImageTexture.create_from_image(image))
 
-func equip(slot: String, item: Equipment) -> void:
+func equip(slot: String, item: Equipment, slot_option: int = 0) -> void:
 	super(slot, item)
-	if slot == "clothing":
-		sprite = generate_sprite()
+	sprite = generate_sprite()

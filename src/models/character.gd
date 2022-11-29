@@ -11,26 +11,13 @@ var stats = [0, 0, 0, 0]
 
 var hp: int = 1
 
-var equipment: CharacterEquipment
+var equipment: Array[Equipment]
 var crests: Array[Crest] = [] as Array[Crest]
 var temporary_effects: Array[Feature] = [] as Array[Feature]
 
 var die_when_downed = false
 
-class CharacterEquipment:
-	func _init():
-		pass
-	var main_hand: Equipment
-	var off_hand: Equipment
-	var clothing: Equipment
-	
-	func to_array() -> Array:
-		var all = [main_hand, off_hand, clothing]
-		var out = []
-		for equipment in all:
-			if all:
-				out.append(equipment)
-		return out
+
 
 func _init(
 	display_name: String,
@@ -43,7 +30,7 @@ func _init(
 	self.display_name = display_name
 	self.stats = [might, precision, knowledge, wit]
 	self.hp = max_hp()
-	self.equipment = CharacterEquipment.new()
+	self.equipment = []
 	self.sprite = sprite
 
 func max_hp() -> int:
@@ -59,19 +46,15 @@ func defence() -> int:
 	
 	return base_defence + stats[1] + defence_boost
 
-func equip(slot: String, item: Equipment) -> void:
-	if slot == "dual_hand":
-		equipment.main_hand = item
-		equipment.off_hand = null
-	else:
-		equipment.set(slot, item)
+func equip(_slot: String, item: Equipment, _slot_option: int = 0) -> void:
+	# TODO: Manage equipment slots here
+	equipment.append(item)
 
 func features() -> Array[Feature]:
 	var feats = [] as Array[Feature]
 	
-	for item in equipment.to_array():
-		var equipped = item as Equipment
-		if equipped and equipped.feature:
+	for equipped in equipment:
+		if equipped.feature:
 			feats.append(equipped.feature)
 	feats.append_array(crests)
 	feats.append_array(temporary_effects)

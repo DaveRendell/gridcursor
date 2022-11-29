@@ -35,9 +35,9 @@ func _init(
 	animation = "attack"
 ):	
 	if is_two_handed:
-		self.equipable_slots = ["both_hands"]
+		self.equipable_slots = [[E.EquipmentSlot.MAIN_HAND, E.EquipmentSlot.OFF_HAND]]
 	else:
-		self.equipable_slots = ["main_hand", "off_hand"]
+		self.equipable_slots = [[E.EquipmentSlot.MAIN_HAND], [E.EquipmentSlot.OFF_HAND]]
 	
 	super(display_name, weight, WeaponFeature.new(
 		display_name,

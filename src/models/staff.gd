@@ -17,5 +17,5 @@ class StaffFeature extends Feature:
 		return staff_spells
 
 func _init(_display_name: String, _weight: int, _attacks: Array[Attack], _spells: Array[Spell]):
-	self.equipable_slots = ["main_hand"]
+	self.equipable_slots = [[E.EquipmentSlot.MAIN_HAND], [E.EquipmentSlot.OFF_HAND]]
 	super(_display_name, _weight, StaffFeature.new(_display_name, _attacks, _spells))

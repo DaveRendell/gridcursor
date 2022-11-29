@@ -16,5 +16,5 @@ func _init(
 	weight: int,
 	defence_boost: int
 ):
-	self.equipable_slots = ["off_hand"]
+	self.equipable_slots = [[E.EquipmentSlot.MAIN_HAND], [E.EquipmentSlot.OFF_HAND]]
 	super(display_name, weight, ShieldFeature.new(display_name, defence_boost))

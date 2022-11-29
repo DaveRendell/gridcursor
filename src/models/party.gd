@@ -33,9 +33,11 @@ func _init():
 		3: Image.load_from_file("res://img/characters/humanoid/layer_3_gloves/IronGloves.png"),
 		6: Image.load_from_file("res://img/characters/humanoid/layer_6_headgears/SoldierSteelHelmRed.png")
 	})
+	var shadow_hood = preload("res://img/characters/humanoid/layer_6_headgears/shadow_hood/shadow_hood.gd")
 	var mage_robes = Clothing.new("Mage robes", 1, null, {
 		2: Image.load_from_file("res://img/characters/humanoid/layer_2_clothes/BasicRed.png"),
-		6: Image.load_from_file("res://img/characters/humanoid/layer_6_headgears/EsperHoodRed.png"),
+		6: shadow_hood.with_colour(Color.GREEN),
+		#6: Image.load_from_file("res://img/characters/humanoid/layer_6_headgears/EsperHoodRed.png"),
 	})
 	var scout_tunic = Clothing.new("Mage robes", 1, null, {
 		2: Image.load_from_file("res://img/characters/humanoid/layer_2_clothes/LeatherTunic.png"),

@@ -34,3 +34,11 @@ enum HairColour {
 	WHITE,
 	YELLOW,
 }
+
+enum EquipmentSlot {
+	MAIN_HAND,
+	OFF_HAND,
+	HEAD_GEAR,
+	BODY,
+	SHOES,
+}
